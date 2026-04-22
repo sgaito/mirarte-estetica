@@ -22,16 +22,16 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://mirarte-estetica.pages.dev'),
-  title: 'Mirarte Estética | Especialistas en Pestañas y Belleza',
-  description: 'Mirarte Estética: Especialistas en extensiones de pestañas, lifting, cejas y tratamientos de belleza integral en Rosario. Realzá tu mirada con atención personalizada y profesional.',
+  title: 'Mirarte Estética | Pestañas, Lifting y Belleza en Rosario',
+  description: 'Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.',
   openGraph: {
     title: 'Mirarte Estética',
-    description: 'Especialistas en extensiones de pestañas, lifting, cejas y tratamientos de belleza integral en Rosario. Realzá tu mirada con atención personalizada y profesional.',
+    description: 'Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.',
     images: [
       {
-        url: '/logo.png',
+        url: 'https://mirarte-estetica.pages.dev/logo.png',
         width: 1200,
-        height: 1200,
+        height: 630,
         alt: 'Mirarte Estética',
       },
     ],
@@ -42,8 +42,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Mirarte Estética',
-    description: 'Especialistas en extensiones de pestañas, lifting, cejas y tratamientos de belleza integral en Rosario. Realzá tu mirada con atención personalizada y profesional.',
-    images: ['/logo.png'],
+    description: 'Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.',
+    images: ['https://mirarte-estetica.pages.dev/logo.png'],
   },
   icons: {
     icon: '/logo.png',
