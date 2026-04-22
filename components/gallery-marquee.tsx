@@ -5,8 +5,20 @@ import { motion, useMotionValue, useAnimationFrame, AnimatePresence } from "fram
 import { X } from "lucide-react"
 import type { DriveImage } from "@/lib/google-drive"
 
-const ROW_HEIGHT = 288
 const COPIES = 4
+
+function useRowHeight() {
+  const [rowHeight, setRowHeight] = useState(200)
+
+  useEffect(() => {
+    const update = () => setRowHeight(window.innerWidth < 640 ? 160 : window.innerWidth < 1024 ? 220 : 288)
+    update()
+    window.addEventListener("resize", update)
+    return () => window.removeEventListener("resize", update)
+  }, [])
+
+  return rowHeight
+}
 
 interface MarqueeRowProps {
   images: DriveImage[]
@@ -14,9 +26,10 @@ interface MarqueeRowProps {
   direction: "left" | "right"
   isPaused: React.MutableRefObject<boolean>
   onImageClick: (image: DriveImage) => void
+  rowHeight: number
 }
 
-function MarqueeRow({ images, speed, direction, isPaused, onImageClick }: MarqueeRowProps) {
+function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeight }: MarqueeRowProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const initialized = useRef(false)
@@ -50,14 +63,14 @@ function MarqueeRow({ images, speed, direction, isPaused, onImageClick }: Marque
       style={{ x, willChange: "transform" }}
     >
       {repeated.map((image, idx) => {
-        const aspectRatio = image.width / image.height
-        const cellWidth = Math.round(ROW_HEIGHT * aspectRatio)
+          const aspectRatio = image.width / image.height
+          const cellWidth = Math.round(rowHeight * aspectRatio)
 
         return (
           <div
             key={`${image.id}-${idx}`}
             className="flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl shadow-sm"
-            style={{ width: cellWidth, height: ROW_HEIGHT }}
+              style={{ width: cellWidth, height: rowHeight }}
             onClick={() => onImageClick(image)}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -122,6 +135,7 @@ function Lightbox({ image, onClose }: { image: DriveImage; onClose: () => void }
 export function GalleryMarquee({ images }: { images: DriveImage[] }) {
   const isPaused = useRef(false)
   const [selected, setSelected] = useState<DriveImage | null>(null)
+  const rowHeight = useRowHeight()
 
   if (images.length === 0) {
     return (
@@ -144,8 +158,8 @@ export function GalleryMarquee({ images }: { images: DriveImage[] }) {
         onMouseEnter={() => { isPaused.current = true }}
         onMouseLeave={() => { isPaused.current = false }}
       >
-        <MarqueeRow images={top}    speed={62} direction="left"  isPaused={isPaused} onImageClick={setSelected} />
-        <MarqueeRow images={bottom} speed={44} direction="right" isPaused={isPaused} onImageClick={setSelected} />
+        <MarqueeRow images={top}    speed={62} direction="left"  isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
+        <MarqueeRow images={bottom} speed={44} direction="right" isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
       </div>
 
       <AnimatePresence>
