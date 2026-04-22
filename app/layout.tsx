@@ -1,10 +1,24 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Great_Vibes, Montserrat } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
+
+const greatVibes = Great_Vibes({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-script",
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: 'Mirarte Estética | Centro de Belleza y Bienestar',
@@ -35,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className="bg-background scroll-smooth">
+    <html lang="es" className={`bg-background scroll-smooth ${greatVibes.variable} ${montserrat.variable}`}>
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

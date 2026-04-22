@@ -17,10 +17,13 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <nav className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-light tracking-wide text-foreground">
-              Mirarte <span className="font-semibold">ESTÉTICA</span>
-            </span>
+          <Link href="/" className="flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo_1.png"
+              alt="Mirarte Estética"
+              className="h-10 w-auto sm:h-12"
+            />
           </Link>
 
           {/* Desktop Navigation */}
