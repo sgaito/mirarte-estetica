@@ -1,53 +1,35 @@
-import { google } from "googleapis"
-import { NextRequest, NextResponse } from "next/server"
-import type { Readable } from "stream"
+import { NextRequest } from "next/server"
+
+export const runtime = "edge"
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get("id")
 
   if (!id) {
-    return NextResponse.json({ error: "Falta el parámetro id" }, { status: 400 })
-  }
-
-  const keyJson = process.env.GOOGLE_SERVICE_ACCOUNT_KEY
-  if (!keyJson) {
-    return NextResponse.json({ error: "Credenciales no configuradas" }, { status: 500 })
+    return new Response("Falta el parámetro id", { status: 400 })
   }
 
   try {
-    const credentials = JSON.parse(keyJson)
+    const driveUrl = `https://drive.google.com/uc?export=download&id=${id}`
 
-    const auth = new google.auth.GoogleAuth({
-      credentials,
-      scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-    })
-
-    const drive = google.drive({ version: "v3", auth })
-
-    const response = await drive.files.get(
-      { fileId: id, alt: "media" },
-      { responseType: "stream" }
-    )
-
-    const nodeStream = response.data as Readable
-    const contentType =
-      (response.headers as Record<string, string>)["content-type"] ?? "image/jpeg"
-
-    const webStream = new ReadableStream({
-      start(controller) {
-        nodeStream.on("data", (chunk: Buffer) => {
-          controller.enqueue(new Uint8Array(chunk))
-        })
-        nodeStream.on("end", () => controller.close())
-        nodeStream.on("error", (err) => controller.error(err))
-      },
-      cancel() {
-        nodeStream.destroy()
+    const upstream = await fetch(driveUrl, {
+      headers: {
+        // Evitar que Drive devuelva la página de advertencia de virus para archivos grandes
+        "User-Agent": "Mozilla/5.0",
       },
     })
 
-    return new Response(webStream, {
+    if (!upstream.ok) {
+      return new Response("No se pudo obtener la imagen desde Drive", {
+        status: upstream.status,
+      })
+    }
+
+    const contentType = upstream.headers.get("content-type") ?? "image/jpeg"
+
+    // Pasar el stream directamente sin bufferear en memoria
+    return new Response(upstream.body, {
       headers: {
         "Content-Type": contentType,
         "Cache-Control": "public, max-age=86400, stale-while-revalidate=3600",
@@ -55,6 +37,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error("[drive-image] Error al obtener imagen:", error)
-    return NextResponse.json({ error: "No se pudo obtener la imagen" }, { status: 500 })
+    return new Response("Error interno al obtener la imagen", { status: 500 })
   }
 }
