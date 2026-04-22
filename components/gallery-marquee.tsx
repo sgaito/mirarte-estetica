@@ -1,17 +1,20 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, useLayoutEffect } from "react"
 import { motion, useMotionValue, useAnimationFrame, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
 import type { DriveImage } from "@/lib/google-drive"
 
-const COPIES = 4
+// 3 copias son suficientes para el loop y reduce nodos en el DOM
+const COPIES = 3
 
 function useRowHeight() {
-  const [rowHeight, setRowHeight] = useState(200)
+  // null = todavía no sabemos el tamaño real (evita el flash de re-layout)
+  const [rowHeight, setRowHeight] = useState<number | null>(null)
 
   useEffect(() => {
-    const update = () => setRowHeight(window.innerWidth < 640 ? 160 : window.innerWidth < 1024 ? 220 : 288)
+    const update = () =>
+      setRowHeight(window.innerWidth < 640 ? 160 : window.innerWidth < 1024 ? 220 : 288)
     update()
     window.addEventListener("resize", update)
     return () => window.removeEventListener("resize", update)
@@ -32,26 +35,41 @@ interface MarqueeRowProps {
 function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeight }: MarqueeRowProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
-  const initialized = useRef(false)
+  // Cacheamos el ancho de un set para no leer el DOM en cada frame
+  const singleWidthRef = useRef(0)
 
   const repeated = Array.from({ length: COPIES }, () => images).flat()
 
+  // Calcula el ancho y fija la posición inicial ANTES del primer paint
+  // Se vuelve a ejecutar cuando cambia rowHeight (el viewport cambió de breakpoint)
+  useLayoutEffect(() => {
+    if (!trackRef.current) return
+    const sw = trackRef.current.scrollWidth / COPIES
+    singleWidthRef.current = sw
+    x.set(direction === "right" ? -sw : 0)
+  }, [direction, rowHeight, x])
+
+  // Actualiza el ancho cacheado si el contenedor cambia de tamaño
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+    const observer = new ResizeObserver(() => {
+      singleWidthRef.current = el.scrollWidth / COPIES
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   useAnimationFrame((_, delta) => {
-    if (isPaused.current || !trackRef.current) return
-
-    const singleWidth = trackRef.current.scrollWidth / COPIES
-    if (singleWidth === 0) return
-
-    if (!initialized.current) {
-      if (direction === "right") x.set(-singleWidth)
-      initialized.current = true
-    }
+    if (isPaused.current) return
+    const sw = singleWidthRef.current
+    if (sw === 0) return
 
     const sign = direction === "left" ? -1 : 1
-    let newX = x.get() + sign * (speed * delta) / 1000
+    let newX = x.get() + (sign * speed * delta) / 1000
 
-    if (direction === "left" && newX <= -singleWidth) newX += singleWidth
-    if (direction === "right" && newX >= 0) newX -= singleWidth
+    if (direction === "left" && newX <= -sw) newX += sw
+    if (direction === "right" && newX >= 0) newX -= sw
 
     x.set(newX)
   })
@@ -63,14 +81,13 @@ function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeigh
       style={{ x, willChange: "transform" }}
     >
       {repeated.map((image, idx) => {
-          const aspectRatio = image.width / image.height
-          const cellWidth = Math.round(rowHeight * aspectRatio)
-
+        const aspectRatio = image.width / image.height
+        const cellWidth = Math.round(rowHeight * aspectRatio)
         return (
           <div
             key={`${image.id}-${idx}`}
             className="flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl shadow-sm"
-              style={{ width: cellWidth, height: rowHeight }}
+            style={{ width: cellWidth, height: rowHeight }}
             onClick={() => onImageClick(image)}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -104,7 +121,6 @@ function Lightbox({ image, onClose }: { image: DriveImage; onClose: () => void }
       transition={{ duration: 0.2 }}
       onClick={onClose}
     >
-      {/* Botón cerrar */}
       <button
         className="absolute right-5 top-5 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
         onClick={onClose}
@@ -145,6 +161,11 @@ export function GalleryMarquee({ images }: { images: DriveImage[] }) {
     )
   }
 
+  // No renderizar hasta saber el alto real → evita el flash de posición incorrecta
+  if (rowHeight === null) {
+    return <div className="mt-16" style={{ height: 288 * 2 + 16 }} />
+  }
+
   const rowTop = images.filter((_, i) => i % 2 === 0)
   const rowBottom = images.filter((_, i) => i % 2 !== 0)
 
@@ -154,12 +175,18 @@ export function GalleryMarquee({ images }: { images: DriveImage[] }) {
   return (
     <>
       <div
-        className="mt-16 flex flex-col gap-4 overflow-hidden"
+        className="mt-16 w-screen overflow-hidden"
+        style={{
+          maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+        }}
         onMouseEnter={() => { isPaused.current = true }}
         onMouseLeave={() => { isPaused.current = false }}
       >
-        <MarqueeRow images={top}    speed={62} direction="left"  isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
-        <MarqueeRow images={bottom} speed={44} direction="right" isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
+        <div className="flex flex-col gap-4">
+          <MarqueeRow images={top}    speed={62} direction="left"  isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
+          <MarqueeRow images={bottom} speed={44} direction="right" isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
+        </div>
       </div>
 
       <AnimatePresence>

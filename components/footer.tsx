@@ -21,9 +21,9 @@ export function Footer() {
           {/* Logo */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo.svg"
+            src="/logo.png"
             alt="Mirarte Estética"
-            className="h-20 w-20 object-contain"
+            className="h-28 w-28 object-contain"
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none" }}
           />
 

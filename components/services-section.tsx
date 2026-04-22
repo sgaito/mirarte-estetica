@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Eye, Feather, Sparkles, ChevronDown } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { FadeIn } from "@/components/fade-in"
 
@@ -9,7 +9,6 @@ const CATEGORIES = [
   {
     id: "pestanas",
     label: "Pestañas",
-    icon: Eye,
     services: [
       "Extensiones pelo a pelo",
       "Extensiones volumen ruso (2D, 3D, 4D)",
@@ -23,7 +22,6 @@ const CATEGORIES = [
   {
     id: "cejas",
     label: "Cejas",
-    icon: Feather,
     services: [
       "Perfilado de cejas — diseño con pinza/cera",
       "Laminado de cejas — Brow Lamination",
@@ -37,7 +35,6 @@ const CATEGORIES = [
   {
     id: "adicionales",
     label: "Adicionales",
-    icon: Sparkles,
     services: [
       "Limpieza facial profunda",
       "Dermaplaning",
@@ -46,105 +43,62 @@ const CATEGORIES = [
   },
 ]
 
+/* Sombra flotante con tinte turquesa */
+const SHADOW_IDLE = "0 4px 14px -2px oklch(0 0 0 / 0.07), 0 2px 4px -1px oklch(0 0 0 / 0.04)"
+const SHADOW_OPEN =
+  "0 24px 48px -12px oklch(0.72 0.12 185 / 0.18), 0 8px 16px -4px oklch(0.72 0.12 185 / 0.08)"
+
+/* Mesh gradient para el fondo */
+const MESH_BG = `
+  radial-gradient(ellipse at 8% 40%,  oklch(0.95 0.05 185 / 0.55) 0%, transparent 52%),
+  radial-gradient(ellipse at 92% 10%,  oklch(0.97 0.03 75  / 0.50) 0%, transparent 48%),
+  radial-gradient(ellipse at 65% 88%,  oklch(0.95 0.04 185 / 0.30) 0%, transparent 42%),
+  oklch(0.977 0.003 240)
+`.trim()
+
 function ServiceList({ services }: { services: string[] }) {
   return (
-    <ul className="grid gap-x-12 sm:grid-cols-2">
+    <ul className="divide-y divide-border/40">
       {services.map((name) => (
-        <li
-          key={name}
-          className="flex items-center gap-3 border-b border-border/40 py-3.5 last:border-0 sm:[&:nth-last-child(2):nth-child(odd)]:border-0"
-        >
-          <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
-          <span className="text-sm leading-snug text-foreground/75">{name}</span>
+        <li key={name} className="flex items-center justify-between py-3.5">
+          <span className="text-sm leading-snug text-foreground/70">{name}</span>
+          <span className="ml-4 select-none text-xs text-muted-foreground/30">—</span>
         </li>
       ))}
     </ul>
   )
 }
 
-/* ── Desktop: tabs ─────────────────────────────────────────── */
-function TabsView() {
-  const [active, setActive] = useState(0)
-  const category = CATEGORIES[active]
-  const Icon = category.icon
-
-  return (
-    <div>
-      {/* Tab nav */}
-      <div className="flex gap-1 rounded-2xl bg-card p-1.5 shadow-sm">
-        {CATEGORIES.map((cat, idx) => {
-          const CatIcon = cat.icon
-          const isActive = idx === active
-          return (
-            <button
-              key={cat.id}
-              onClick={() => setActive(idx)}
-              className="relative flex flex-1 items-center justify-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium transition-colors duration-200"
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="tab-bg"
-                  className="absolute inset-0 rounded-xl bg-primary/10"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                />
-              )}
-              <CatIcon
-                className={`relative h-4 w-4 transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}
-              />
-              <span className={`relative transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}>
-                {cat.label}
-              </span>
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Tab content */}
-      <div className="mt-8 min-h-[280px]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="mb-6 flex items-center gap-3">
-              <div className="inline-flex rounded-xl bg-primary/10 p-2.5">
-                <Icon className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-foreground">{category.label}</h3>
-            </div>
-            <ServiceList services={category.services} />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </div>
-  )
-}
-
-/* ── Mobile: acordeón ──────────────────────────────────────── */
-function AccordionView() {
-  const [open, setOpen] = useState<number>(0)
+function Accordion() {
+  const [open, setOpen] = useState<number | null>(null)
 
   return (
     <div className="flex flex-col gap-3">
       {CATEGORIES.map((cat, idx) => {
-        const Icon = cat.icon
         const isOpen = open === idx
-
         return (
-          <div key={cat.id} className="overflow-hidden rounded-2xl bg-card shadow-sm">
+          <div
+            key={cat.id}
+            className="overflow-hidden rounded-2xl bg-card transition-shadow duration-300"
+            style={{ boxShadow: isOpen ? SHADOW_OPEN : SHADOW_IDLE }}
+          >
             <button
-              onClick={() => setOpen(isOpen ? -1 : idx)}
-              className="flex w-full items-center gap-3 px-5 py-4 text-left"
+              onClick={() => setOpen(isOpen ? null : idx)}
+              className="flex w-full items-center justify-between px-6 py-5 text-left"
             >
-              <div className="inline-flex rounded-xl bg-primary/10 p-2">
-                <Icon className="h-4 w-4 text-primary" />
-              </div>
-              <span className="flex-1 font-medium text-foreground">{cat.label}</span>
-              <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25 }}>
-                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              <span
+                className={`text-2xl leading-none transition-colors duration-200 ${
+                  isOpen ? "text-primary" : "text-foreground/80"
+                }`}
+                style={{ fontFamily: "var(--font-script)" }}
+              >
+                {cat.label}
+              </span>
+              <motion.div
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+              >
+                <ChevronDown className="h-5 w-5 text-primary" />
               </motion.div>
             </button>
 
@@ -156,7 +110,7 @@ function AccordionView() {
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
-                  <div className="px-5 pb-5">
+                  <div className="px-6 pb-6">
                     <ServiceList services={cat.services} />
                   </div>
                 </motion.div>
@@ -169,15 +123,48 @@ function AccordionView() {
   )
 }
 
-/* ── Sección principal ─────────────────────────────────────── */
 export function ServicesSection() {
   return (
-    <section id="servicios" className="bg-secondary py-24 scroll-mt-20 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section
+      id="servicios"
+      className="relative overflow-hidden scroll-mt-20 py-24 lg:py-32"
+      style={{ background: MESH_BG }}
+    >
+      {/* Hojas decorativas — esquina superior izquierda */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-32 -top-32 h-[480px] w-[480px] -rotate-12 opacity-[0.06] blur-2xl"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.png" alt="" className="h-full w-full object-contain" />
+      </div>
+
+      {/* Hojas decorativas — esquina inferior derecha */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-32 -right-32 h-[480px] w-[480px] rotate-12 opacity-[0.06] blur-2xl"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.png" alt="" className="h-full w-full object-contain" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-              Nuestros <span className="font-semibold">Servicios</span>
+              Nuestros{" "}
+              <span
+                className="font-semibold"
+                style={{
+                  background:
+                    "linear-gradient(130deg, oklch(0.18 0 0) 0%, oklch(0.52 0.11 185) 50%, oklch(0.18 0 0) 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                Servicios
+              </span>
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Cada tratamiento está diseñado para realzar tu belleza natural con dedicación y precisión.
@@ -186,17 +173,9 @@ export function ServicesSection() {
         </FadeIn>
 
         <FadeIn delay={0.15}>
-        <div className="mx-auto mt-16 max-w-3xl">
-          {/* Tabs — solo desktop */}
-          <div className="hidden md:block">
-            <TabsView />
+          <div className="mx-auto mt-16 max-w-2xl">
+            <Accordion />
           </div>
-
-          {/* Acordeón — solo mobile */}
-          <div className="md:hidden">
-            <AccordionView />
-          </div>
-        </div>
         </FadeIn>
       </div>
     </section>
