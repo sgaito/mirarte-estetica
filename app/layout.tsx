@@ -21,9 +21,30 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: 'Mirarte Estética | Centro de Belleza y Bienestar',
-  description: 'Tu espacio de relajación y cuidado personal. Tratamientos faciales, corporales y de bienestar en un ambiente único.',
-  generator: 'v0.app',
+  metadataBase: new URL('https://mirarte-estetica.pages.dev'),
+  title: 'Mirarte Estética | Especialistas en Pestañas y Belleza',
+  description: 'Mirarte Estética: Especialistas en extensiones de pestañas, lifting, cejas y tratamientos de belleza integral en Rosario. Realzá tu mirada con atención personalizada y profesional.',
+  openGraph: {
+    title: 'Mirarte Estética',
+    description: 'Especialistas en extensiones de pestañas, lifting, cejas y tratamientos de belleza integral en Rosario. Realzá tu mirada con atención personalizada y profesional.',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 1200,
+        alt: 'Mirarte Estética',
+      },
+    ],
+    type: 'website',
+    locale: 'es_AR',
+    siteName: 'Mirarte Estética',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mirarte Estética',
+    description: 'Especialistas en extensiones de pestañas, lifting, cejas y tratamientos de belleza integral en Rosario. Realzá tu mirada con atención personalizada y profesional.',
+    images: ['/logo.png'],
+  },
   icons: {
     icon: '/logo.png',
     apple: '/logo.png',
