@@ -125,3 +125,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Resaltes en títulos de sección (mismo efecto metálico que Servicios / FAQ) */
+.heading-emphasis {
+  font-weight: 600;
+  background: linear-gradient(
+    130deg,
+    oklch(0.18 0 0) 0%,
+    oklch(0.52 0.11 185) 50%,
+    oklch(0.18 0 0) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}

@@ -148,19 +148,7 @@ export function FaqSection() {
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-              Preguntas{" "}
-              <span
-                className="font-semibold"
-                style={{
-                  background:
-                    "linear-gradient(130deg, oklch(0.18 0 0) 0%, oklch(0.52 0.11 185) 50%, oklch(0.18 0 0) 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                Frecuentes
-              </span>
+              Preguntas <span className="heading-emphasis">Frecuentes</span>
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Todo lo que necesitás saber antes de tu primera visita.

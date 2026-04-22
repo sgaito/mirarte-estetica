@@ -12,7 +12,7 @@ export async function GallerySection() {
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-              Nuestra <span className="font-semibold">Galería</span>
+              Nuestra <span className="heading-emphasis">Galería</span>
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Conoce nuestros espacios diseñados para tu comodidad y bienestar.

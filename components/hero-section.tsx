@@ -1,61 +1,82 @@
+import Image from "next/image"
 import Link from "next/link"
-import { Sparkles } from "lucide-react"
-import { FadeIn } from "@/components/fade-in"
+
+const WA_URL =
+  "https://wa.me/5493416367119?text=Hola%20Mirarte%20Estetica!%20Quiero%20consultar%20por%20un%20turno."
 
 export function HeroSection() {
   return (
     <section
       id="reservar"
-      className="relative min-h-screen flex items-center justify-center bg-background pt-20 scroll-mt-20"
+      className="relative grid min-h-[100dvh] scroll-mt-20 grid-cols-1 bg-background pt-20 md:grid-cols-2"
     >
-      {/* Decorative blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-secondary blur-3xl" />
+      {/* Columna izquierda — mismo fondo secundario que el resto del sitio */}
+      <div className="relative z-0 flex min-h-[52dvh] flex-col justify-center bg-secondary px-8 py-14 md:min-h-[calc(100dvh-5rem)] md:px-14 lg:px-20 lg:py-20">
+        {/* "Estética" decorativo con stroke (tinte turquesa suave) */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-[42%] z-0 -translate-x-1/2 -translate-y-1/2 select-none text-[clamp(4.5rem,18vw,11rem)] font-light uppercase leading-none tracking-tight text-transparent opacity-[0.12]"
+          style={{
+            fontFamily: "var(--font-display), Montserrat, sans-serif",
+            WebkitTextStroke: "1.5px oklch(0.72 0.12 185 / 0.45)",
+          }}
+        >
+          Estética
+        </span>
+
+        <div className="relative z-10 mx-auto w-full max-w-xl">
+          <h1 className="text-balance tracking-tight text-foreground">
+            <span
+              className="block text-[clamp(3rem,9vw,5.5rem)] leading-[0.95]"
+              style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
+            >
+              Mirarte
+            </span>
+            <span
+              className="mt-2 block text-[clamp(0.7rem,1.6vw,0.85rem)] font-medium uppercase tracking-[0.35em] text-primary"
+              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+            >
+              Estética
+            </span>
+          </h1>
+
+          <p className="mt-8 max-w-md text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
+            Espacio de belleza y bienestar en Rosario. Pestañas, cejas y tratamientos con dedicación,
+            técnica y un ambiente pensado para que te sientas cómoda en cada visita.
+          </p>
+
+          <Link
+            href={WA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-10 inline-flex items-center justify-center rounded-full bg-primary px-10 py-4 text-sm font-medium text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-105 active:scale-95"
+          >
+            Reservar Turno
+          </Link>
+        </div>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 py-14 lg:px-8 lg:py-32">
-        <div className="mx-auto max-w-3xl text-center">
-          <FadeIn delay={0}>
-            <div className="mb-6 flex justify-center">
-              <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary sm:px-5 sm:py-2 sm:text-sm">
-                <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                Tu bienestar es nuestra prioridad
-              </span>
-            </div>
-          </FadeIn>
+      {/* Columna derecha — imagen a pantalla completa */}
+      <div className="relative min-h-[48dvh] w-full md:min-h-[calc(100dvh-5rem)]">
+        <Image
+          src="/placeholder.jpg"
+          alt="Mirarte Estética — ambiente del salón"
+          fill
+          priority
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      </div>
 
-          <FadeIn delay={0.08}>
-            <h1 className="text-balance text-3xl font-light tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              Descubre el arte del{" "}
-              <span className="font-semibold text-primary">cuidado personal</span>
-            </h1>
-          </FadeIn>
-
-          <FadeIn delay={0.16}>
-            <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground lg:text-lg">
-              En Mirarte Estética creamos experiencias únicas de relajación y
-              belleza. Déjate consentir por nuestros especialistas en un ambiente
-              diseñado para tu tranquilidad.
-            </p>
-          </FadeIn>
-
-          <FadeIn delay={0.24}>
-            <div className="mt-8 flex flex-col items-center gap-3 sm:mt-12 sm:flex-row sm:justify-center sm:gap-4">
-              <Link
-                href="#contacto"
-                className="w-full rounded-full bg-primary px-8 py-3.5 text-sm font-medium text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-105 active:scale-95 sm:w-auto sm:py-4 sm:text-base"
-              >
-                Reservar Turno
-              </Link>
-              <Link
-                href="#servicios"
-                className="w-full rounded-full border border-border bg-background px-8 py-3.5 text-sm font-medium text-foreground transition-all hover:bg-secondary active:scale-95 sm:w-auto sm:py-4 sm:text-base"
-              >
-                Ver Servicios
-              </Link>
-            </div>
-          </FadeIn>
+      {/* Badge circular en el encuentro de columnas */}
+      <div className="pointer-events-none absolute left-1/2 z-20 -translate-x-1/2 max-md:top-[calc(5rem+52dvh-3.5rem)] md:top-1/2 md:-translate-y-1/2">
+        <div className="pointer-events-auto h-28 w-28 rounded-full bg-background p-1 shadow-xl ring-1 ring-border/60 md:h-32 md:w-32">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt="Mirarte Estética"
+            className="h-full w-full rounded-full object-contain"
+          />
         </div>
       </div>
     </section>

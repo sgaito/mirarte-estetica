@@ -144,8 +144,7 @@ export function ReviewsSection() {
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-              Lo que dicen nuestras{" "}
-              <span className="font-semibold">Clientas</span>
+              Lo que dicen nuestras <span className="heading-emphasis">Clientas</span>
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               La satisfacción de quienes nos visitan es nuestra mayor recompensa.

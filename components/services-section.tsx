@@ -152,19 +152,7 @@ export function ServicesSection() {
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-              Nuestros{" "}
-              <span
-                className="font-semibold"
-                style={{
-                  background:
-                    "linear-gradient(130deg, oklch(0.18 0 0) 0%, oklch(0.52 0.11 185) 50%, oklch(0.18 0 0) 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                Servicios
-              </span>
+              Nuestros <span className="heading-emphasis">Servicios</span>
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Cada tratamiento está diseñado para realzar tu belleza natural con dedicación y precisión.
