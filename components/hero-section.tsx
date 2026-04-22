@@ -25,13 +25,11 @@ export function HeroSection() {
         </span>
 
         <div className="relative z-10 mx-auto w-full max-w-xl">
-          <h1 className="text-balance tracking-tight text-foreground">
-            <span
-              className="block text-[clamp(3rem,9vw,5.5rem)] leading-[0.95]"
-              style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
-            >
-              Mirarte
-            </span>
+          <h1
+            className="text-balance text-4xl font-medium tracking-tight text-foreground/90 md:text-5xl"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            Realzá tu belleza natural. Especialistas en pestañas y cejas.
             <span
               className="mt-2 block text-[clamp(0.7rem,1.6vw,0.85rem)] font-medium uppercase tracking-[0.35em] text-primary"
               style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
@@ -40,7 +38,7 @@ export function HeroSection() {
             </span>
           </h1>
 
-          <p className="mt-6 max-w-md text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base md:mt-8 md:text-lg">
+          <p className="mt-7 max-w-md text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base md:mt-9 md:text-lg">
             Espacio de belleza y bienestar en Rosario. Pestañas, cejas y tratamientos con dedicación,
             técnica y un ambiente pensado para que te sientas cómoda en cada visita.
           </p>
@@ -69,7 +67,7 @@ export function HeroSection() {
       </div>
 
       {/* Badge circular en el encuentro de columnas */}
-      <div className="pointer-events-none absolute left-1/2 top-[calc(100%-22dvh)] z-20 -translate-x-1/2 md:top-1/2 md:-translate-y-1/2">
+      <div className="pointer-events-none absolute left-1/2 top-[calc(100%-22dvh)] z-20 hidden -translate-x-1/2 md:block md:top-1/2 md:-translate-y-1/2">
         <div className="pointer-events-auto h-20 w-20 rounded-full bg-background p-1 shadow-xl ring-1 ring-border/60 sm:h-24 sm:w-24 md:h-32 md:w-32">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
