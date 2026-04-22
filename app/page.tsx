@@ -4,6 +4,7 @@ import { ServicesSection } from "@/components/services-section"
 import { GallerySection } from "@/components/gallery-section"
 import { ReviewsSection } from "@/components/reviews-section"
 import { LocationSection } from "@/components/location-section"
+import { FaqSection } from "@/components/faq-section"
 import { Footer } from "@/components/footer"
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
       <GallerySection />
       <ReviewsSection />
       <LocationSection />
+      <FaqSection />
       <Footer />
     </main>
   )
