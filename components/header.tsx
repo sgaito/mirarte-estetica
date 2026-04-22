@@ -15,8 +15,11 @@ export function Header() {
   }, [])
 
   const navLinks = [
+    { href: "#reservar", label: "Inicio" },
     { href: "#servicios", label: "Servicios" },
     { href: "#galeria", label: "Galería" },
+    { href: "#ubicacion", label: "Ubicación" },
+    { href: "#faq", label: "Preguntas" },
     { href: "#contacto", label: "Contacto" },
   ]
 
