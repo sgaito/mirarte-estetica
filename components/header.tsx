@@ -1,11 +1,18 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 20)
+    window.addEventListener("scroll", handler, { passive: true })
+    return () => window.removeEventListener("scroll", handler)
+  }, [])
 
   const navLinks = [
     { href: "#servicios", label: "Servicios" },
@@ -14,7 +21,13 @@ export function Header() {
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ${
+        scrolled
+          ? "bg-background/90 backdrop-blur-md border-border/50"
+          : "bg-transparent border-transparent"
+      }`}
+    >
       <nav className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <Link href="/" className="flex items-center">
@@ -39,7 +52,7 @@ export function Header() {
             ))}
             <Link
               href="#reservar"
-              className="rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:shadow-md hover:brightness-105"
+              className="rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:shadow-md hover:brightness-105 active:scale-95"
             >
               Reservar
             </Link>
@@ -76,7 +89,7 @@ export function Header() {
               ))}
               <Link
                 href="#reservar"
-                className="mt-2 rounded-full bg-primary px-6 py-3 text-center text-sm font-medium text-primary-foreground shadow-sm transition-all hover:shadow-md hover:brightness-105"
+                className="mt-2 rounded-full bg-primary px-6 py-3 text-center text-sm font-medium text-primary-foreground shadow-sm transition-all hover:shadow-md hover:brightness-105 active:scale-95"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Reservar

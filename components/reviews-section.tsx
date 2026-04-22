@@ -1,4 +1,5 @@
 import { Star } from "lucide-react"
+import { FadeIn } from "@/components/fade-in"
 
 const reviews = [
   {
@@ -40,37 +41,38 @@ export function ReviewsSection() {
   return (
     <section className="bg-secondary py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-            Lo que dicen nuestras{" "}
-            <span className="font-semibold">Clientas</span>
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            La satisfacción de quienes nos visitan es nuestra mayor recompensa.
-          </p>
-        </div>
+        <FadeIn>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
+              Lo que dicen nuestras{" "}
+              <span className="font-semibold">Clientas</span>
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+              La satisfacción de quienes nos visitan es nuestra mayor recompensa.
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="mx-auto mt-16 grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {reviews.map((review) => (
-            <div
-              key={review.id}
-              className="rounded-2xl bg-card p-8 shadow-sm transition-all duration-300 hover:shadow-md"
-            >
-              <StarRating rating={review.rating} />
-              <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-                &ldquo;{review.text}&rdquo;
-              </p>
-              <div className="mt-6 flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-lg font-medium text-primary">
-                    {review.name.charAt(0)}
+          {reviews.map((review, idx) => (
+            <FadeIn key={review.id} delay={idx * 0.1}>
+              <div className="rounded-2xl bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <StarRating rating={review.rating} />
+                <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+                  &ldquo;{review.text}&rdquo;
+                </p>
+                <div className="mt-6 flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-lg font-medium text-primary">
+                      {review.name.charAt(0)}
+                    </span>
+                  </div>
+                  <span className="font-medium text-card-foreground">
+                    {review.name}
                   </span>
                 </div>
-                <span className="font-medium text-card-foreground">
-                  {review.name}
-                </span>
               </div>
-            </div>
+            </FadeIn>
           ))}
         </div>
       </div>

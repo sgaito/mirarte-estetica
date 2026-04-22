@@ -14,23 +14,23 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export function Footer() {
   return (
-    <footer id="contacto" className="bg-background border-t border-border">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
-        <div className="flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+    <footer id="contacto" className="bg-background border-t border-border scroll-mt-20">
+      <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+        <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
 
           {/* Logo */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/logo.svg"
             alt="Mirarte Estética"
-            className="h-40 w-40 object-contain"
+            className="h-20 w-20 object-contain"
             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none" }}
           />
 
           {/* Contacto */}
           <div>
-            <h3 className="text-lg font-semibold text-foreground">Contacto</h3>
-            <ul className="mt-4 space-y-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/60">Contacto</h3>
+            <ul className="mt-3 space-y-2">
               <li>
                 <Link
                   href="https://wa.me/5493416367119?text=Hola%20Mirarte%20Estetica!%20Quiero%20consultar%20por%20un%20turno."
@@ -56,8 +56,8 @@ export function Footer() {
 
           {/* Redes */}
           <div>
-            <h3 className="text-lg font-semibold text-foreground">Seguinos</h3>
-            <div className="mt-4 flex gap-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/60">Seguinos</h3>
+            <div className="mt-3 flex gap-3">
               <Link
                 href="https://www.instagram.com/mirarte.estetica/"
                 target="_blank"
@@ -81,7 +81,7 @@ export function Footer() {
 
         </div>
 
-        <div className="mt-12 border-t border-border pt-6 text-center">
+        <div className="mt-6 border-t border-border pt-5 text-center">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Mirarte Estética. Todos los derechos reservados.
           </p>

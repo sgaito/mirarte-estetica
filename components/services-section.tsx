@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Eye, Feather, Sparkles, ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { FadeIn } from "@/components/fade-in"
 
 const CATEGORIES = [
   {
@@ -171,17 +172,20 @@ function AccordionView() {
 /* ── Sección principal ─────────────────────────────────────── */
 export function ServicesSection() {
   return (
-    <section id="servicios" className="bg-secondary py-24 lg:py-32">
+    <section id="servicios" className="bg-secondary py-24 scroll-mt-20 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-            Nuestros <span className="font-semibold">Servicios</span>
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            Cada tratamiento está diseñado para realzar tu belleza natural con dedicación y precisión.
-          </p>
-        </div>
+        <FadeIn>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
+              Nuestros <span className="font-semibold">Servicios</span>
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+              Cada tratamiento está diseñado para realzar tu belleza natural con dedicación y precisión.
+            </p>
+          </div>
+        </FadeIn>
 
+        <FadeIn delay={0.15}>
         <div className="mx-auto mt-16 max-w-3xl">
           {/* Tabs — solo desktop */}
           <div className="hidden md:block">
@@ -193,6 +197,7 @@ export function ServicesSection() {
             <AccordionView />
           </div>
         </div>
+        </FadeIn>
       </div>
     </section>
   )
