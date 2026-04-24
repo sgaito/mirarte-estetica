@@ -15,8 +15,7 @@ export async function GallerySection() {
               Nuestra <span className="heading-emphasis">Galería</span>
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Conoce nuestros espacios diseñados para tu comodidad y bienestar.
-            </p>
+            Resultados reales que potencian tu belleza natural y transforman tu mirada.</p>
           </div>
         </FadeIn>
       </div>
