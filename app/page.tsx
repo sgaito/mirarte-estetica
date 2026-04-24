@@ -8,17 +8,27 @@ import { FeaturedProductSection } from "@/components/featured-product-section"
 import { FaqSection } from "@/components/faq-section"
 import { LocationSection } from "@/components/location-section"
 import { Footer } from "@/components/footer"
-import { getHeroImage } from "@/lib/google-drive"
+import { getHeroImage, getSobreEliMedia } from "@/lib/google-drive"
 
 export default async function HomePage() {
-  const heroImage = await getHeroImage()
+  const [heroImage, sobreEliMedia] = await Promise.all([getHeroImage(), getSobreEliMedia()])
 
   return (
     <main className="min-h-screen">
       <Header />
       <HeroSection heroImageSrc={heroImage?.url ?? null} />
       <ServicesSection />
-      <SobreEliSection />
+      <SobreEliSection
+        eliPhoto={
+          sobreEliMedia.eli
+            ? { src: sobreEliMedia.eli.url, alt: `Eli — ${sobreEliMedia.eli.name}` }
+            : null
+        }
+        studioPhotos={sobreEliMedia.estudio.map((img) => ({
+          src: img.url,
+          alt: `Estudio Mirarte — ${img.name}`,
+        }))}
+      />
       <GallerySection />
       <ReviewsSection />
       <FeaturedProductSection />

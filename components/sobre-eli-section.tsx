@@ -6,11 +6,19 @@ import { X } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import { FadeIn } from "@/components/fade-in"
 
-const STUDIO_PHOTOS = [
-  { src: "/sobre_mi/estudio-ambiente(1).jpg", alt: "Estudio Mirarte — vista general" },
-  { src: "/sobre_mi/estudio-ambiente(2).jpg", alt: "Estudio Mirarte — detalle de trabajo" },
-  { src: "/sobre_mi/estudio-ambiente(3).jpg", alt: "Estudio Mirarte — ambiente relajante" },
-]
+export interface SobreEliImageSlot {
+  src: string
+  alt: string
+}
+
+export interface SobreEliSectionProps {
+  eliPhoto: SobreEliImageSlot | null
+  studioPhotos: SobreEliImageSlot[]
+}
+
+function isDriveProxySrc(src: string) {
+  return src.startsWith("/api/drive-image")
+}
 
 function StudioLightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
   useEffect(() => {
@@ -62,8 +70,11 @@ function StudioLightbox({ src, alt, onClose }: { src: string; alt: string; onClo
   )
 }
 
-export function SobreEliSection() {
+export function SobreEliSection({ eliPhoto, studioPhotos }: SobreEliSectionProps) {
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
+
+  const eliSrc = eliPhoto?.src ?? "/placeholder.jpg"
+  const eliAlt = eliPhoto?.alt ?? "Eli — fundadora de Mirarte Estética"
 
   return (
     <section id="sobre-eli" className="relative scroll-mt-20 overflow-hidden bg-secondary py-20 lg:py-28">
@@ -118,9 +129,10 @@ export function SobreEliSection() {
               <div className="relative overflow-hidden rounded-3xl shadow-xl">
                 <div className="relative aspect-[3/4] w-full">
                   <Image
-                    src="/sobre_mi/eli-fundadora.jpg"
-                    alt="Eli — fundadora de Mirarte Estética"
+                    src={eliSrc}
+                    alt={eliAlt}
                     fill
+                    unoptimized={isDriveProxySrc(eliSrc)}
                     className="object-cover"
                     sizes="(max-width: 768px) 90vw, 38vw"
                   />
@@ -188,7 +200,7 @@ export function SobreEliSection() {
 
             {/* Mosaico de ambiente — 3 cols desktop, 2 cols mobile */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {STUDIO_PHOTOS.map((photo, i) => (
+              {studioPhotos.map((photo, i) => (
                 <FadeIn key={photo.src} delay={0.06 * i} direction="none">
                   <button
                     type="button"
@@ -201,6 +213,7 @@ export function SobreEliSection() {
                         src={photo.src}
                         alt=""
                         fill
+                        unoptimized={isDriveProxySrc(photo.src)}
                         className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
                         sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, 18vw"
                       />
