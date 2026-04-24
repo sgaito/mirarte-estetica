@@ -1,86 +1,67 @@
-import Image from "next/image"
 import Link from "next/link"
 
 const WA_URL =
   "https://wa.me/5493416367119?text=Hola%20Mirarte%20Estetica!%20Quiero%20consultar%20por%20un%20turno."
 
-interface HeroSectionProps {
-  heroImageSrc?: string | null
-}
-
-export function HeroSection({ heroImageSrc }: HeroSectionProps) {
+export function HeroSection() {
   return (
     <section
       id="reservar"
-      className="relative grid grid-cols-1 scroll-mt-20 bg-background pt-20 md:min-h-[100dvh] md:grid-cols-2"
+      className="
+        relative flex min-h-[100dvh] scroll-mt-20 items-center justify-center overflow-hidden
+        bg-secondary pt-20
+      "
     >
-      {/* Columna izquierda — mismo fondo secundario que el resto del sitio */}
-      <div className="relative z-0 flex min-h-[46dvh] flex-col justify-center bg-secondary px-5 py-10 sm:px-6 md:min-h-[calc(100dvh-5rem)] md:px-14 md:py-14 lg:px-20 lg:py-20">
-        {/* "Estética" decorativo con stroke (tinte turquesa suave) */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[44%] z-0 -translate-x-1/2 -translate-y-1/2 select-none text-[clamp(3rem,14vw,11rem)] font-light uppercase leading-none tracking-tight text-transparent opacity-[0.08] md:opacity-[0.12]"
-          style={{
-            fontFamily: "var(--font-display), Montserrat, sans-serif",
-            WebkitTextStroke: "1.5px oklch(0.72 0.12 185 / 0.45)",
-          }}
-        >
-          Estética
-        </span>
+      {/*
+        ── Fondo: desktop centrado; mobile desplazado a la derecha para enmarcar
+           con las ramas/flores de la esquina superior derecha del arte original.
+      ── */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-cover max-md:bg-[position:92%_38%] md:bg-center"
+        style={{ backgroundImage: "url('/bg-hero.png')" }}
+      />
+      {/* Overlay mobile (más visible) → desktop (casi transparente) */}
+      <div className="absolute inset-0 bg-background/45 sm:bg-background/25 md:bg-background/15" />
 
-        <div className="relative z-10 mx-auto w-full max-w-xl">
+      {/* ── Contenido centrado ── */}
+      <div className="relative z-10 flex flex-col items-center gap-6 px-6 py-16 text-center sm:gap-7 sm:py-20 md:gap-8">
+
+        {/* Título */}
+        <div className="flex flex-col items-center gap-2">
           <h1
-            className="text-balance text-4xl font-medium tracking-tight text-foreground/90 md:text-5xl"
+            className="max-w-2xl text-balance text-3xl font-semibold uppercase tracking-[0.12em] text-foreground/85 sm:text-4xl md:text-5xl lg:text-6xl"
             style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
           >
-            Realzá tu belleza natural. Especialistas en pestañas y cejas.
-            <span
-              className="mt-2 block text-[clamp(0.7rem,1.6vw,0.85rem)] font-medium uppercase tracking-[0.35em] text-primary"
-              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-            >
-              Estética
-            </span>
+            Realzá tu Mirada
           </h1>
-
-          <p className="mt-7 max-w-md text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base md:mt-9 md:text-lg">
-            Espacio de belleza y bienestar en Rosario. Pestañas, cejas y tratamientos con dedicación,
-            técnica y un ambiente pensado para que te sientas cómoda en cada visita.
-          </p>
-
-          <Link
-            href={WA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-105 active:scale-95 sm:mt-10 sm:w-auto sm:px-10 sm:py-4"
+          <p
+            className="text-2xl text-foreground/55 sm:text-3xl md:text-4xl"
+            style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
           >
-            Reservar Turno
-          </Link>
+            Pestañas &amp; Cejas en Rosario
+          </p>
         </div>
-      </div>
 
-      {/* Columna derecha — imagen a pantalla completa */}
-      <div className="relative min-h-[40dvh] w-full md:min-h-[calc(100dvh-5rem)]">
-          <Image
-          src={heroImageSrc ?? "/placeholder.jpg"}
-          alt="Mirarte Estética — ambiente del salón"
-          fill
-          priority
-          unoptimized={!!heroImageSrc}
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
-      </div>
+        {/* Bajada */}
+        <p
+          className="max-w-md text-pretty text-sm leading-relaxed text-foreground/60 sm:text-base"
+          style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+        >
+          Espacio de belleza y bienestar. Extensiones de pestañas, lifting, diseño de cejas
+          y tratamientos con dedicación y calidad premium.
+        </p>
 
-      {/* Badge circular en el encuentro de columnas */}
-      <div className="pointer-events-none absolute left-1/2 top-[calc(100%-22dvh)] z-20 hidden -translate-x-1/2 md:block md:top-1/2 md:-translate-y-1/2">
-        <div className="pointer-events-auto h-20 w-20 rounded-full bg-background p-1 shadow-xl ring-1 ring-border/60 sm:h-24 sm:w-24 md:h-32 md:w-32">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo.png"
-            alt="Mirarte Estética"
-            className="h-full w-full rounded-full object-contain"
-          />
-        </div>
+        {/* CTA */}
+        <Link
+          href={WA_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center rounded-full bg-primary px-9 py-3.5 text-sm font-medium text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-105 active:scale-95 sm:px-11 sm:py-4 sm:text-base"
+          style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+        >
+          Reservar Turno
+        </Link>
       </div>
     </section>
   )

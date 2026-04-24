@@ -8,15 +8,15 @@ import { FeaturedProductSection } from "@/components/featured-product-section"
 import { FaqSection } from "@/components/faq-section"
 import { LocationSection } from "@/components/location-section"
 import { Footer } from "@/components/footer"
-import { getHeroImage, getSobreEliMedia } from "@/lib/google-drive"
+import { getSobreEliMedia } from "@/lib/google-drive"
 
 export default async function HomePage() {
-  const [heroImage, sobreEliMedia] = await Promise.all([getHeroImage(), getSobreEliMedia()])
+  const sobreEliMedia = await getSobreEliMedia()
 
   return (
     <main className="min-h-screen">
       <Header />
-      <HeroSection heroImageSrc={heroImage?.url ?? null} />
+      <HeroSection />
       <ServicesSection />
       <SobreEliSection
         eliPhoto={

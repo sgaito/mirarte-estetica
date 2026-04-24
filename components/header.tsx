@@ -14,6 +14,16 @@ export function Header() {
     return () => window.removeEventListener("scroll", handler)
   }, [])
 
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)")
+    const closeMenuOnDesktop = () => {
+      if (mq.matches) setMobileMenuOpen(false)
+    }
+    mq.addEventListener("change", closeMenuOnDesktop)
+    closeMenuOnDesktop()
+    return () => mq.removeEventListener("change", closeMenuOnDesktop)
+  }, [])
+
   const navLinks = [
     { href: "#reservar", label: "Inicio" },
     { href: "#servicios", label: "Servicios" },
@@ -28,14 +38,19 @@ export function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ${
-        scrolled
-          ? "bg-background/90 backdrop-blur-md border-border/50"
-          : "bg-transparent border-transparent"
+        mobileMenuOpen
+          ? "bg-background border-border"
+          : scrolled
+            ? "bg-background/90 backdrop-blur-md border-border/50"
+            : "bg-transparent border-transparent"
       }`}
     >
       <nav className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
-          <Link href="/" className="flex items-center">
+        <div className="relative flex h-20 items-center justify-between">
+          <Link
+            href="/"
+            className="z-10 flex items-center max-md:absolute max-md:left-1/2 max-md:-translate-x-1/2"
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo_1.png"
@@ -66,7 +81,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="md:hidden rounded-full p-2 text-foreground/70 hover:text-primary transition-colors"
+            className="z-10 ml-auto md:hidden rounded-full p-2 text-foreground/70 transition-colors hover:text-primary"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <span className="sr-only">Abrir menú</span>
