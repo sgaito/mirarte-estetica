@@ -18,6 +18,8 @@ export async function GET(request: NextRequest) {
         // Evitar que Drive devuelva la página de advertencia de virus para archivos grandes
         "User-Agent": "Mozilla/5.0",
       },
+      // Cachear el fetch interno de Next.js 1 h (stale-while-revalidate implícito)
+      next: { revalidate: 3600 },
     })
 
     if (!upstream.ok) {
@@ -32,7 +34,8 @@ export async function GET(request: NextRequest) {
     return new Response(upstream.body, {
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "public, max-age=86400, stale-while-revalidate=3600",
+        // 1 h fresco; luego servir stale mientras se revalida en background (SWR)
+        "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
       },
     })
   } catch (error) {

@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache"
 import { google } from "googleapis"
 
 export interface DriveImage {
@@ -8,6 +9,9 @@ export interface DriveImage {
   width: number
   height: number
 }
+
+/* Un único número para cambiar el TTL en todos lados */
+const DRIVE_REVALIDATE_SECONDS = 3600
 
 function makeAuth() {
   const keyJson = process.env.GOOGLE_SERVICE_ACCOUNT_KEY
@@ -23,7 +27,27 @@ function makeAuth() {
   }
 }
 
-export async function getDriveImages(): Promise<DriveImage[]> {
+function mapFile(f: {
+  id?: string | null
+  name?: string | null
+  mimeType?: string | null
+  imageMediaMetadata?: unknown
+}): DriveImage | null {
+  if (!f.id || !f.name || !f.mimeType) return null
+  const meta = f.imageMediaMetadata as { width?: number; height?: number } | undefined
+  return {
+    id: f.id,
+    name: f.name,
+    mimeType: f.mimeType,
+    url: `/api/drive-image?id=${f.id}`,
+    width: meta?.width ?? 4,
+    height: meta?.height ?? 3,
+  }
+}
+
+/* ─── Galería ─────────────────────────────────────────────── */
+
+async function _fetchGalleryImages(): Promise<DriveImage[]> {
   const folderId = process.env.DRIVE_GALLERY_FOLDER_ID
   const auth = makeAuth()
 
@@ -42,31 +66,35 @@ export async function getDriveImages(): Promise<DriveImage[]> {
       orderBy: "name",
     })
 
-    const files = response.data.files ?? []
-
-    return files
-      .filter((f) => Boolean(f.id && f.name && f.mimeType))
-      .map((f) => ({
-        id: f.id!,
-        name: f.name!,
-        mimeType: f.mimeType!,
-        url: `/api/drive-image?id=${f.id}`,
-        width: (f.imageMediaMetadata as any)?.width ?? 4,
-        height: (f.imageMediaMetadata as any)?.height ?? 3,
-      }))
+    return (response.data.files ?? [])
+      .map(mapFile)
+      .filter((img): img is DriveImage => img !== null)
   } catch (error) {
     console.error("[google-drive] Error al obtener imágenes de galería:", error)
     return []
   }
 }
 
-export async function getHeroImage(): Promise<DriveImage | null> {
+/**
+ * Lista de imágenes de galería.
+ * Se cachea 1 h; tras ese tiempo Next.js la sirve igual (stale) mientras
+ * refresca la caché en segundo plano → stale-while-revalidate a nivel de datos.
+ */
+export const getDriveImages = unstable_cache(
+  _fetchGalleryImages,
+  ["drive-gallery-images"],
+  { revalidate: DRIVE_REVALIDATE_SECONDS, tags: ["drive-gallery"] },
+)
+
+/* ─── Hero ────────────────────────────────────────────────── */
+
+async function _fetchHeroFiles(): Promise<DriveImage[]> {
   const folderId = process.env.DRIVE_HERO_FOLDER_ID
   const auth = makeAuth()
 
   if (!auth || !folderId) {
     console.warn("[google-drive] Faltan las variables GOOGLE_SERVICE_ACCOUNT_KEY o DRIVE_HERO_FOLDER_ID")
-    return null
+    return []
   }
 
   try {
@@ -79,23 +107,24 @@ export async function getHeroImage(): Promise<DriveImage | null> {
       orderBy: "name",
     })
 
-    const files = (response.data.files ?? []).filter(
-      (f) => Boolean(f.id && f.name && f.mimeType),
-    )
-    if (files.length === 0) return null
-
-    const file = files[Math.floor(Math.random() * files.length)]
-
-    return {
-      id: file.id!,
-      name: file.name!,
-      mimeType: file.mimeType!,
-      url: `/api/drive-image?id=${file.id}`,
-      width: (file.imageMediaMetadata as any)?.width ?? 4,
-      height: (file.imageMediaMetadata as any)?.height ?? 3,
-    }
+    return (response.data.files ?? [])
+      .map(mapFile)
+      .filter((img): img is DriveImage => img !== null)
   } catch (error) {
-    console.error("[google-drive] Error al obtener imagen del Hero:", error)
-    return null
+    console.error("[google-drive] Error al obtener imágenes del Hero:", error)
+    return []
   }
+}
+
+/* La lista de archivos se cachea; la selección aleatoria ocurre en cada request */
+const _getHeroFilesCached = unstable_cache(
+  _fetchHeroFiles,
+  ["drive-hero-folder-files"],
+  { revalidate: DRIVE_REVALIDATE_SECONDS, tags: ["drive-hero"] },
+)
+
+export async function getHeroImage(): Promise<DriveImage | null> {
+  const images = await _getHeroFilesCached()
+  if (images.length === 0) return null
+  return images[Math.floor(Math.random() * images.length)]
 }

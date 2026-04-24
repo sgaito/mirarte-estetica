@@ -60,7 +60,7 @@ export function HeroSection({ heroImageSrc }: HeroSectionProps) {
 
       {/* Columna derecha — imagen a pantalla completa */}
       <div className="relative min-h-[40dvh] w-full md:min-h-[calc(100dvh-5rem)]">
-        <Image
+          <Image
           src={heroImageSrc ?? "/placeholder.jpg"}
           alt="Mirarte Estética — ambiente del salón"
           fill

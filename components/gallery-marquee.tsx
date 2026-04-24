@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useRef, useState, useEffect, useLayoutEffect } from "react"
 import { motion, useMotionValue, useAnimationFrame, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
@@ -86,15 +87,17 @@ function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeigh
         return (
           <div
             key={`${image.id}-${idx}`}
-            className="flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl shadow-sm"
+            className="relative flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl shadow-sm"
             style={{ width: cellWidth, height: rowHeight }}
             onClick={() => onImageClick(image)}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={image.url}
               alt={image.name}
-              className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+              fill
+              sizes={`${cellWidth}px`}
+              unoptimized
+              className="object-cover transition-transform duration-500 hover:scale-105"
               loading="lazy"
               draggable={false}
             />
@@ -130,18 +133,21 @@ function Lightbox({ image, onClose }: { image: DriveImage; onClose: () => void }
       </button>
 
       <motion.div
-        className="relative max-h-[90vh] max-w-[90vw]"
+        className="relative h-[min(90dvh,900px)] w-[min(90vw,1200px)]"
         initial={{ scale: 0.92, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.92, opacity: 0 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={image.url}
           alt={image.name}
-          className="max-h-[90vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl"
+          fill
+          sizes="90vw"
+          unoptimized
+          className="rounded-2xl object-contain shadow-2xl"
+          priority
         />
       </motion.div>
     </motion.div>
