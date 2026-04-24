@@ -1,54 +1,35 @@
 "use client"
 
-import { useState } from "react"
-import { ChevronDown } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
+import { useState, useEffect, useCallback } from "react"
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  MessageCircleHeart,
+  ImageIcon,
+  Sparkles,
+} from "lucide-react"
+import { AnimatePresence, motion } from "framer-motion"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FadeIn } from "@/components/fade-in"
+import {
+  SERVICES_CATALOG,
+  ELI_EXTENSIONES_PREMIUM_INTRO,
+  ELI_ASESORAMIENTO_EXTENSIONES,
+  DESCRIPCION_SERVICIO_PENDIENTE,
+  type ServiceItem,
+  type ServiceCategory,
+} from "@/lib/services-catalog"
 
-const CATEGORIES = [
-  {
-    id: "pestanas",
-    label: "Pestañas",
-    services: [
-      "Extensiones pelo a pelo",
-      "Extensiones volumen ruso (2D, 3D, 4D)",
-      "Extensiones efecto rímel / Hybrid",
-      "Lifting de pestañas — curvado natural",
-      "Arqueado permanente",
-      "Tintura de pestañas",
-      "Botox de pestañas — tratamiento de nutrición",
-    ],
-  },
-  {
-    id: "cejas",
-    label: "Cejas",
-    services: [
-      "Perfilado de cejas — diseño con pinza/cera",
-      "Laminado de cejas — Brow Lamination",
-      "Tintura de cejas",
-      "Henna para cejas — efecto sombreado temporal",
-      "Microblading — tatuaje pelo a pelo (semi-permanente)",
-      "Microshading — efecto polvo/maquillaje (semi-permanente)",
-      "Alisado de cejas",
-    ],
-  },
-  {
-    id: "adicionales",
-    label: "Adicionales",
-    services: [
-      "Limpieza facial profunda",
-      "Dermaplaning",
-      "Remoción de extensiones",
-    ],
-  },
-]
+/* ─── Constants ───────────────────────────────────────────────────────────── */
 
-/* Sombra flotante con tinte turquesa */
-const SHADOW_IDLE = "0 4px 14px -2px oklch(0 0 0 / 0.07), 0 2px 4px -1px oklch(0 0 0 / 0.04)"
-const SHADOW_OPEN =
-  "0 24px 48px -12px oklch(0.72 0.12 185 / 0.18), 0 8px 16px -4px oklch(0.72 0.12 185 / 0.08)"
+const WA_SERVICE = (name: string) =>
+  `https://wa.me/5493416367119?text=${encodeURIComponent(
+    `Hola Mirarte Estética! Quiero consultar por el servicio de ${name}.`,
+  )}`
 
-/* Mesh gradient para el fondo */
 const MESH_BG = `
   radial-gradient(ellipse at 8% 40%,  oklch(0.95 0.05 185 / 0.55) 0%, transparent 52%),
   radial-gradient(ellipse at 92% 10%,  oklch(0.97 0.03 75  / 0.50) 0%, transparent 48%),
@@ -56,81 +37,439 @@ const MESH_BG = `
   oklch(0.977 0.003 240)
 `.trim()
 
-function ServiceList({ services }: { services: string[] }) {
+/* ─── WhatsApp icon ───────────────────────────────────────────────────────── */
+
+function WhatsAppIcon({ className }: { className?: string }) {
   return (
-    <ul className="divide-y divide-border/40">
-      {services.map((name) => (
-        <li key={name} className="flex items-center justify-between py-3.5">
-          <span className="text-sm leading-snug text-foreground/70">{name}</span>
-          <span className="ml-4 select-none text-xs text-muted-foreground/30">—</span>
-        </li>
-      ))}
-    </ul>
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
   )
 }
 
-function Accordion() {
-  const [open, setOpen] = useState<number | null>(null)
+/* ─── Extensiones seda premium (texto de Eli) + botón ─────────────────────── */
+
+function ExtensionesPremiumIntro() {
+  const [open, setOpen] = useState(false)
 
   return (
-    <div className="flex flex-col gap-3">
-      {CATEGORIES.map((cat, idx) => {
-        const isOpen = open === idx
-        return (
-          <div
-            key={cat.id}
-            className="overflow-hidden rounded-2xl bg-card transition-shadow duration-300"
-            style={{ boxShadow: isOpen ? SHADOW_OPEN : SHADOW_IDLE }}
+    <div
+      className="rounded-2xl border border-border/60 bg-card/90 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
+      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+          Extensiones de pestaña — seda premium
+        </p>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/15 sm:self-auto"
+        >
+          {open ? "Cerrar" : "Ver descripción"}
+          <ChevronDown
+            className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          />
+        </button>
+      </div>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
           >
-            <button
-              onClick={() => setOpen(isOpen ? null : idx)}
-              className="flex w-full items-center justify-between px-6 py-5 text-left"
+            <p
+              className="mt-4 text-sm leading-relaxed text-foreground/85 sm:text-base"
+              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
             >
-              <span
-                className={`text-2xl leading-none transition-colors duration-200 ${
-                  isOpen ? "text-primary" : "text-foreground/80"
-                }`}
-                style={{ fontFamily: "var(--font-script)" }}
-              >
-                {cat.label}
-              </span>
-              <motion.div
-                animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.25, ease: "easeInOut" }}
-              >
-                <ChevronDown className="h-5 w-5 text-primary" />
-              </motion.div>
-            </button>
-
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                >
-                  <div className="px-6 pb-6">
-                    <ServiceList services={cat.services} />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )
-      })}
+              {ELI_EXTENSIONES_PREMIUM_INTRO}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
 
+/* ─── Asesoramiento (turquesa) — solo texto de Eli ───────────────────────── */
+
+function AsesoramientoCallout() {
+  return (
+    <div
+      className="relative overflow-hidden rounded-2xl border border-primary/25 px-5 py-5 shadow-sm sm:px-6 sm:py-6"
+      style={{
+        background:
+          "linear-gradient(135deg, oklch(0.88 0.09 185 / 0.60) 0%, oklch(0.92 0.05 185 / 0.40) 45%, oklch(0.96 0.02 200 / 0.45) 100%)",
+      }}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full opacity-40 blur-2xl"
+        style={{ background: "radial-gradient(circle, oklch(0.72 0.14 185) 0%, transparent 70%)" }}
+      />
+      <div className="relative flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-5">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/20 text-primary">
+          <MessageCircleHeart className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p
+            className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            Asesoramiento
+          </p>
+          <p
+            className="mt-2 text-sm leading-relaxed text-foreground/85 sm:text-base"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            {ELI_ASESORAMIENTO_EXTENSIONES}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Service card ────────────────────────────────────────────────────────── */
+
+function ServiceCard({
+  service,
+  onOpen,
+}: {
+  service: ServiceItem
+  onOpen: (s: ServiceItem) => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(service)}
+      className="group relative flex flex-col items-start overflow-hidden rounded-2xl border border-border/50 bg-card/80 text-left shadow-sm ring-offset-2 ring-offset-background transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.97]"
+      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+    >
+      {/* Thumbnail */}
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40">
+        {service.photos.length > 0 ? (
+          <Image
+            src={service.photos[0].src}
+            alt={service.photos[0].alt}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-secondary to-muted/40">
+            <Sparkles className="h-7 w-7 text-primary/25" />
+          </div>
+        )}
+        {service.tag && (
+          <span className="absolute right-2 top-2 rounded-full bg-primary/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground shadow-sm backdrop-blur-sm">
+            {service.tag}
+          </span>
+        )}
+      </div>
+
+      {/* Text */}
+      <div className="flex flex-1 flex-col gap-1 px-3.5 py-3">
+        <p className="text-sm font-semibold leading-tight text-foreground/90 transition-colors group-hover:text-primary">
+          {service.name}
+        </p>
+        <p
+          className={`line-clamp-2 text-xs leading-relaxed ${
+            service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
+              ? "text-muted-foreground/85 italic"
+              : "text-muted-foreground"
+          }`}
+        >
+          {service.shortDesc}
+        </p>
+      </div>
+    </button>
+  )
+}
+
+/* ─── Service modal ───────────────────────────────────────────────────────── */
+
+function ServiceModal({
+  service,
+  onClose,
+}: {
+  service: ServiceItem
+  onClose: () => void
+}) {
+  const [photoIdx, setPhotoIdx] = useState(0)
+  const hasPhotos = service.photos.length > 0
+
+  const prevPhoto = useCallback(
+    () => setPhotoIdx((p) => (p - 1 + service.photos.length) % service.photos.length),
+    [service.photos.length],
+  )
+  const nextPhoto = useCallback(
+    () => setPhotoIdx((p) => (p + 1) % service.photos.length),
+    [service.photos.length],
+  )
+
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+      if (e.key === "ArrowLeft" && hasPhotos) prevPhoto()
+      if (e.key === "ArrowRight" && hasPhotos) nextPhoto()
+    }
+    const prevOverflow = document.body.style.overflow
+    document.addEventListener("keydown", h)
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.removeEventListener("keydown", h)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [onClose, hasPhotos, prevPhoto, nextPhoto])
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-5"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="relative flex w-full flex-col overflow-hidden rounded-t-3xl bg-background shadow-2xl sm:w-[95%] sm:max-w-xl sm:rounded-3xl"
+        style={{ maxHeight: "90dvh" }}
+        initial={{ y: 52, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 52, opacity: 0 }}
+        transition={{ duration: 0.28, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Drag handle (mobile) */}
+        <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-border sm:hidden" />
+
+        {/* Header */}
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
+          <div>
+            {service.tag && (
+              <p
+                className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary"
+                style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+              >
+                {service.tag}
+              </p>
+            )}
+            <h3
+              className="text-base font-semibold text-foreground sm:text-lg"
+              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+            >
+              {service.name}
+            </h3>
+          </div>
+          {/* Big touch-friendly close button */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-muted hover:text-foreground active:scale-90"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          {/* Image carousel */}
+          {hasPhotos ? (
+            <div className="relative aspect-[4/3] w-full bg-muted sm:aspect-[16/9]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={photoIdx}
+                  className="absolute inset-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  <Image
+                    src={service.photos[photoIdx].src}
+                    alt={service.photos[photoIdx].alt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 560px"
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {service.photos.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      prevPhoto()
+                    }}
+                    aria-label="Foto anterior"
+                    className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      nextPhoto()
+                    }}
+                    aria-label="Foto siguiente"
+                    className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                  <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+                    {service.photos.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setPhotoIdx(i)
+                        }}
+                        aria-label={`Foto ${i + 1}`}
+                        className={`h-1.5 rounded-full transition-all duration-200 ${
+                          i === photoIdx ? "w-5 bg-white" : "w-1.5 bg-white/50"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-2.5 bg-muted/25 py-10">
+              <ImageIcon className="h-9 w-9 text-muted-foreground/30" />
+              <p className="text-xs text-muted-foreground/60">Sin fotos en la carpeta del servicio</p>
+            </div>
+          )}
+
+          {/* Text content */}
+          <div
+            className="space-y-4 px-5 pb-7 pt-5"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            <p
+              className={`text-sm leading-relaxed sm:text-base ${
+                service.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
+                  ? "text-muted-foreground/90 italic"
+                  : "text-muted-foreground"
+              }`}
+            >
+              {service.fullDesc}
+            </p>
+
+            {service.details && service.details.length > 0 && (
+              <ul className="space-y-2.5">
+                {service.details.map((d) => (
+                  <li key={d} className="flex items-center gap-3 text-sm text-foreground/75">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <a
+              href={WA_SERVICE(service.name)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2.5 rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-105 hover:shadow-md active:scale-95"
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+              Consultar por {service.name}
+            </a>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+/* ─── Category content ────────────────────────────────────────────────────── */
+
+function CategoryContent({
+  category,
+  onOpenService,
+}: {
+  category: ServiceCategory
+  onOpenService: (s: ServiceItem) => void
+}) {
+  if (category.id === "pestanas") {
+    const extensions = category.services.filter((s) => s.group === "extension")
+    const treatments = category.services.filter((s) => s.group === "tratamiento")
+
+    return (
+      <div className="space-y-8">
+        <ExtensionesPremiumIntro />
+        <AsesoramientoCallout />
+
+        <div>
+          <p
+            className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/80"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            Opciones de pestañas
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {extensions.map((s) => (
+              <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
+            ))}
+          </div>
+        </div>
+
+        {treatments.length > 0 && (
+          <div>
+            <p
+              className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground/45"
+              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+            >
+              Tratamientos
+            </p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {treatments.map((s) => (
+                <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className={`grid gap-3 ${
+        category.services.length === 1
+          ? "max-w-xs grid-cols-1"
+          : "grid-cols-2 sm:grid-cols-3"
+      }`}
+    >
+      {category.services.map((s) => (
+        <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
+      ))}
+    </div>
+  )
+}
+
+/* ─── Main section ────────────────────────────────────────────────────────── */
+
 export function ServicesSection() {
+  const [activeService, setActiveService] = useState<ServiceItem | null>(null)
+
   return (
     <section
       id="servicios"
-      className="relative overflow-hidden scroll-mt-20 py-24 lg:py-32"
+      className="relative scroll-mt-20 overflow-hidden py-24 lg:py-32"
       style={{ background: MESH_BG }}
     >
-      {/* Hojas decorativas — esquina superior izquierda */}
+      {/* Decorative blurred logos */}
       <div
         aria-hidden
         className="pointer-events-none absolute -left-32 -top-32 h-[480px] w-[480px] -rotate-12 opacity-[0.06] blur-2xl"
@@ -138,8 +477,6 @@ export function ServicesSection() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.png" alt="" className="h-full w-full object-contain" />
       </div>
-
-      {/* Hojas decorativas — esquina inferior derecha */}
       <div
         aria-hidden
         className="pointer-events-none absolute -bottom-32 -right-32 h-[480px] w-[480px] rotate-12 opacity-[0.06] blur-2xl"
@@ -154,18 +491,48 @@ export function ServicesSection() {
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
               Nuestros <span className="heading-emphasis">Servicios</span>
             </h2>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Cada tratamiento está diseñado para realzar tu belleza natural con dedicación y precisión.
-            </p>
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.15}>
-          <div className="mx-auto mt-16 max-w-2xl">
-            <Accordion />
+        <FadeIn delay={0.12}>
+          <div className="mx-auto mt-14 max-w-5xl">
+            <Tabs defaultValue="pestanas" className="gap-6">
+              {/* Scrollable tab bar */}
+              <div className="overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <TabsList
+                  className="inline-flex h-auto w-max min-w-full gap-1 rounded-xl bg-muted/80 p-1.5 shadow-inner"
+                  style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+                >
+                  {SERVICES_CATALOG.map((cat) => (
+                    <TabsTrigger
+                      key={cat.id}
+                      value={cat.id}
+                      className="flex-1 rounded-lg px-4 py-2.5 text-sm data-[state=active]:text-primary"
+                    >
+                      {cat.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+
+              {SERVICES_CATALOG.map((cat) => (
+                <TabsContent key={cat.id} value={cat.id} className="mt-2 outline-none">
+                  <CategoryContent category={cat} onOpenService={setActiveService} />
+                </TabsContent>
+              ))}
+            </Tabs>
           </div>
         </FadeIn>
       </div>
+
+      <AnimatePresence>
+        {activeService && (
+          <ServiceModal
+            service={activeService}
+            onClose={() => setActiveService(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   )
 }

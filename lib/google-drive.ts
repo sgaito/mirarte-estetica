@@ -140,6 +140,8 @@ export interface SobreEliMedia {
   eli: DriveImage | null
   /** Hasta 4 imágenes de la carpeta ESTUDIO */
   estudio: DriveImage[]
+  /** Fotos de Eli trabajando (carpeta TRABAJANDO / TRABAJO bajo la raíz Sobre Eli) */
+  trabajando: DriveImage[]
 }
 
 function findChildFolderByName(
@@ -155,7 +157,7 @@ async function _fetchSobreEliMediaUncached(): Promise<SobreEliMedia> {
   const auth = makeAuth()
   if (!auth) {
     console.warn("[google-drive] getSobreEliMedia: falta GOOGLE_SERVICE_ACCOUNT_KEY")
-    return { eli: null, estudio: [] }
+    return { eli: null, estudio: [], trabajando: [] }
   }
 
   try {
@@ -170,9 +172,14 @@ async function _fetchSobreEliMediaUncached(): Promise<SobreEliMedia> {
 
     const eliFolder = findChildFolderByName(subfolders, "ELI")
     const estudioFolder = findChildFolderByName(subfolders, "ESTUDIO")
+    const trabajandoFolder =
+      findChildFolderByName(subfolders, "TRABAJANDO") ??
+      findChildFolderByName(subfolders, "TRABAJO") ??
+      findChildFolderByName(subfolders, "ELI TRABAJANDO")
 
     let eli: DriveImage | null = null
     const estudio: DriveImage[] = []
+    const trabajando: DriveImage[] = []
 
     if (eliFolder) {
       const eliRes = await drive.files.list({
@@ -198,15 +205,29 @@ async function _fetchSobreEliMediaUncached(): Promise<SobreEliMedia> {
       }
     }
 
-    return { eli, estudio }
+    if (trabajandoFolder) {
+      const trabRes = await drive.files.list({
+        q: `'${trabajandoFolder.id}' in parents and mimeType contains 'image/' and trashed = false`,
+        fields: "files(id, name, mimeType, imageMediaMetadata)",
+        pageSize: 20,
+        orderBy: "name",
+      })
+      for (const f of (trabRes.data.files ?? []).slice(0, 8)) {
+        const m = mapFile(f)
+        if (m) trabajando.push(m)
+      }
+    }
+
+    return { eli, estudio, trabajando }
   } catch (error) {
     console.error("[google-drive] Error al obtener medios Sobre Eli:", error)
-    return { eli: null, estudio: [] }
+    return { eli: null, estudio: [], trabajando: [] }
   }
 }
 
 export const getSobreEliMedia = unstable_cache(
   _fetchSobreEliMediaUncached,
-  ["sobre-eli-drive-media", SOBRE_ELI_ROOT_FOLDER_ID],
+  /* v3: incluye trabajando — cambiar clave invalida cachés viejas sin esa propiedad */
+  ["sobre-eli-drive-media", "v3-trabajando", SOBRE_ELI_ROOT_FOLDER_ID],
   { revalidate: DRIVE_REVALIDATE_SECONDS, tags: ["sobre-eli"] },
 )

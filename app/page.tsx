@@ -8,6 +8,7 @@ import { FeaturedProductSection } from "@/components/featured-product-section"
 import { FaqSection } from "@/components/faq-section"
 import { LocationSection } from "@/components/location-section"
 import { Footer } from "@/components/footer"
+import { ELI_CARTA_PRESENTACION_DEFAULT } from "@/lib/eli-presentacion"
 import { getSobreEliMedia } from "@/lib/google-drive"
 
 export default async function HomePage() {
@@ -19,6 +20,7 @@ export default async function HomePage() {
       <HeroSection />
       <ServicesSection />
       <SobreEliSection
+        cartaParrafos={ELI_CARTA_PRESENTACION_DEFAULT}
         eliPhoto={
           sobreEliMedia.eli
             ? { src: sobreEliMedia.eli.url, alt: `Eli — ${sobreEliMedia.eli.name}` }
@@ -27,6 +29,10 @@ export default async function HomePage() {
         studioPhotos={sobreEliMedia.estudio.map((img) => ({
           src: img.url,
           alt: `Estudio Mirarte — ${img.name}`,
+        }))}
+        trabajandoPhotos={(sobreEliMedia.trabajando ?? []).map((img) => ({
+          src: img.url,
+          alt: `Eli trabajando — ${img.name}`,
         }))}
       />
       <GallerySection />
