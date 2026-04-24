@@ -4,7 +4,11 @@ import Link from "next/link"
 const WA_URL =
   "https://wa.me/5493416367119?text=Hola%20Mirarte%20Estetica!%20Quiero%20consultar%20por%20un%20turno."
 
-export function HeroSection() {
+interface HeroSectionProps {
+  heroImageSrc?: string | null
+}
+
+export function HeroSection({ heroImageSrc }: HeroSectionProps) {
   return (
     <section
       id="reservar"
@@ -57,10 +61,11 @@ export function HeroSection() {
       {/* Columna derecha — imagen a pantalla completa */}
       <div className="relative min-h-[40dvh] w-full md:min-h-[calc(100dvh-5rem)]">
         <Image
-          src="/placeholder.jpg"
+          src={heroImageSrc ?? "/placeholder.jpg"}
           alt="Mirarte Estética — ambiente del salón"
           fill
           priority
+          unoptimized={!!heroImageSrc}
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
         />

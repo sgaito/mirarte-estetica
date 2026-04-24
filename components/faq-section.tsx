@@ -8,43 +8,33 @@ import { FadeIn } from "@/components/fade-in"
 const FAQS = [
   {
     id: 1,
-    q: "¿Cuánto duran las extensiones de pestañas?",
-    a: "Con los cuidados adecuados, las extensiones duran entre 3 y 4 semanas. Se recomienda hacer un relleno cada 2-3 semanas para mantenerlas siempre perfectas.",
+    q: "¿Qué técnicas de extensiones de pestañas realizan?",
+    a: "Realizamos la colocación con técnica pelo por pelo Clásica y Volumen.",
   },
   {
     id: 2,
-    q: "¿Necesito reservar turno con anticipación?",
-    a: "Sí, toda la atención es con turno previo. Podés reservar por WhatsApp o Instagram y te confirmamos disponibilidad a la brevedad.",
+    q: "¿Qué tipo de materiales utilizan?",
+    a: "Trabajamos con productos de alta calidad, hipoalergénicos, de larga duración y resistentes al agua. Utilizamos pestañas de seda Premium importadas.",
   },
   {
     id: 3,
-    q: "¿Qué pasa si tengo ojos sensibles o soy alérgica?",
-    a: "No hay problema. Antes de cualquier servicio evaluamos tu caso y, si es necesario, realizamos una prueba de parche para garantizar que el procedimiento sea seguro y cómodo para vos.",
+    q: "¿Las extensiones dañan mis pestañas naturales?",
+    a: "No. Al utilizar pestañas de seda Premium el resultado es natural, no aportan peso y no dañan tu pestaña natural.",
   },
   {
     id: 4,
-    q: "¿Cómo cuido mis extensiones en casa?",
-    a: "Evitá mojarlas las primeras 24 horas, no usés productos oleosos cerca de los ojos y cepillalas suavemente cada mañana. Con esos cuidados simples van a durar mucho más.",
+    q: "¿Cómo elijo el diseño o volumen adecuado para mí?",
+    a: "Previo a la colocación se realiza un asesoramiento donde elegís en conjunto el diseño, volumen, estilo, curvatura y largo.",
   },
   {
     id: 5,
-    q: "¿El lifting o arqueado daña mis pestañas naturales?",
-    a: "No, siempre que se realice con los productos adecuados y respetando los tiempos del proceso. En Mirarte usamos productos de alta calidad que cuidan tu pestaña natural.",
+    q: "¿Cuánto tiempo duran las extensiones?",
+    a: "Tienen una duración aproximada de 3 meses o más, dependiendo de que se realicen los retoques en tiempo y forma y se mantengan los cuidados indicados.",
   },
   {
     id: 6,
-    q: "¿Cuánto dura cada turno?",
-    a: "Depende del servicio: las extensiones completas llevan entre 1.5 y 2 horas, los rellenos entre 45 y 60 minutos, el lifting o arqueado alrededor de 1 hora, y el diseño de cejas unos 30 minutos.",
-  },
-  {
-    id: 7,
-    q: "¿Cómo agendo un turno?",
-    a: "Podés contactarnos directamente por WhatsApp o enviarnos un mensaje por Instagram. Te respondemos a la brevedad y coordinamos el horario que mejor te quede.",
-  },
-  {
-    id: 8,
-    q: "¿Hacen remoción de extensiones colocadas en otro lugar?",
-    a: "Sí, ofrecemos el servicio de remoción de extensiones sin importar dónde te las hayas hecho. Lo realizamos con productos seguros que no dañan tu pestaña natural.",
+    q: "¿Dónde están ubicados y qué medidas de higiene toman?",
+    a: "El estudio está en la zona Centro de Rosario. Trabajamos bajo protocolo de bioseguridad, tomando todas las medidas y precauciones necesarias.",
   },
 ]
 

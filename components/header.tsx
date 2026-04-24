@@ -17,10 +17,12 @@ export function Header() {
   const navLinks = [
     { href: "#reservar", label: "Inicio" },
     { href: "#servicios", label: "Servicios" },
+    { href: "#sobre-eli", label: "Eli & Mirarte" },
     { href: "#galeria", label: "Galería" },
-    { href: "#ubicacion", label: "Ubicación" },
+    { href: "#resenas", label: "Reseñas" },
+    { href: "#promoter", label: "Promoter" },
     { href: "#faq", label: "Preguntas" },
-    { href: "#contacto", label: "Contacto" },
+    { href: "#ubicacion", label: "Ubicación" },
   ]
 
   return (

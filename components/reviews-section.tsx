@@ -139,7 +139,7 @@ function ReviewsCarousel() {
 
 export function ReviewsSection() {
   return (
-    <section className="bg-secondary py-24 lg:py-32">
+    <section id="resenas" className="scroll-mt-20 bg-secondary py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
