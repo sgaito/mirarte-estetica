@@ -59,7 +59,6 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         fullDesc:
           "Style Natural está pensado para quien quiere levantar la mirada sin que se note que lleva extensiones. Se trabaja con curvas y largos muy armónicos con tu ojo, sumando solo el volumen justo para dar definición y apertura. Es el estilo ideal para empezar, para el día a día o para quien prefiere un acabado discreto y elegante.",
         details: [
-          "Efecto «yo, pero mejor»",
           "Ideal para primera vez en extensiones",
           "Combinable con el asesoramiento previo de diseño y curvatura",
         ],
