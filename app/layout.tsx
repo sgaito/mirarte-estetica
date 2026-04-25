@@ -22,9 +22,16 @@ const montserrat = Montserrat({
 
 const siteUrl = "https://mirarte-estetica.vercel.app"
 
+/** 58 caracteres — rango recomendado OG/Twitter ~50–60. */
+const shareTitle =
+  "Mirarte Estética | Extensiones, lifting y cejas en Rosario"
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Mirarte Estética | Pestañas, Lifting y Belleza en Rosario",
+  title: {
+    default: "Mirarte Estética | Pestañas, Lifting y Belleza en Rosario",
+    template: "%s | Mirarte Estética",
+  },
   description:
     "Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.",
   alternates: {
@@ -32,15 +39,15 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: siteUrl,
-    title: "Mirarte Estética",
+    title: shareTitle,
     description:
       "Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.",
     images: [
       {
-        url: "/logo.png",
+        url: "/metadatos.png",
         width: 1200,
         height: 630,
-        alt: "Mirarte Estética",
+        alt: "Mirarte Estética — Extensiones, lifting y cejas en Rosario. Reservá tu turno por WhatsApp.",
       },
     ],
     type: "website",
@@ -49,10 +56,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mirarte Estética",
+    title: shareTitle,
     description:
       "Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.",
-    images: [`${siteUrl}/logo.png`],
+    images: [`${siteUrl}/metadatos.png`],
   },
   icons: {
     icon: '/logo.png',
