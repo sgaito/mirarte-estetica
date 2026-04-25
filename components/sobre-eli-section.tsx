@@ -12,19 +12,64 @@ export interface SobreEliImageSlot {
 }
 
 export interface SobreEliSectionProps {
+  /** Párrafos de la carta de presentación. */
+  cartaParrafos: string[]
   eliPhoto: SobreEliImageSlot | null
   studioPhotos: SobreEliImageSlot[]
+  /** Fotos de Eli trabajando (carpeta TRABAJANDO en Drive). */
+  trabajandoPhotos?: SobreEliImageSlot[]
 }
 
+/** Detecta si una imagen viene de nuestro proxy Drive (cualquier versión). */
 function isDriveProxySrc(src: string) {
-  return src.startsWith("/api/drive-image")
+  return src.startsWith("/api/image-proxy") || src.startsWith("/api/drive-image")
 }
+
+/* ─── Imagen con skeleton crema ─────────────────────────────────────────── */
+
+function ProxyImage({
+  src,
+  alt,
+  sizes,
+  className,
+}: {
+  src: string
+  alt: string
+  sizes: string
+  className?: string
+}) {
+  const [loaded, setLoaded] = useState(false)
+
+  return (
+    <>
+      {!loaded && (
+        <div
+          className="absolute inset-0 animate-pulse"
+          style={{ background: "oklch(0.95 0.02 185 / 0.6)" }}
+        />
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        unoptimized={isDriveProxySrc(src)}
+        className={`${className ?? ""} transition-opacity duration-700 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+        sizes={sizes}
+        onLoad={() => setLoaded(true)}
+      />
+    </>
+  )
+}
+
+/* ─── Lightbox ───────────────────────────────────────────────────────────── */
 
 function StudioLightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  const [loaded, setLoaded] = useState(false)
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose() }
     document.addEventListener("keydown", onKey)
     const prev = document.body.style.overflow
     document.body.style.overflow = "hidden"
@@ -51,11 +96,20 @@ function StudioLightbox({ src, alt, onClose }: { src: string; alt: string; onClo
         transition={{ duration: 0.2, ease: "easeOut" }}
         onClick={(e) => e.stopPropagation()}
       >
+        {!loaded && (
+          <div
+            className="absolute inset-0 animate-pulse rounded-2xl"
+            style={{ background: "oklch(0.18 0 0 / 0.5)" }}
+          />
+        )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt={alt}
-          className="max-h-[88dvh] max-w-[88vw] rounded-2xl object-contain shadow-2xl"
+          className={`max-h-[88dvh] max-w-[88vw] rounded-2xl object-contain shadow-2xl transition-opacity duration-500 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setLoaded(true)}
         />
         <button
           type="button"
@@ -70,7 +124,50 @@ function StudioLightbox({ src, alt, onClose }: { src: string; alt: string; onClo
   )
 }
 
-export function SobreEliSection({ eliPhoto, studioPhotos }: SobreEliSectionProps) {
+/* ─── Thumb genérico con skeleton ────────────────────────────────────────── */
+
+function PhotoThumb({
+  photo,
+  delay,
+  onOpen,
+}: {
+  photo: SobreEliImageSlot
+  delay: number
+  onOpen: () => void
+}) {
+  return (
+    <FadeIn delay={delay} direction="none">
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label={`Ver en grande: ${photo.alt}`}
+        className="group relative block w-full overflow-hidden rounded-2xl shadow-sm ring-offset-2 ring-offset-secondary transition-transform duration-500 hover:scale-[1.02] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.98]"
+      >
+        <div className="relative aspect-square w-full">
+          <ProxyImage
+            src={photo.src}
+            alt={photo.alt}
+            sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, 18vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+          />
+          <span className="pointer-events-none absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
+        </div>
+        <span className="pointer-events-none absolute bottom-2 right-2 rounded-full bg-background/90 px-2 py-0.5 text-[10px] font-medium text-primary opacity-0 shadow backdrop-blur-sm transition-opacity group-hover:opacity-100">
+          Ampliar
+        </span>
+      </button>
+    </FadeIn>
+  )
+}
+
+/* ─── Sección principal ──────────────────────────────────────────────────── */
+
+export function SobreEliSection({
+  cartaParrafos,
+  eliPhoto,
+  studioPhotos,
+  trabajandoPhotos = [],
+}: SobreEliSectionProps) {
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
 
   const eliSrc = eliPhoto?.src ?? "/placeholder.jpg"
@@ -78,7 +175,7 @@ export function SobreEliSection({ eliPhoto, studioPhotos }: SobreEliSectionProps
 
   return (
     <section id="sobre-eli" className="relative scroll-mt-20 overflow-hidden bg-secondary py-20 lg:py-28">
-      {/* Destellos decorativos de fondo */}
+      {/* Destellos decorativos */}
       <div
         aria-hidden
         className="pointer-events-none absolute -right-24 -top-20 h-80 w-80 rounded-full opacity-15"
@@ -91,8 +188,6 @@ export function SobreEliSection({ eliPhoto, studioPhotos }: SobreEliSectionProps
       />
 
       <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
-
-        {/* ── Eyebrow centrado ── */}
         <FadeIn>
           <div className="mb-12 text-center lg:mb-16">
             <p
@@ -111,13 +206,11 @@ export function SobreEliSection({ eliPhoto, studioPhotos }: SobreEliSectionProps
           </div>
         </FadeIn>
 
-        {/* ── Dos columnas: foto + texto ── */}
         <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:gap-14 lg:gap-20">
 
           {/* Columna izquierda — foto de Eli */}
           <FadeIn direction="none" className="w-full md:w-[42%] lg:w-[38%]">
             <div className="relative">
-              {/* Mancha watercolor turquesa detrás de la foto */}
               <div
                 aria-hidden
                 className="absolute -left-6 -top-6 h-[105%] w-[105%] rounded-[40%_60%_55%_45%/45%_55%_60%_40%] opacity-30 blur-2xl"
@@ -128,17 +221,14 @@ export function SobreEliSection({ eliPhoto, studioPhotos }: SobreEliSectionProps
               />
               <div className="relative overflow-hidden rounded-3xl shadow-xl">
                 <div className="relative aspect-[3/4] w-full">
-                  <Image
+                  <ProxyImage
                     src={eliSrc}
                     alt={eliAlt}
-                    fill
-                    unoptimized={isDriveProxySrc(eliSrc)}
-                    className="object-cover"
                     sizes="(max-width: 768px) 90vw, 38vw"
+                    className="object-cover"
                   />
                 </div>
               </div>
-              {/* Pastilla flotante */}
               <div
                 className="absolute -bottom-4 -right-4 rounded-2xl bg-background px-4 py-3 shadow-lg"
                 style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
@@ -169,24 +259,38 @@ export function SobreEliSection({ eliPhoto, studioPhotos }: SobreEliSectionProps
             </div>
 
             <div className="flex flex-col gap-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              <p>
-                Desde siempre me apasionó el mundo de la estética y cómo un pequeño detalle puede
-                transformar la confianza de una persona. Me certifiqué como{" "}
-                <strong className="font-medium text-foreground/80">Lashista Profesional</strong> y
-                pasé años perfeccionando técnicas de realce natural.
-              </p>
-              <p>
-                <strong className="font-medium text-foreground/80">Mirarte Estética</strong> nació
-                de un sueño: crear un espacio donde la delicadeza, la calidad premium y la atención
-                personalizada sean la prioridad.
-              </p>
-              <p>
-                Te invito a mi estudio, diseñado para tu relax, donde cada servicio es un arte
-                dedicado a resaltar tu belleza única.
-              </p>
+              {cartaParrafos.map((bloque, i) => (
+                <p key={i}>{bloque}</p>
+              ))}
             </div>
 
-            {/* Separador decorativo */}
+            {/* Fotos de Eli trabajando (si Drive las tiene) */}
+            {trabajandoPhotos.length > 0 && (
+              <>
+                <div className="flex items-center gap-3">
+                  <div className="h-px flex-1 bg-border" />
+                  <p
+                    className="text-base text-primary/60 sm:text-lg"
+                    style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
+                  >
+                    Eli trabajando
+                  </p>
+                  <div className="h-px flex-1 bg-border" />
+                </div>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {trabajandoPhotos.map((photo, i) => (
+                    <PhotoThumb
+                      key={photo.src}
+                      photo={photo}
+                      delay={0.05 * i}
+                      onOpen={() => setLightbox({ src: photo.src, alt: photo.alt })}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* Separador */}
             <div className="flex items-center gap-3">
               <div className="h-px flex-1 bg-border" />
               <p
@@ -198,32 +302,15 @@ export function SobreEliSection({ eliPhoto, studioPhotos }: SobreEliSectionProps
               <div className="h-px flex-1 bg-border" />
             </div>
 
-            {/* Mosaico de ambiente — 3 cols desktop, 2 cols mobile */}
+            {/* Mosaico del estudio */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {studioPhotos.map((photo, i) => (
-                <FadeIn key={photo.src} delay={0.06 * i} direction="none">
-                  <button
-                    type="button"
-                    onClick={() => setLightbox({ src: photo.src, alt: photo.alt })}
-                    aria-label={`Ver en grande: ${photo.alt}`}
-                    className="group relative block w-full overflow-hidden rounded-2xl shadow-sm ring-offset-2 ring-offset-secondary transition-transform duration-500 hover:scale-[1.02] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.98]"
-                  >
-                    <div className="relative aspect-square w-full">
-                      <Image
-                        src={photo.src}
-                        alt=""
-                        fill
-                        unoptimized={isDriveProxySrc(photo.src)}
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                        sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, 18vw"
-                      />
-                      <span className="pointer-events-none absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
-                    </div>
-                    <span className="pointer-events-none absolute bottom-2 right-2 rounded-full bg-background/90 px-2 py-0.5 text-[10px] font-medium text-primary opacity-0 shadow backdrop-blur-sm transition-opacity group-hover:opacity-100">
-                      Ampliar
-                    </span>
-                  </button>
-                </FadeIn>
+                <PhotoThumb
+                  key={photo.src}
+                  photo={photo}
+                  delay={0.06 * i}
+                  onOpen={() => setLightbox({ src: photo.src, alt: photo.alt })}
+                />
               ))}
             </div>
           </FadeIn>

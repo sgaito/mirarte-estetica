@@ -39,7 +39,7 @@ function mapFile(f: {
     id: f.id,
     name: f.name,
     mimeType: f.mimeType,
-    url: `/api/drive-image?id=${f.id}`,
+    url: `/api/image-proxy?fileId=${f.id}`,
     width: meta?.width ?? 4,
     height: meta?.height ?? 3,
   }
@@ -82,7 +82,8 @@ async function _fetchGalleryImages(): Promise<DriveImage[]> {
  */
 export const getDriveImages = unstable_cache(
   _fetchGalleryImages,
-  ["drive-gallery-images"],
+  /* v2: URLs migradas a /api/image-proxy — nueva clave invalida caché vieja */
+  ["drive-gallery-images", "v2-proxy"],
   { revalidate: DRIVE_REVALIDATE_SECONDS, tags: ["drive-gallery"] },
 )
 
@@ -119,7 +120,7 @@ async function _fetchHeroFiles(): Promise<DriveImage[]> {
 /* La lista de archivos se cachea; la selección aleatoria ocurre en cada request */
 const _getHeroFilesCached = unstable_cache(
   _fetchHeroFiles,
-  ["drive-hero-folder-files"],
+  ["drive-hero-folder-files", "v2-proxy"],
   { revalidate: DRIVE_REVALIDATE_SECONDS, tags: ["drive-hero"] },
 )
 

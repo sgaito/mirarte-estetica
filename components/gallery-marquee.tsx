@@ -6,11 +6,9 @@ import { motion, useMotionValue, useAnimationFrame, AnimatePresence } from "fram
 import { X } from "lucide-react"
 import type { DriveImage } from "@/lib/google-drive"
 
-// 3 copias son suficientes para el loop y reduce nodos en el DOM
 const COPIES = 3
 
 function useRowHeight() {
-  // null = todavía no sabemos el tamaño real (evita el flash de re-layout)
   const [rowHeight, setRowHeight] = useState<number | null>(null)
 
   useEffect(() => {
@@ -22,6 +20,53 @@ function useRowHeight() {
   }, [])
 
   return rowHeight
+}
+
+/* ─── Imagen de galería con skeleton crema ───────────────────────────────── */
+
+function GalleryImage({
+  src,
+  alt,
+  width,
+  height,
+  onClick,
+}: {
+  src: string
+  alt: string
+  width: number
+  height: number
+  onClick: () => void
+}) {
+  const [loaded, setLoaded] = useState(false)
+
+  return (
+    <div
+      className="relative flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl shadow-sm"
+      style={{ width, height }}
+      onClick={onClick}
+    >
+      {/* Skeleton crema pulsante — se oculta al cargar */}
+      {!loaded && (
+        <div
+          className="absolute inset-0 animate-pulse rounded-2xl"
+          style={{ background: "oklch(0.95 0.01 240)" }}
+        />
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        unoptimized
+        sizes={`${width}px`}
+        className={`object-cover transition-all duration-700 hover:scale-105 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+        loading="lazy"
+        draggable={false}
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  )
 }
 
 interface MarqueeRowProps {
@@ -36,13 +81,10 @@ interface MarqueeRowProps {
 function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeight }: MarqueeRowProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
-  // Cacheamos el ancho de un set para no leer el DOM en cada frame
   const singleWidthRef = useRef(0)
 
   const repeated = Array.from({ length: COPIES }, () => images).flat()
 
-  // Calcula el ancho y fija la posición inicial ANTES del primer paint
-  // Se vuelve a ejecutar cuando cambia rowHeight (el viewport cambió de breakpoint)
   useLayoutEffect(() => {
     if (!trackRef.current) return
     const sw = trackRef.current.scrollWidth / COPIES
@@ -50,7 +92,6 @@ function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeigh
     x.set(direction === "right" ? -sw : 0)
   }, [direction, rowHeight, x])
 
-  // Actualiza el ancho cacheado si el contenedor cambia de tamaño
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
@@ -85,30 +126,25 @@ function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeigh
         const aspectRatio = image.width / image.height
         const cellWidth = Math.round(rowHeight * aspectRatio)
         return (
-          <div
+          <GalleryImage
             key={`${image.id}-${idx}`}
-            className="relative flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl shadow-sm"
-            style={{ width: cellWidth, height: rowHeight }}
+            src={image.url}
+            alt={image.name}
+            width={cellWidth}
+            height={rowHeight}
             onClick={() => onImageClick(image)}
-          >
-            <Image
-              src={image.url}
-              alt={image.name}
-              fill
-              sizes={`${cellWidth}px`}
-              unoptimized
-              className="object-cover transition-transform duration-500 hover:scale-105"
-              loading="lazy"
-              draggable={false}
-            />
-          </div>
+          />
         )
       })}
     </motion.div>
   )
 }
 
+/* ─── Lightbox con skeleton ──────────────────────────────────────────────── */
+
 function Lightbox({ image, onClose }: { image: DriveImage; onClose: () => void }) {
+  const [loaded, setLoaded] = useState(false)
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose() }
     window.addEventListener("keydown", onKey)
@@ -140,19 +176,31 @@ function Lightbox({ image, onClose }: { image: DriveImage; onClose: () => void }
         transition={{ duration: 0.25, ease: "easeOut" }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Skeleton mientras carga el lightbox */}
+        {!loaded && (
+          <div
+            className="absolute inset-0 animate-pulse rounded-2xl"
+            style={{ background: "oklch(0.18 0 0 / 0.6)" }}
+          />
+        )}
         <Image
           src={image.url}
           alt={image.name}
           fill
-          sizes="90vw"
           unoptimized
-          className="rounded-2xl object-contain shadow-2xl"
+          sizes="90vw"
+          className={`rounded-2xl object-contain shadow-2xl transition-opacity duration-500 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
           priority
+          onLoad={() => setLoaded(true)}
         />
       </motion.div>
     </motion.div>
   )
 }
+
+/* ─── GalleryMarquee ─────────────────────────────────────────────────────── */
 
 export function GalleryMarquee({ images }: { images: DriveImage[] }) {
   const isPaused = useRef(false)
@@ -167,7 +215,6 @@ export function GalleryMarquee({ images }: { images: DriveImage[] }) {
     )
   }
 
-  // No renderizar hasta saber el alto real → evita el flash de posición incorrecta
   if (rowHeight === null) {
     return <div className="mt-16" style={{ height: 288 * 2 + 16 }} />
   }
@@ -186,8 +233,6 @@ export function GalleryMarquee({ images }: { images: DriveImage[] }) {
           maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
           WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
         }}
-        onMouseEnter={() => { isPaused.current = true }}
-        onMouseLeave={() => { isPaused.current = false }}
       >
         <div className="flex flex-col gap-4">
           <MarqueeRow images={top}    speed={62} direction="left"  isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
