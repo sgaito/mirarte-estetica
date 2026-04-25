@@ -20,30 +20,39 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+const siteUrl = "https://mirarte-estetica.vercel.app"
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://mirarte-estetica.pages.dev'),
-  title: 'Mirarte Estética | Pestañas, Lifting y Belleza en Rosario',
-  description: 'Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.',
+  metadataBase: new URL(siteUrl),
+  title: "Mirarte Estética | Pestañas, Lifting y Belleza en Rosario",
+  description:
+    "Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: 'Mirarte Estética',
-    description: 'Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.',
+    url: siteUrl,
+    title: "Mirarte Estética",
+    description:
+      "Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.",
     images: [
       {
-        url: 'https://mirarte-estetica.pages.dev/logo.png',
+        url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: 'Mirarte Estética',
+        alt: "Mirarte Estética",
       },
     ],
-    type: 'website',
-    locale: 'es_AR',
-    siteName: 'Mirarte Estética',
+    type: "website",
+    locale: "es_AR",
+    siteName: "Mirarte Estética",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Mirarte Estética',
-    description: 'Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.',
-    images: ['https://mirarte-estetica.pages.dev/logo.png'],
+    card: "summary_large_image",
+    title: "Mirarte Estética",
+    description:
+      "Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.",
+    images: [`${siteUrl}/logo.png`],
   },
   icons: {
     icon: '/logo.png',
