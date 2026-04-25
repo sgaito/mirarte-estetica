@@ -44,7 +44,7 @@ export const metadata: Metadata = {
       "Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.",
     images: [
       {
-        url: "/metadatos.png",
+        url: "/metadatos-og.webp",
         width: 1200,
         height: 630,
         alt: "Mirarte Estética — Extensiones, lifting y cejas en Rosario. Reservá tu turno por WhatsApp.",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     title: shareTitle,
     description:
       "Especialistas en extensiones de pestañas, lifting y cejas en Rosario. Realzá tu mirada con atención personalizada y profesional.",
-    images: [`${siteUrl}/metadatos.png`],
+    images: [`${siteUrl}/metadatos-og.webp`],
   },
   icons: {
     icon: '/logo.png',
