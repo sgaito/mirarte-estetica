@@ -30,12 +30,9 @@ const WA_SERVICE = (name: string) =>
     `Hola Mirarte Estética! Quiero consultar por el servicio de ${name}.`,
   )}`
 
-const MESH_BG = `
-  radial-gradient(ellipse at 8% 40%,  oklch(0.95 0.05 185 / 0.55) 0%, transparent 52%),
-  radial-gradient(ellipse at 92% 10%,  oklch(0.97 0.03 75  / 0.50) 0%, transparent 48%),
-  radial-gradient(ellipse at 65% 88%,  oklch(0.95 0.04 185 / 0.30) 0%, transparent 42%),
-  oklch(0.977 0.003 240)
-`.trim()
+/** Fondo ligero (sin radiales multicapa — mejor en GPU móvil). */
+const SECTION_SURFACE_CLASS =
+  "bg-gradient-to-b from-[oklch(0.97_0.02_185/0.35)] via-[oklch(0.977_0.003_240)] to-[oklch(0.965_0.02_75/0.2)]"
 
 /* ─── WhatsApp icon ───────────────────────────────────────────────────────── */
 
@@ -98,18 +95,7 @@ function ExtensionesPremiumIntro() {
 
 function AsesoramientoCallout() {
   return (
-    <div
-      className="relative overflow-hidden rounded-2xl border border-primary/25 px-5 py-5 shadow-sm sm:px-6 sm:py-6"
-      style={{
-        background:
-          "linear-gradient(135deg, oklch(0.88 0.09 185 / 0.60) 0%, oklch(0.92 0.05 185 / 0.40) 45%, oklch(0.96 0.02 200 / 0.45) 100%)",
-      }}
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full opacity-40 blur-2xl"
-        style={{ background: "radial-gradient(circle, oklch(0.72 0.14 185) 0%, transparent 70%)" }}
-      />
+    <div className="relative overflow-hidden rounded-2xl border border-primary/25 bg-gradient-to-br from-[oklch(0.9_0.08_185/0.45)] via-[oklch(0.94_0.05_185/0.35)] to-[oklch(0.96_0.02_200/0.4)] px-5 py-5 shadow-sm sm:px-6 sm:py-6">
       <div className="relative flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-5">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/20 text-primary">
           <MessageCircleHeart className="h-5 w-5" />
@@ -227,21 +213,13 @@ function ServiceModal({
   }, [onClose, hasPhotos, prevPhoto, nextPhoto])
 
   return (
-    <motion.div
+    <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-5"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.22 }}
       onClick={onClose}
     >
-      <motion.div
+      <div
         className="relative flex w-full flex-col overflow-hidden rounded-t-3xl bg-background shadow-2xl sm:w-[95%] sm:max-w-xl sm:rounded-3xl"
         style={{ maxHeight: "90dvh" }}
-        initial={{ y: 52, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 52, opacity: 0 }}
-        transition={{ duration: 0.28, ease: "easeOut" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drag handle (mobile) */}
@@ -387,8 +365,8 @@ function ServiceModal({
             </a>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   )
 }
 
@@ -462,24 +440,25 @@ function CategoryContent({
 
 export function ServicesSection() {
   const [activeService, setActiveService] = useState<ServiceItem | null>(null)
+  const [activeTab, setActiveTab] = useState<ServiceCategory["id"]>("pestanas")
+  const activeCategory = SERVICES_CATALOG.find((c) => c.id === activeTab)
 
   return (
     <section
       id="servicios"
-      className="relative scroll-mt-20 overflow-hidden py-24 lg:py-32"
-      style={{ background: MESH_BG }}
+      className={`relative scroll-mt-20 overflow-hidden py-24 lg:py-32 ${SECTION_SURFACE_CLASS}`}
     >
-      {/* Decorative blurred logos */}
+      {/* Decorative logos — blur suave para no saturar la GPU */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-32 -top-32 h-[480px] w-[480px] -rotate-12 opacity-[0.06] blur-2xl"
+        className="pointer-events-none absolute -left-32 -top-32 h-[480px] w-[480px] -rotate-12 opacity-[0.04] blur-xl"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.png" alt="" className="h-full w-full object-contain" />
       </div>
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-32 -right-32 h-[480px] w-[480px] rotate-12 opacity-[0.06] blur-2xl"
+        className="pointer-events-none absolute -bottom-32 -right-32 h-[480px] w-[480px] rotate-12 opacity-[0.04] blur-xl"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.png" alt="" className="h-full w-full object-contain" />
@@ -496,7 +475,7 @@ export function ServicesSection() {
 
         <FadeIn delay={0.12}>
           <div className="mx-auto mt-14 max-w-5xl">
-            <Tabs defaultValue="pestanas" className="gap-6">
+            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ServiceCategory["id"])} className="gap-6">
               {/* Scrollable tab bar */}
               <div className="overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <TabsList
@@ -515,24 +494,23 @@ export function ServicesSection() {
                 </TabsList>
               </div>
 
-              {SERVICES_CATALOG.map((cat) => (
-                <TabsContent key={cat.id} value={cat.id} className="mt-2 outline-none">
-                  <CategoryContent category={cat} onOpenService={setActiveService} />
+              {activeCategory ? (
+                <TabsContent key={activeTab} value={activeTab} className="mt-2 outline-none">
+                  <CategoryContent category={activeCategory} onOpenService={setActiveService} />
                 </TabsContent>
-              ))}
+              ) : null}
             </Tabs>
           </div>
         </FadeIn>
       </div>
 
-      <AnimatePresence>
-        {activeService && (
-          <ServiceModal
-            service={activeService}
-            onClose={() => setActiveService(null)}
-          />
-        )}
-      </AnimatePresence>
+      {activeService ? (
+        <ServiceModal
+          key={activeService.slug}
+          service={activeService}
+          onClose={() => setActiveService(null)}
+        />
+      ) : null}
     </section>
   )
 }

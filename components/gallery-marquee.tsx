@@ -7,19 +7,47 @@ import { X } from "lucide-react"
 import type { DriveImage } from "@/lib/google-drive"
 
 const COPIES = 3
+const RESIZE_DEBOUNCE_MS = 160
 
 function useRowHeight() {
   const [rowHeight, setRowHeight] = useState<number | null>(null)
 
   useEffect(() => {
-    const update = () =>
-      setRowHeight(window.innerWidth < 640 ? 160 : window.innerWidth < 1024 ? 220 : 288)
-    update()
-    window.addEventListener("resize", update)
-    return () => window.removeEventListener("resize", update)
+    const compute = () =>
+      window.innerWidth < 640 ? 160 : window.innerWidth < 1024 ? 220 : 288
+
+    let t: ReturnType<typeof setTimeout> | undefined
+    const schedule = () => {
+      if (t !== undefined) clearTimeout(t)
+      t = setTimeout(() => {
+        t = undefined
+        setRowHeight(compute())
+      }, RESIZE_DEBOUNCE_MS)
+    }
+
+    setRowHeight(compute())
+    window.addEventListener("resize", schedule, { passive: true })
+    return () => {
+      window.removeEventListener("resize", schedule)
+      if (t !== undefined) clearTimeout(t)
+    }
   }, [])
 
   return rowHeight
+}
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const apply = () => setReduced(mq.matches)
+    apply()
+    mq.addEventListener("change", apply)
+    return () => mq.removeEventListener("change", apply)
+  }, [])
+
+  return reduced
 }
 
 /* ─── Imagen de galería con skeleton crema ───────────────────────────────── */
@@ -74,11 +102,12 @@ interface MarqueeRowProps {
   speed: number
   direction: "left" | "right"
   isPaused: React.MutableRefObject<boolean>
+  reduceMotion: boolean
   onImageClick: (image: DriveImage) => void
   rowHeight: number
 }
 
-function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeight }: MarqueeRowProps) {
+function MarqueeRow({ images, speed, direction, isPaused, reduceMotion, onImageClick, rowHeight }: MarqueeRowProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const singleWidthRef = useRef(0)
@@ -103,7 +132,7 @@ function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeigh
   }, [])
 
   useAnimationFrame((_, delta) => {
-    if (isPaused.current) return
+    if (reduceMotion || isPaused.current) return
     const sw = singleWidthRef.current
     if (sw === 0) return
 
@@ -142,7 +171,15 @@ function MarqueeRow({ images, speed, direction, isPaused, onImageClick, rowHeigh
 
 /* ─── Lightbox con skeleton ──────────────────────────────────────────────── */
 
-function Lightbox({ image, onClose }: { image: DriveImage; onClose: () => void }) {
+function Lightbox({
+  image,
+  onClose,
+  reduceMotion,
+}: {
+  image: DriveImage
+  onClose: () => void
+  reduceMotion: boolean
+}) {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -151,13 +188,16 @@ function Lightbox({ image, onClose }: { image: DriveImage; onClose: () => void }
     return () => window.removeEventListener("keydown", onKey)
   }, [onClose])
 
+  const instant = { duration: reduceMotion ? 0 : 0.2 }
+  const instantPop = { duration: reduceMotion ? 0 : 0.25, ease: "easeOut" as const }
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
-      initial={{ opacity: 0 }}
+      initial={{ opacity: reduceMotion ? 1 : 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      exit={{ opacity: reduceMotion ? 1 : 0 }}
+      transition={instant}
       onClick={onClose}
     >
       <button
@@ -170,10 +210,10 @@ function Lightbox({ image, onClose }: { image: DriveImage; onClose: () => void }
 
       <motion.div
         className="relative h-[min(90dvh,900px)] w-[min(90vw,1200px)]"
-        initial={{ scale: 0.92, opacity: 0 }}
+        initial={{ scale: reduceMotion ? 1 : 0.92, opacity: reduceMotion ? 1 : 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.92, opacity: 0 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        exit={{ scale: reduceMotion ? 1 : 0.92, opacity: reduceMotion ? 1 : 0 }}
+        transition={instantPop}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Skeleton mientras carga el lightbox */}
@@ -206,6 +246,7 @@ export function GalleryMarquee({ images }: { images: DriveImage[] }) {
   const isPaused = useRef(false)
   const [selected, setSelected] = useState<DriveImage | null>(null)
   const rowHeight = useRowHeight()
+  const reduceMotion = usePrefersReducedMotion()
 
   if (images.length === 0) {
     return (
@@ -235,14 +276,14 @@ export function GalleryMarquee({ images }: { images: DriveImage[] }) {
         }}
       >
         <div className="flex flex-col gap-4">
-          <MarqueeRow images={top}    speed={62} direction="left"  isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
-          <MarqueeRow images={bottom} speed={44} direction="right" isPaused={isPaused} onImageClick={setSelected} rowHeight={rowHeight} />
+          <MarqueeRow images={top} speed={62} direction="left" isPaused={isPaused} reduceMotion={reduceMotion} onImageClick={setSelected} rowHeight={rowHeight} />
+          <MarqueeRow images={bottom} speed={44} direction="right" isPaused={isPaused} reduceMotion={reduceMotion} onImageClick={setSelected} rowHeight={rowHeight} />
         </div>
       </div>
 
       <AnimatePresence>
         {selected && (
-          <Lightbox image={selected} onClose={() => setSelected(null)} />
+          <Lightbox image={selected} reduceMotion={reduceMotion} onClose={() => setSelected(null)} />
         )}
       </AnimatePresence>
     </>

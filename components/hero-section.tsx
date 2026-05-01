@@ -39,7 +39,7 @@ export function HeroSection() {
             className="text-2xl text-foreground/55 sm:text-3xl md:text-4xl"
             style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
           >
-            Pestañas &amp; Cejas en Rosario
+            Pestañas y Cejas en Rosario
           </p>
         </div>
 

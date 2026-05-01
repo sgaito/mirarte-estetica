@@ -62,7 +62,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
           "Ideal para primera vez en extensiones",
           "Combinable con el asesoramiento previo de diseño y curvatura",
         ],
-        photos: photos("pestanas", "style-natural", ["1.jpg"]),
+        photos: photos("pestanas", "style-natural", ["1.jpg", "2.jpg", "3.jpg"]),
       },
       {
         slug: "clasicas",

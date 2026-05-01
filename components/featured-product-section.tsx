@@ -443,6 +443,10 @@ export function FeaturedProductSection() {
               </button>
             </FadeIn>
 
+
+
+
+
             <FadeIn delay={0.12} className="flex w-full flex-col items-start gap-5 md:w-[54%] lg:w-[58%]">
               <div>
                 <h2
