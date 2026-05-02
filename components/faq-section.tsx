@@ -79,7 +79,7 @@ function MobileAccordion() {
             className="overflow-hidden rounded-xl bg-card shadow-sm transition-shadow duration-200"
             style={{
               boxShadow: isOpen
-                ? "0 8px 24px -6px oklch(0.72 0.12 185 / 0.12)"
+                ? "0 8px 24px -6px oklch(0.53 0.11 178 / 0.18)"
                 : undefined,
             }}
           >
@@ -128,7 +128,7 @@ export function FaqSection() {
       className="relative overflow-hidden scroll-mt-20 py-24 lg:py-32"
       style={{
         background: `
-          radial-gradient(ellipse at 90% 60%, oklch(0.95 0.05 185 / 0.45) 0%, transparent 50%),
+          radial-gradient(ellipse at 90% 60%, oklch(0.95 0.05 178 / 0.45) 0%, transparent 50%),
           radial-gradient(ellipse at 5%  20%, oklch(0.97 0.03 75  / 0.40) 0%, transparent 48%),
           oklch(0.977 0.003 240)
         `.trim(),

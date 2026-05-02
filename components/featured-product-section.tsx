@@ -393,12 +393,12 @@ export function FeaturedProductSection() {
         <div
           aria-hidden
           className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, oklch(0.82 0.12 185) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, oklch(0.82 0.12 178) 0%, transparent 70%)" }}
         />
         <div
           aria-hidden
           className="pointer-events-none absolute -bottom-24 -right-16 h-80 w-80 rounded-full opacity-15"
-          style={{ background: "radial-gradient(circle, oklch(0.72 0.12 185) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, oklch(0.72 0.12 178) 0%, transparent 70%)" }}
         />
 
         <div className="relative mx-auto max-w-6xl px-6 lg:px-8">

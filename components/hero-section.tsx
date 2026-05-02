@@ -33,13 +33,13 @@ export function HeroSection() {
             className="max-w-2xl text-balance text-3xl font-semibold uppercase tracking-[0.12em] text-foreground/85 sm:text-4xl md:text-5xl lg:text-6xl"
             style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
           >
-            Realzá tu Mirada
+            Tu mirada habla por vos
           </h1>
           <p
             className="text-2xl text-foreground/55 sm:text-3xl md:text-4xl"
             style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
           >
-            Pestañas y Cejas en Rosario
+            Pestañas y cejas en Rosario
           </p>
         </div>
 

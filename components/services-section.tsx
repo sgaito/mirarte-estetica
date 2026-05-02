@@ -32,7 +32,7 @@ const WA_SERVICE = (name: string) =>
 
 /** Fondo ligero (sin radiales multicapa — mejor en GPU móvil). */
 const SECTION_SURFACE_CLASS =
-  "bg-gradient-to-b from-[oklch(0.97_0.02_185/0.35)] via-[oklch(0.977_0.003_240)] to-[oklch(0.965_0.02_75/0.2)]"
+  "bg-gradient-to-b from-[oklch(0.97_0.02_178/0.35)] via-[oklch(0.977_0.003_240)] to-[oklch(0.965_0.02_75/0.2)]"
 
 /* ─── WhatsApp icon ───────────────────────────────────────────────────────── */
 
@@ -95,7 +95,7 @@ function ExtensionesPremiumIntro() {
 
 function AsesoramientoCallout() {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-primary/25 bg-gradient-to-br from-[oklch(0.9_0.08_185/0.45)] via-[oklch(0.94_0.05_185/0.35)] to-[oklch(0.96_0.02_200/0.4)] px-5 py-5 shadow-sm sm:px-6 sm:py-6">
+    <div className="relative overflow-hidden rounded-2xl border border-primary/25 bg-gradient-to-br from-[oklch(0.9_0.08_178/0.45)] via-[oklch(0.94_0.05_178/0.35)] to-[oklch(0.96_0.02_190/0.4)] px-5 py-5 shadow-sm sm:px-6 sm:py-6">
       <div className="relative flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-5">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/20 text-primary">
           <MessageCircleHeart className="h-5 w-5" />

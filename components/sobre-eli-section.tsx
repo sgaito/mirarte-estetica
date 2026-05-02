@@ -45,7 +45,7 @@ function ProxyImage({
       {!loaded && (
         <div
           className="absolute inset-0 animate-pulse"
-          style={{ background: "oklch(0.95 0.02 185 / 0.6)" }}
+          style={{ background: "oklch(0.95 0.02 178 / 0.6)" }}
         />
       )}
       <Image
@@ -179,12 +179,12 @@ export function SobreEliSection({
       <div
         aria-hidden
         className="pointer-events-none absolute -right-24 -top-20 h-80 w-80 rounded-full opacity-15"
-        style={{ background: "radial-gradient(circle, oklch(0.82 0.12 185) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, oklch(0.82 0.12 178) 0%, transparent 70%)" }}
       />
       <div
         aria-hidden
         className="pointer-events-none absolute -bottom-20 -left-16 h-72 w-72 rounded-full opacity-10"
-        style={{ background: "radial-gradient(circle, oklch(0.72 0.14 185) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, oklch(0.72 0.14 178) 0%, transparent 70%)" }}
       />
 
       <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
@@ -216,7 +216,7 @@ export function SobreEliSection({
                 className="absolute -left-6 -top-6 h-[105%] w-[105%] rounded-[40%_60%_55%_45%/45%_55%_60%_40%] opacity-30 blur-2xl"
                 style={{
                   background:
-                    "radial-gradient(ellipse at 40% 40%, oklch(0.85 0.10 185) 0%, oklch(0.78 0.13 185 / 0.5) 50%, transparent 75%)",
+                    "radial-gradient(ellipse at 40% 40%, oklch(0.85 0.10 178) 0%, oklch(0.78 0.13 178 / 0.5) 50%, transparent 75%)",
                 }}
               />
               <div className="relative overflow-hidden rounded-3xl shadow-xl">
