@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Mismo tono opaco en el borde Hero ↔ Servicios (evita línea al usar alphas distintos) */
+  --hero-services-seam: oklch(0.977 0.003 240);
   --background: oklch(1 0 0);
   --foreground: oklch(0.1 0 0);
   --card: oklch(1 0 0);

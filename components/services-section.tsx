@@ -18,6 +18,7 @@ import {
   SERVICES_CATALOG,
   ELI_EXTENSIONES_PREMIUM_INTRO,
   ELI_ASESORAMIENTO_EXTENSIONES,
+  ELI_COMO_ASISTIR_CITA_PESTANAS,
   DESCRIPCION_SERVICIO_PENDIENTE,
   type ServiceItem,
   type ServiceCategory,
@@ -30,9 +31,9 @@ const WA_SERVICE = (name: string) =>
     `Hola Mirarte Estética! Quiero consultar por el servicio de ${name}.`,
   )}`
 
-/** Fondo ligero (sin radiales multicapa — mejor en GPU móvil). */
+/** Continúa desde el mismo tono opaco que el final del Hero (`--hero-services-seam`). */
 const SECTION_SURFACE_CLASS =
-  "bg-gradient-to-b from-[oklch(0.97_0.02_178/0.35)] via-[oklch(0.977_0.003_240)] to-[oklch(0.965_0.02_75/0.2)]"
+  "bg-gradient-to-b from-[var(--hero-services-seam)] via-[oklch(0.976_0.012_178)] to-[oklch(0.964_0.022_75/0.22)]"
 
 /* ─── WhatsApp icon ───────────────────────────────────────────────────────── */
 
@@ -115,6 +116,24 @@ function AsesoramientoCallout() {
           </p>
         </div>
       </div>
+    </div>
+  )
+}
+
+function ComoAsistirCitaPestanas() {
+  return (
+    <div
+      className="rounded-2xl border border-border/60 bg-card/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
+      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+    >
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+        Cómo asistir a tu cita
+      </p>
+      <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-foreground/85 marker:text-primary/70 sm:text-[15px]">
+        {ELI_COMO_ASISTIR_CITA_PESTANAS.map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -387,6 +406,7 @@ function CategoryContent({
       <div className="space-y-8">
         <ExtensionesPremiumIntro />
         <AsesoramientoCallout />
+        <ComoAsistirCitaPestanas />
 
         <div>
           <p

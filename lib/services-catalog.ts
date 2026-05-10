@@ -16,6 +16,15 @@ export const ELI_EXTENSIONES_PREMIUM_INTRO =
 export const ELI_ASESORAMIENTO_EXTENSIONES =
   "Antes de colocarte las extensiones hacemos un asesoramiento: ahí definimos juntas el diseño, el volumen, la curvatura y el largo. Con retoques a tiempo, en forma y cuidándolas, el trabajo puede mantenerse hasta tres meses."
 
+/** Reglas — pestaña Pestañas (bloque “Cómo asistir a tu cita”). */
+export const ELI_COMO_ASISTIR_CITA_PESTANAS = [
+  "Desmaquillate completamente el área de los ojos, cejas y frente.",
+  "Está prohibido asistir con acompañantes (en caso de que seas menor, podés venir con tu mamá, papá, amiga o tutor).",
+  "La tolerancia máxima es de 20 minutos. La seña no es reembolsable.",
+  "Consultá el tiempo de tu turno: cada caso es particular. Nuestro trabajo es artesanal y profesional.",
+  "Si venís con extensiones, avisá así contemplamos el tiempo de remoción.",
+]
+
 export interface ServicePhoto {
   src: string
   alt: string
@@ -54,14 +63,8 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         slug: "style-natural",
         name: "Style Natural",
         group: "extension",
-        shortDesc:
-          "Mirada limpia y muy natural: se integra con tus pestañas como si siempre hubieran sido así.",
-        fullDesc:
-          "Style Natural está pensado para quien quiere levantar la mirada sin que se note que lleva extensiones. Se trabaja con curvas y largos muy armónicos con tu ojo, sumando solo el volumen justo para dar definición y apertura. Es el estilo ideal para empezar, para el día a día o para quien prefiere un acabado discreto y elegante.",
-        details: [
-          "Ideal para primera vez en extensiones",
-          "Combinable con el asesoramiento previo de diseño y curvatura",
-        ],
+        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
         photos: photos("pestanas", "style-natural", ["1.jpg", "2.jpg", "3.jpg"]),
       },
       {
@@ -73,20 +76,14 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         photos: photos("pestanas", "clasicas", []),
       },
       {
-        slug: "volumen-2d",
-        name: "Volúmen Natural 2D",
+        slug: "volumen-2d-y-3d",
+        name: "Volúmen 2D y 3D",
         group: "extension",
-        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "volumen-2d", []),
-      },
-      {
-        slug: "volumen-3d",
-        name: "Volúmen 3D",
-        group: "extension",
-        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "volumen-3d", []),
+        shortDesc:
+          "Sutiles y naturales: abanicos artesanales de 2 a 3 extensiones; mirada destacada y audaz.",
+        fullDesc:
+          "Sutiles y naturales, ideales para comenzar: son abanicos artesanales de 2 a 3 extensiones creados en el momento, aplicados en el 100% de tus pestañas para lograr una mirada destacada y audaz.",
+        photos: photos("pestanas", "volumen-2d-y-3d", []),
       },
       {
         slug: "volumen-4d",
@@ -94,39 +91,61 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         group: "extension",
         shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "volumen-4d", []),
+        photos: photos("pestanas", "volumen-4d", ["IMG_3051.JPEG", "IMG_3083.JPEG", "IMG_3085.JPEG"]),
       },
       {
         slug: "glow-5d",
-        name: "Volúmen Glow (5D)",
+        name: "Volúmen Glow",
         group: "extension",
-        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "glow-5d", []),
+        shortDesc:
+          "Impacto con abanicos de 5 extensiones: cobertura total, textura súper liviana.",
+        fullDesc:
+          "El volumen justo para impactar: rellenamos todas tus pestañas naturales al 100% con abanicos artesanales armados en el momento de 5 extensiones; el grosor y la textura son súper livianos.",
+        photos: photos("pestanas", "glow-5d", ["IMG_8171.JPEG", "IMG_8172.JPEG"]),
       },
       {
         slug: "ruso-6d",
-        name: "Volúmen Ruso (6D)",
+        name: "Volúmen Ruso",
         group: "extension",
         shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "ruso-6d", []),
+        photos: photos("pestanas", "ruso-6d", ["IMG_3440.JPEG"]),
       },
       {
         slug: "mega-volumen",
-        name: "Mega Volúmen (full 6D – 8D)",
+        name: "Mega Volúmen",
+        group: "extension",
+        shortDesc:
+          "100% de cobertura con fibras finísimas: efecto oscuro y voluminoso. Solo para exigentes.",
+        fullDesc:
+          "En esta técnica completamos el 100% de las pestañas naturales con abanicos artesanales armados en el momento con fibras súper finitas, para cuidar tus pestañas y crear un efecto súper oscuro y voluminoso. Solo para exigentes.",
+        photos: photos("pestanas", "mega-volumen", ["IMG_5984.JPEG", "IMG_5987.JPEG"]),
+      },
+      {
+        slug: "foxy-curl-l",
+        name: "Foxy Curv L",
         group: "extension",
         shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "mega-volumen", []),
+        photos: photos("pestanas", "foxy-curl-l", ["IMG_3393.JPEG", "IMG_3414.JPEG"]),
+      },
+      {
+        slug: "delineado",
+        name: "Delineado",
+        group: "extension",
+        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        photos: photos("pestanas", "delineado", ["IMG_2852.JPEG"]),
       },
       {
         slug: "lash-lifting-botox",
         name: "Lash Lifting + Botox + Tintura",
         group: "tratamiento",
-        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "lash-lifting-botox", []),
+        shortDesc:
+          "Si aún no te animás a las extensiones: curvatura natural con efecto de arqueado.",
+        fullDesc:
+          "Si aún no te animás a las extensiones, el lash lifting es una muy buena opción: modificamos la curvatura de tus pestañas naturales generando un efecto de arqueado.",
+        photos: photos("pestanas", "lash-lifting-botox", ["IMG_2354.png", "IMG_2356.png"]),
       },
       {
         slug: "full-botox",
@@ -162,9 +181,11 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         slug: "diseno-perfilado",
         name: "Diseño y Perfilado de cejas",
         group: "main",
-        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("cejas", "diseno-perfilado", []),
+        shortDesc:
+          "Diseño con regla y depilación con pinza e hilo para simetría y prolijidad.",
+        fullDesc:
+          "Realizamos el diseño ideal acorde a tu rostro utilizando una regla; luego trazamos diferentes líneas y depilamos con pinza e hilo, otorgando mayor simetría y prolijidad.",
+        photos: photos("cejas", "diseno-perfilado", ["IMG_1569.JPEG"]),
       },
       {
         slug: "brow-lamination",
@@ -172,7 +193,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         group: "main",
         shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("cejas", "brow-lamination", []),
+        photos: photos("cejas", "brow-lamination", ["IMG_3448.PNG", "IMG_3449.PNG", "IMG_9525.JPEG"]),
       },
       {
         slug: "microshading",
@@ -186,8 +207,10 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         slug: "alisado",
         name: "Alisado de cejas",
         group: "main",
-        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        shortDesc:
+          "Cejas peinadas en la dirección deseada: prolijidad y grosor; duración ~un mes y medio.",
+        fullDesc:
+          "Cejas peinadas con la dirección deseada: otorga prolijidad y grosor. Duración: un mes y medio (depende del crecimiento de los pelitos de tus cejas).",
         photos: photos("cejas", "alisado", []),
       },
       {

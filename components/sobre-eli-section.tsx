@@ -20,6 +20,15 @@ export interface SobreEliSectionProps {
   trabajandoPhotos?: SobreEliImageSlot[]
 }
 
+/** Banderas como imágenes (los emoji suelen verse como “AR”, “US”, etc. en Windows). */
+const CERTIFICACION_FLAGS = [
+  { code: "ar", label: "Argentina" },
+  { code: "us", label: "Estados Unidos" },
+  { code: "mx", label: "México" },
+  { code: "gb", label: "Reino Unido" },
+  { code: "pe", label: "Perú" },
+] as const
+
 /** Detecta si una imagen viene de nuestro proxy Drive (cualquier versión). */
 function isDriveProxySrc(src: string) {
   return src.startsWith("/api/image-proxy") || src.startsWith("/api/drive-image")
@@ -233,10 +242,30 @@ export function SobreEliSection({
                 className="absolute -bottom-4 -right-4 rounded-2xl bg-background px-4 py-3 shadow-lg"
                 style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
               >
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
-                  Lashista Profesional
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary leading-snug">
+                  Lashista Profesional Certificada
                 </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">Fundadora · Mirarte Estética</p>
+                <div
+                  className="mt-1.5 flex flex-wrap items-center gap-1"
+                  role="img"
+                  aria-label={`Certificaciones: ${CERTIFICACION_FLAGS.map((f) => f.label).join(", ")}`}
+                >
+                  {CERTIFICACION_FLAGS.map(({ code, label }) => (
+                    <img
+                      key={code}
+                      src={`https://flagcdn.com/w40/${code}.png`}
+                      alt={label}
+                      width={22}
+                      height={15}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-[15px] w-auto rounded-[2px] object-cover shadow-sm ring-1 ring-black/10"
+                    />
+                  ))}
+                </div>
+                <p className="mt-1.5 text-xs text-muted-foreground leading-snug">
+                  Creadora de Mirarte Estética
+                </p>
               </div>
             </div>
           </FadeIn>

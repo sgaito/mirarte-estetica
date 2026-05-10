@@ -9,7 +9,7 @@ export function HeroSection() {
       id="reservar"
       className="
         relative flex min-h-[100dvh] scroll-mt-20 items-center justify-center overflow-hidden
-        bg-secondary pt-20
+        bg-[var(--hero-services-seam)] pt-20
       "
     >
       {/*
@@ -23,6 +23,16 @@ export function HeroSection() {
       />
       {/* Overlay mobile (más visible) → desktop (casi transparente) */}
       <div className="absolute inset-0 bg-background/45 sm:bg-background/25 md:bg-background/15" />
+
+      {/* Puente pegado al borde inferior: casi toda la banda sigue siendo foto; el fundido fuerte solo abajo (como si subiera desde Servicios). */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[min(26vh,10.5rem)] sm:h-[min(28vh,12rem)] md:h-[min(30vh,13.5rem)]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom, transparent 0%, transparent 52%, rgba(255,255,255,0.15) 68%, rgba(255,255,255,0.55) 82%, rgba(255,255,255,0.92) 93%, var(--hero-services-seam) 100%)",
+        }}
+      />
 
       {/* ── Contenido centrado ── */}
       <div className="relative z-10 flex flex-col items-center gap-6 px-6 py-16 text-center sm:gap-7 sm:py-20 md:gap-8">

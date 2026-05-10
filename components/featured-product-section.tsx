@@ -35,7 +35,7 @@ const BENEFITS = [
   { icon: Sparkles, text: "Crecimiento y grosor — pestañas y cejas más largas y tupidas" },
   { icon: Zap,      text: "Acción antioxidante — vitaminas A, C, E, B3, B5 y Biotina" },
   { icon: Droplets, text: "Hidratación periocular — humecta párpados y previene arrugas finas" },
-  { icon: Check,    text: "Compatible con extensiones, microblading y lifting" },
+  { icon: Check,    text: "Único producto compatible con extensiones y microblading" },
 ]
 
 const BADGES = [
@@ -453,19 +453,19 @@ export function FeaturedProductSection() {
                   className="text-3xl font-semibold uppercase tracking-[0.12em] text-primary sm:text-4xl lg:text-5xl"
                   style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
                 >
-                  Realzá tu Mirada
+                  Cuidá tu mirada
                 </h2>
                 <p
                   className="mt-1 text-2xl text-foreground/55 sm:text-3xl"
                   style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
                 >
-                  Con Exel Promoter
+                  con exel Promoter
                 </p>
               </div>
 
               <p className="max-w-md text-pretty text-base leading-relaxed text-muted-foreground">
                 Potenciador vitamínico en spray con nanotecnología de liposomas para el crecimiento y
-                fortalecimiento de pestañas y cejas. Resultados visibles en 60 días.
+                fortalecimiento de pestañas y cejas.
               </p>
 
               <ul className="flex flex-col gap-2.5">

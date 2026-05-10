@@ -1,8 +1,8 @@
 import { FadeIn } from "@/components/fade-in"
 
 const HORARIOS = [
-  { dia: "Lunes – Viernes", hora: "9:00 – 20:00" },
-  { dia: "Sábados",         hora: "10:00 – 18:00" },
+  { dia: "Lunes – Viernes", hora: "8:30 – 21:00" },
+  { dia: "Sábados",         hora: "9:00 – 18:00" },
   { dia: "Domingos",        hora: "Cerrado" },
 ]
 
