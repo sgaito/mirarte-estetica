@@ -39,6 +39,12 @@ export function HeroSection() {
 
         {/* Título */}
         <div className="flex flex-col items-center gap-2">
+          <p
+            className="text-[11px] font-medium uppercase tracking-[0.28em] text-foreground/45 sm:text-xs"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            Since 2019.
+          </p>
           <h1
             className="max-w-2xl text-balance text-3xl font-semibold uppercase tracking-[0.12em] text-foreground/85 sm:text-4xl md:text-5xl lg:text-6xl"
             style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
@@ -46,10 +52,10 @@ export function HeroSection() {
             Tu mirada habla por vos
           </h1>
           <p
-            className="text-2xl text-foreground/55 sm:text-3xl md:text-4xl"
+            className="max-w-[min(100%,20rem)] text-pretty text-xl leading-snug text-foreground/55 sm:max-w-none sm:text-3xl md:text-4xl"
             style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
           >
-            Pestañas y cejas en Rosario
+            N °1 en Pestañas y cejas en Rosario
           </p>
         </div>
 

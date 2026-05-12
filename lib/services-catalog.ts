@@ -12,6 +12,22 @@ export const DESCRIPCION_SERVICIO_PENDIENTE =
 export const ELI_EXTENSIONES_PREMIUM_INTRO =
   "Trabajo con técnica pelo por pelo en Clásica y Volúmen. Uso productos de alta calidad: hipoalergénicos, de larga duración y resistentes al agua. Las pestañas son de seda premium importadas; el resultado se ve natural, respeta tus pestañas naturales y no les suma peso."
 
+/** Destacados verdes bajo el párrafo de extensiones seda premium. */
+export const ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS = [
+  "Productos certificados por AMMAT",
+  "Cruelty free",
+  "Extensiones de fibras tecnológicas de seda",
+] as const
+
+/**
+ * Foto del bloque “seda premium”. Reemplazá el archivo en `public/servicios/`
+ * manteniendo el mismo nombre, o cambiá `src` aquí si usás otro nombre.
+ */
+export const ELI_EXTENSIONES_PREMIUM_IMAGE = {
+  src: "/servicios/extensiones-seda-premium.jpeg",
+  alt: "Productos y extensiones de seda premium en Mirarte Estética",
+} as const
+
 /** Asesoramiento — mismo contenido que Eli, redacción fluida. */
 export const ELI_ASESORAMIENTO_EXTENSIONES =
   "Antes de colocarte las extensiones hacemos un asesoramiento: ahí definimos juntas el diseño, el volumen, la curvatura y el largo. Con retoques a tiempo, en forma y cuidándolas, el trabajo puede mantenerse hasta tres meses."

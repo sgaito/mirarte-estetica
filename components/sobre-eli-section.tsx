@@ -264,7 +264,7 @@ export function SobreEliSection({
                   ))}
                 </div>
                 <p className="mt-1.5 text-xs text-muted-foreground leading-snug">
-                  Creadora de Mirarte Estética
+                  Fundadora de Mirarte Estética
                 </p>
               </div>
             </div>

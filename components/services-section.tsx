@@ -17,6 +17,8 @@ import { FadeIn } from "@/components/fade-in"
 import {
   SERVICES_CATALOG,
   ELI_EXTENSIONES_PREMIUM_INTRO,
+  ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS,
+  ELI_EXTENSIONES_PREMIUM_IMAGE,
   ELI_ASESORAMIENTO_EXTENSIONES,
   ELI_COMO_ASISTIR_CITA_PESTANAS,
   DESCRIPCION_SERVICIO_PENDIENTE,
@@ -45,49 +47,48 @@ function WhatsAppIcon({ className }: { className?: string }) {
   )
 }
 
-/* ─── Extensiones seda premium (texto de Eli) + botón ─────────────────────── */
+/* ─── Extensiones seda premium (texto de Eli) ─────────────────────────────── */
 
 function ExtensionesPremiumIntro() {
-  const [open, setOpen] = useState(false)
-
   return (
     <div
       className="rounded-2xl border border-border/60 bg-card/90 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-          Extensiones de pestaña — seda premium
-        </p>
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/15 sm:self-auto"
-        >
-          {open ? "Cerrar" : "Ver descripción"}
-          <ChevronDown
-            className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          />
-        </button>
-      </div>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden"
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+        Extensiones de pestaña — seda premium
+      </p>
+
+      <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-stretch md:gap-6">
+        <div className="min-w-0 flex-1 space-y-4">
+          <p
+            className="text-sm leading-relaxed text-foreground/85 sm:text-base"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
           >
-            <p
-              className="mt-4 text-sm leading-relaxed text-foreground/85 sm:text-base"
-              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-            >
-              {ELI_EXTENSIONES_PREMIUM_INTRO}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {ELI_EXTENSIONES_PREMIUM_INTRO}
+          </p>
+          <ul className="space-y-2.5" aria-label="Certificaciones y materiales">
+            {ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS.map((line) => (
+              <li
+                key={line}
+                className="rounded-xl border border-emerald-600/25 bg-emerald-500/12 px-3.5 py-2.5 text-sm font-semibold leading-snug text-emerald-950 shadow-sm dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-50"
+              >
+                {line}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <figure className="relative mx-auto aspect-[4/3] w-full max-w-md shrink-0 overflow-hidden rounded-xl border border-border/50 bg-muted/30 shadow-sm md:mx-0 md:w-[min(100%,280px)] lg:w-[min(100%,320px)]">
+          <Image
+            src={ELI_EXTENSIONES_PREMIUM_IMAGE.src}
+            alt={ELI_EXTENSIONES_PREMIUM_IMAGE.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 320px"
+          />
+        </figure>
+      </div>
     </div>
   )
 }
@@ -121,19 +122,46 @@ function AsesoramientoCallout() {
 }
 
 function ComoAsistirCitaPestanas() {
+  const [open, setOpen] = useState(false)
+
   return (
     <div
       className="rounded-2xl border border-border/60 bg-card/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-        Cómo asistir a tu cita
-      </p>
-      <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-foreground/85 marker:text-primary/70 sm:text-[15px]">
-        {ELI_COMO_ASISTIR_CITA_PESTANAS.map((line) => (
-          <li key={line}>{line}</li>
-        ))}
-      </ul>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+          Cómo asistir a tu cita
+        </p>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/15 sm:self-auto"
+          aria-expanded={open}
+        >
+          {open ? "Ver menos" : "Ver más"}
+          <ChevronDown
+            className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          />
+        </button>
+      </div>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-foreground/85 marker:text-primary/70 sm:text-[15px]">
+              {ELI_COMO_ASISTIR_CITA_PESTANAS.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
