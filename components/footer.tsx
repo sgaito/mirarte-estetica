@@ -72,11 +72,11 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="mailto:hola@mirarteestetica.com"
+                  href="mailto:mirarteestetica2019@gmail.com"
                   className="inline-flex items-center gap-3 text-muted-foreground transition-colors hover:text-primary"
                 >
                   <Mail className="h-5 w-5 text-primary shrink-0" />
-                  <span>hola@mirarteestetica.com</span>
+                  <span>mirarteestetica2019@gmail.com</span>
                 </Link>
               </li>
             </ul>
