@@ -139,7 +139,7 @@ const SOBRE_ELI_ROOT_FOLDER_ID =
 export interface SobreEliMedia {
   /** Primera imagen de la carpeta ELI */
   eli: DriveImage | null
-  /** Hasta 4 imágenes de la carpeta ESTUDIO */
+  /** Hasta 6 imágenes de la carpeta ESTUDIO */
   estudio: DriveImage[]
   /** Fotos de Eli trabajando (carpeta TRABAJANDO / TRABAJO bajo la raíz Sobre Eli) */
   trabajando: DriveImage[]
@@ -200,7 +200,7 @@ async function _fetchSobreEliMediaUncached(): Promise<SobreEliMedia> {
         pageSize: 20,
         orderBy: "name",
       })
-      for (const f of (estRes.data.files ?? []).slice(0, 4)) {
+      for (const f of (estRes.data.files ?? []).slice(0, 6)) {
         const m = mapFile(f)
         if (m) estudio.push(m)
       }
@@ -228,7 +228,7 @@ async function _fetchSobreEliMediaUncached(): Promise<SobreEliMedia> {
 
 export const getSobreEliMedia = unstable_cache(
   _fetchSobreEliMediaUncached,
-  /* v3: incluye trabajando — cambiar clave invalida cachés viejas sin esa propiedad */
-  ["sobre-eli-drive-media", "v3-trabajando", SOBRE_ELI_ROOT_FOLDER_ID],
+  /* v4: estudio pasa a mostrar hasta 6 fotos */
+  ["sobre-eli-drive-media", "v4-estudio-6", SOBRE_ELI_ROOT_FOLDER_ID],
   { revalidate: DRIVE_REVALIDATE_SECONDS, tags: ["sobre-eli"] },
 )
