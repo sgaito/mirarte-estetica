@@ -12,34 +12,6 @@ function WhatsAppIcon({ className }: { className?: string }) {
   )
 }
 
-function FacebookOutlineIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path
-        d="M14 8h2V5h-2.4C11.7 5 10.5 6.2 10.5 8.2V11H8v2.8h2.5V19H13v-5.2h2.7l.4-2.8H13V8.5c0-.3.2-.5.5-.5z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function TikTokOutlineIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path
-        d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
 export function Footer() {
   return (
     <footer id="contacto" className="bg-background border-t border-border scroll-mt-20">
@@ -94,24 +66,6 @@ export function Footer() {
                 aria-label="Instagram"
               >
                 <Instagram size={26} strokeWidth={1.5} />
-              </Link>
-              <Link
-                href="https://www.facebook.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary/90 transition-all duration-200 hover:-translate-y-0.5 hover:text-primary"
-                aria-label="Facebook"
-              >
-                <FacebookOutlineIcon className="h-[26px] w-[26px]" />
-              </Link>
-              <Link
-                href="https://www.tiktok.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary/90 transition-all duration-200 hover:-translate-y-0.5 hover:text-primary"
-                aria-label="TikTok"
-              >
-                <TikTokOutlineIcon className="h-[26px] w-[26px]" />
               </Link>
             </div>
           </div>
