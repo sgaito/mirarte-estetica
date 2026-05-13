@@ -1,18 +1,17 @@
 "use client"
 
-import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 
 const navLinks = [
-  { href: "/#reservar", label: "Inicio" },
-  { href: "/#servicios", label: "Servicios" },
-  { href: "/#sobre-eli", label: "Eli & Mirarte" },
-  { href: "/#galeria", label: "Galería" },
-  { href: "/#resenas", label: "Reseñas" },
-  { href: "/#promoter", label: "Promoter" },
-  { href: "/#faq", label: "Preguntas" },
-  { href: "/#ubicacion", label: "Ubicación" },
+  { sectionId: "reservar", label: "Inicio" },
+  { sectionId: "servicios", label: "Servicios" },
+  { sectionId: "sobre-eli", label: "Eli & Mirarte" },
+  { sectionId: "galeria", label: "Galería" },
+  { sectionId: "resenas", label: "Reseñas" },
+  { sectionId: "promoter", label: "Promoter" },
+  { sectionId: "faq", label: "Preguntas" },
+  { sectionId: "ubicacion", label: "Ubicación" },
 ] as const
 
 const mid = Math.ceil(navLinks.length / 2)
@@ -25,6 +24,19 @@ const linkClassDesktop =
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+
+  const scrollToSection = (sectionId: (typeof navLinks)[number]["sectionId"]) => {
+    const section = document.getElementById(sectionId)
+    if (!section) return
+
+    const cleanUrl = `${window.location.pathname}${window.location.search}`
+    if (window.location.hash) {
+      window.history.replaceState(null, "", cleanUrl)
+    }
+
+    section.scrollIntoView({ behavior: "smooth", block: "start" })
+    setMobileMenuOpen(false)
+  }
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
@@ -56,10 +68,11 @@ export function Header() {
         {/* Mobile: fila con menú + logo centrado */}
         <div className="relative flex h-20 items-center justify-between md:hidden">
           <div className="w-11 shrink-0" aria-hidden />
-          <Link
-            href="/#reservar"
+          <button
+            type="button"
             className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={() => scrollToSection("reservar")}
+            aria-label="Ir a inicio"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -67,7 +80,7 @@ export function Header() {
               alt="Mirarte Estética — Inicio"
               className="h-10 w-auto"
             />
-          </Link>
+          </button>
           <button
             type="button"
             className="z-10 shrink-0 rounded-full p-2 text-foreground/70 transition-colors hover:text-primary"
@@ -86,14 +99,20 @@ export function Header() {
         <div className="hidden md:grid md:h-20 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-x-6 lg:gap-x-10">
           <div className="flex min-w-0 items-center justify-end gap-x-6 lg:gap-x-9 xl:gap-x-10">
             {navLinksLeft.map((link) => (
-              <Link key={link.href} href={link.href} className={linkClassDesktop}>
+              <button
+                key={link.sectionId}
+                type="button"
+                onClick={() => scrollToSection(link.sectionId)}
+                className={`${linkClassDesktop} bg-transparent`}
+              >
                 {link.label}
-              </Link>
+              </button>
             ))}
           </div>
 
-          <Link
-            href="/#reservar"
+          <button
+            type="button"
+            onClick={() => scrollToSection("reservar")}
             className="flex shrink-0 items-center justify-center px-2"
             aria-label="Ir a inicio"
           >
@@ -103,13 +122,18 @@ export function Header() {
               alt="Mirarte Estética — Inicio"
               className="h-11 w-auto lg:h-12"
             />
-          </Link>
+          </button>
 
           <div className="flex min-w-0 items-center justify-start gap-x-6 lg:gap-x-9 xl:gap-x-10">
             {navLinksRight.map((link) => (
-              <Link key={link.href} href={link.href} className={linkClassDesktop}>
+              <button
+                key={link.sectionId}
+                type="button"
+                onClick={() => scrollToSection(link.sectionId)}
+                className={`${linkClassDesktop} bg-transparent`}
+              >
                 {link.label}
-              </Link>
+              </button>
             ))}
           </div>
         </div>
@@ -118,14 +142,14 @@ export function Header() {
           <div className="md:hidden pb-6 pt-2">
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
+                <button
+                  key={link.sectionId}
+                  type="button"
+                  onClick={() => scrollToSection(link.sectionId)}
                   className="py-2.5 text-base font-medium text-foreground/70 transition-colors hover:text-primary"
-                  onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
-                </Link>
+                </button>
               ))}
             </div>
           </div>
