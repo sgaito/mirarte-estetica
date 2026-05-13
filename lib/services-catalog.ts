@@ -43,7 +43,7 @@ export const ELI_COMO_ASISTIR_CITA_PESTANAS = [
 
 /** Guía para reservar turno — placeholder hasta recibir el texto final. */
 export const ELI_COMO_RESERVAR_TURNO_PESTANAS = [
-  "Proximamente: Texto Correspondiente"
+  "Proximamente: Texto Correspondiente."
 ]
 
 export interface ServicePhoto {
