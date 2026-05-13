@@ -41,6 +41,11 @@ export const ELI_COMO_ASISTIR_CITA_PESTANAS = [
   "Si venís con extensiones, avisá así contemplamos el tiempo de remoción.",
 ]
 
+/** Guía para reservar turno — placeholder hasta recibir el texto final. */
+export const ELI_COMO_RESERVAR_TURNO_PESTANAS = [
+  "Proximamente: Texto Correspondiente"
+]
+
 export interface ServicePhoto {
   src: string
   alt: string
