@@ -14,7 +14,7 @@ export const ELI_EXTENSIONES_PREMIUM_INTRO =
 
 /** Destacados verdes bajo el párrafo de extensiones seda premium. */
 export const ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS = [
-  "Productos certificados por AMMAT",
+  "Productos certificados por ANMAT",
   "Cruelty free",
   "Extensiones de fibras tecnológicas de seda",
 ] as const
