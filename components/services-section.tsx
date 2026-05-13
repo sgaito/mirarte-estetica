@@ -55,23 +55,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 function ExtensionesPremiumIntro() {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
   const hasMultipleImages = ELI_EXTENSIONES_PREMIUM_IMAGES.length > 1
-  const premiumHighlights = [
-    {
-      text: ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS[0],
-      eyebrow: "Calidad",
-      Icon: ShieldCheck,
-    },
-    {
-      text: ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS[1],
-      eyebrow: "Formula",
-      Icon: Leaf,
-    },
-    {
-      text: ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS[2],
-      eyebrow: "Material",
-      Icon: Sparkles,
-    },
-  ] as const
+  const premiumHighlightIcons = [ShieldCheck, Leaf, Sparkles] as const
 
   const prevImage = useCallback(() => {
     setSelectedIdx((current) => {
@@ -125,26 +109,25 @@ function ExtensionesPremiumIntro() {
               {ELI_EXTENSIONES_PREMIUM_INTRO}
             </p>
             <ul className="grid gap-3" aria-label="Certificaciones y materiales">
-              {premiumHighlights.map(({ text, eyebrow, Icon }) => (
+              {ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS.map((text, index) => {
+                const Icon = premiumHighlightIcons[index] ?? Sparkles
+
+                return (
                 <li
                   key={text}
                   className="relative overflow-hidden rounded-2xl border border-emerald-700/15 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/70 p-3.5 shadow-[0_10px_30px_-22px_rgba(5,150,105,0.75)] dark:border-emerald-400/25 dark:from-emerald-950/25 dark:via-card dark:to-emerald-900/15"
                 >
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600/12 text-emerald-700 ring-1 ring-emerald-600/15 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-400/20">
-                      <Icon className="h-5 w-5" />
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600/12 text-emerald-700 ring-1 ring-emerald-600/15 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-400/20">
+                      <Icon className="h-4.5 w-4.5" />
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-700/70 dark:text-emerald-300/70">
-                        {eyebrow}
-                      </p>
-                      <p className="mt-1 text-sm font-semibold leading-snug text-foreground/90">
-                        {text}
-                      </p>
-                    </div>
+                    <p className="text-sm font-semibold leading-snug text-foreground/90">
+                      {text}
+                    </p>
                   </div>
                 </li>
-              ))}
+                )
+              })}
             </ul>
           </div>
 
