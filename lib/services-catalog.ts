@@ -19,14 +19,17 @@ export const ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS = [
   "Extensiones de fibras tecnológicas de seda",
 ] as const
 
-/**
- * Foto del bloque “seda premium”. Reemplazá el archivo en `public/servicios/`
- * manteniendo el mismo nombre, o cambiá `src` aquí si usás otro nombre.
- */
-export const ELI_EXTENSIONES_PREMIUM_IMAGE = {
-  src: "/servicios/extensiones-seda-premium.jpeg",
-  alt: "Productos y extensiones de seda premium en Mirarte Estética",
-} as const
+/** Fotos del bloque “seda premium” / descripción de pestañas. */
+export const ELI_EXTENSIONES_PREMIUM_IMAGES = [
+  {
+    src: "/servicios/pestanas/descripcion/1.jpeg",
+    alt: "Extensiones de pestañas de seda premium en Mirarte Estética",
+  },
+  {
+    src: "/servicios/pestanas/descripcion/2.jpeg",
+    alt: "Detalle de extensiones de pestañas de seda premium en Mirarte Estética",
+  },
+] as const
 
 /** Asesoramiento — mismo contenido que Eli, redacción fluida. */
 export const ELI_ASESORAMIENTO_EXTENSIONES =
@@ -86,7 +89,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         group: "extension",
         shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "style-natural", ["1.jpg", "2.jpg", "3.jpg"]),
+        photos: photos("pestanas", "style-natural", []),
       },
       {
         slug: "clasicas",

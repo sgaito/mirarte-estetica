@@ -18,7 +18,7 @@ import {
   SERVICES_CATALOG,
   ELI_EXTENSIONES_PREMIUM_INTRO,
   ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS,
-  ELI_EXTENSIONES_PREMIUM_IMAGE,
+  ELI_EXTENSIONES_PREMIUM_IMAGES,
   ELI_ASESORAMIENTO_EXTENSIONES,
   ELI_COMO_ASISTIR_CITA_PESTANAS,
   ELI_COMO_RESERVAR_TURNO_PESTANAS,
@@ -51,46 +51,156 @@ function WhatsAppIcon({ className }: { className?: string }) {
 /* ─── Extensiones seda premium (texto de Eli) ─────────────────────────────── */
 
 function ExtensionesPremiumIntro() {
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
+  const hasMultipleImages = ELI_EXTENSIONES_PREMIUM_IMAGES.length > 1
+
+  const prevImage = useCallback(() => {
+    setSelectedIdx((current) => {
+      if (current === null) return current
+      return (current - 1 + ELI_EXTENSIONES_PREMIUM_IMAGES.length) % ELI_EXTENSIONES_PREMIUM_IMAGES.length
+    })
+  }, [])
+
+  const nextImage = useCallback(() => {
+    setSelectedIdx((current) => {
+      if (current === null) return current
+      return (current + 1) % ELI_EXTENSIONES_PREMIUM_IMAGES.length
+    })
+  }, [])
+
+  useEffect(() => {
+    if (selectedIdx === null) return
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedIdx(null)
+      if (e.key === "ArrowLeft" && hasMultipleImages) prevImage()
+      if (e.key === "ArrowRight" && hasMultipleImages) nextImage()
+    }
+
+    const prevOverflow = document.body.style.overflow
+    document.addEventListener("keydown", onKeyDown)
+    document.body.style.overflow = "hidden"
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [selectedIdx, hasMultipleImages, prevImage, nextImage])
+
   return (
-    <div
-      className="rounded-2xl border border-border/60 bg-card/90 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
-      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-    >
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-        Extensiones de pestaña — seda premium
-      </p>
+    <>
+      <div
+        className="rounded-2xl border border-border/60 bg-card/90 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
+        style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+      >
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+          Extensiones de pestaña — seda premium
+        </p>
 
-      <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-stretch md:gap-6">
-        <div className="min-w-0 flex-1 space-y-4">
-          <p
-            className="text-sm leading-relaxed text-foreground/85 sm:text-base"
-            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-          >
-            {ELI_EXTENSIONES_PREMIUM_INTRO}
-          </p>
-          <ul className="space-y-2.5" aria-label="Certificaciones y materiales">
-            {ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS.map((line) => (
-              <li
-                key={line}
-                className="rounded-xl border border-emerald-600/25 bg-emerald-500/12 px-3.5 py-2.5 text-sm font-semibold leading-snug text-emerald-950 shadow-sm dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-50"
+        <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-stretch md:gap-6">
+          <div className="min-w-0 flex-1 space-y-4">
+            <p
+              className="text-sm leading-relaxed text-foreground/85 sm:text-base"
+              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+            >
+              {ELI_EXTENSIONES_PREMIUM_INTRO}
+            </p>
+            <ul className="space-y-2.5" aria-label="Certificaciones y materiales">
+              {ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS.map((line) => (
+                <li
+                  key={line}
+                  className="rounded-xl border border-emerald-600/25 bg-emerald-500/12 px-3.5 py-2.5 text-sm font-semibold leading-snug text-emerald-950 shadow-sm dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-50"
+                >
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mx-auto grid w-full max-w-md shrink-0 grid-cols-2 gap-3 md:mx-0 md:w-[min(100%,340px)] lg:w-[min(100%,380px)]">
+            {ELI_EXTENSIONES_PREMIUM_IMAGES.map((image, index) => (
+              <button
+                key={image.src}
+                type="button"
+                onClick={() => setSelectedIdx(index)}
+                className="group relative aspect-[3/4] overflow-hidden rounded-xl border border-border/50 bg-muted/30 shadow-sm ring-offset-2 ring-offset-background transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label={`Abrir imagen ${index + 1} de extensiones de pestañas`}
               >
-                {line}
-              </li>
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  sizes="(max-width: 768px) 50vw, 190px"
+                />
+                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
+              </button>
             ))}
-          </ul>
+          </div>
         </div>
-
-        <figure className="relative mx-auto aspect-[4/3] w-full max-w-md shrink-0 overflow-hidden rounded-xl border border-border/50 bg-muted/30 shadow-sm md:mx-0 md:w-[min(100%,280px)] lg:w-[min(100%,320px)]">
-          <Image
-            src={ELI_EXTENSIONES_PREMIUM_IMAGE.src}
-            alt={ELI_EXTENSIONES_PREMIUM_IMAGE.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 320px"
-          />
-        </figure>
       </div>
-    </div>
+
+      <AnimatePresence>
+        {selectedIdx !== null && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+            onClick={() => setSelectedIdx(null)}
+          >
+            <div
+              className="relative w-full max-w-4xl rounded-3xl bg-background p-3 shadow-2xl sm:p-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedIdx(null)}
+                aria-label="Cerrar imagen"
+                className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {hasMultipleImages && (
+                <>
+                  <button
+                    type="button"
+                    onClick={prevImage}
+                    aria-label="Imagen anterior"
+                    className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextImage}
+                    aria-label="Imagen siguiente"
+                    className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </>
+              )}
+
+              <motion.div
+                key={ELI_EXTENSIONES_PREMIUM_IMAGES[selectedIdx].src}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.18 }}
+                className="relative flex h-[75vh] items-center justify-center overflow-hidden rounded-2xl bg-muted/30"
+              >
+                <Image
+                  src={ELI_EXTENSIONES_PREMIUM_IMAGES[selectedIdx].src}
+                  alt={ELI_EXTENSIONES_PREMIUM_IMAGES[selectedIdx].alt}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                />
+              </motion.div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
 
