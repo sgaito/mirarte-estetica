@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 const WA_URL =
-  "https://wa.me/5493416367119?text=Hola%20Mirarte%20Estetica!%20Quiero%20consultar%20por%20un%20turno."
+  "https://wa.me/5493416367119?text=Hola%20Mirarte%20Estetica!!%20Quiero%20consultar%20por%20un%20turno."
 
 export function HeroSection() {
   return (
