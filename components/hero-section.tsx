@@ -43,7 +43,7 @@ export function HeroSection() {
             className="text-[11px] font-medium uppercase tracking-[0.28em] text-foreground/45 sm:text-xs"
             style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
           >
-            Since 2019.
+            Since 2019
           </p>
           <h1
             className="max-w-2xl text-balance text-3xl font-semibold uppercase tracking-[0.12em] text-foreground/85 sm:text-4xl md:text-5xl lg:text-6xl"
