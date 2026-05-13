@@ -5,14 +5,14 @@ import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 
 const navLinks = [
-  { href: "#reservar", label: "Inicio" },
-  { href: "#servicios", label: "Servicios" },
-  { href: "#sobre-eli", label: "Eli & Mirarte" },
-  { href: "#galeria", label: "Galería" },
-  { href: "#resenas", label: "Reseñas" },
-  { href: "#promoter", label: "Promoter" },
-  { href: "#faq", label: "Preguntas" },
-  { href: "#ubicacion", label: "Ubicación" },
+  { href: "/#reservar", label: "Inicio" },
+  { href: "/#servicios", label: "Servicios" },
+  { href: "/#sobre-eli", label: "Eli & Mirarte" },
+  { href: "/#galeria", label: "Galería" },
+  { href: "/#resenas", label: "Reseñas" },
+  { href: "/#promoter", label: "Promoter" },
+  { href: "/#faq", label: "Preguntas" },
+  { href: "/#ubicacion", label: "Ubicación" },
 ] as const
 
 const mid = Math.ceil(navLinks.length / 2)
@@ -57,7 +57,7 @@ export function Header() {
         <div className="relative flex h-20 items-center justify-between md:hidden">
           <div className="w-11 shrink-0" aria-hidden />
           <Link
-            href="#reservar"
+            href="/#reservar"
             className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center"
             onClick={() => setMobileMenuOpen(false)}
           >
@@ -93,7 +93,7 @@ export function Header() {
           </div>
 
           <Link
-            href="#reservar"
+            href="/#reservar"
             className="flex shrink-0 items-center justify-center px-2"
             aria-label="Ir a inicio"
           >
