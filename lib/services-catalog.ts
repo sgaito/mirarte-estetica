@@ -16,7 +16,7 @@ export const ELI_EXTENSIONES_PREMIUM_INTRO =
 export const ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS = [
   "Productos certificados por ANMAT",
   "Cruelty free",
-  "Extensiones de fibras tecnológicas de seda",
+  "Extensiones de seda importadas “London Lash” y de Fibras tecnológicas",
 ] as const
 
 /** Fotos del bloque “seda premium” / descripción de pestañas. */
