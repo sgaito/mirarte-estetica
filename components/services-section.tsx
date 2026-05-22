@@ -247,8 +247,8 @@ function AsesoramientoCallout() {
 const pestanasBlockFont = { fontFamily: "var(--font-display), Montserrat, sans-serif" } as const
 
 /**
- * Móvil: <details> nativo (Ver más / Ver menos sin React ni animar altura).
- * Chrome Android rompe con useState + motion height:auto + overflow-hidden.
+ * Móvil: toggle simple. Chrome rompe el estado CERRADO con <details> o con
+ * pastilla redonda + ChevronDown (capas GPU). Abierto = solo texto + lista.
  */
 function PestanasAccordionMobile({
   title,
@@ -259,42 +259,43 @@ function PestanasAccordionMobile({
   listType: "ul" | "ol"
   items: readonly string[]
 }) {
+  const [open, setOpen] = useState(false)
   const listClass =
     "mt-3 space-y-2 pl-4 text-sm leading-relaxed text-foreground/85 " +
     (listType === "ol" ? "list-decimal" : "list-disc")
 
-  const list =
-    listType === "ul" ? (
-      <ul className={listClass}>
-        {items.map((line) => (
-          <li key={line}>{line}</li>
-        ))}
-      </ul>
-    ) : (
-      <ol className={listClass}>
-        {items.map((line) => (
-          <li key={line}>{line}</li>
-        ))}
-      </ol>
-    )
-
   return (
-    <details
-      className="group rounded-2xl border border-border/60 bg-card px-4 py-4 sm:px-5 sm:py-5"
+    <div
+      className="rounded-2xl border border-border/60 bg-card px-4 py-4 sm:px-5 sm:py-5"
       style={pestanasBlockFont}
     >
-      <summary className="flex cursor-pointer list-none flex-col gap-3 [&::-webkit-details-marker]:hidden">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-          {title}
-        </span>
-        <span className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary">
-          <span className="group-open:hidden">Ver más</span>
-          <span className="hidden group-open:inline">Ver menos</span>
-          <ChevronDown className="h-4 w-4 shrink-0 group-open:rotate-180" />
-        </span>
-      </summary>
-      {list}
-    </details>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+        {title}
+      </p>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="mt-3 text-xs font-semibold text-primary underline underline-offset-2"
+        aria-expanded={open}
+      >
+        {open ? "Ver menos" : "Ver más"}
+      </button>
+      {open ? (
+        listType === "ul" ? (
+          <ul className={listClass}>
+            {items.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        ) : (
+          <ol className={listClass}>
+            {items.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ol>
+        )
+      ) : null}
+    </div>
   )
 }
 
