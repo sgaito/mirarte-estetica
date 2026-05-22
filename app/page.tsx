@@ -10,15 +10,19 @@ import { LocationSection } from "@/components/location-section"
 import { Footer } from "@/components/footer"
 import { ELI_CARTA_PRESENTACION_DEFAULT } from "@/lib/eli-presentacion"
 import { getSobreEliMedia } from "@/lib/google-drive"
+import { detectMobileSafeGridFromUserAgent } from "@/lib/progressive-service-grid"
+import { headers } from "next/headers"
 
 export default async function HomePage() {
   const sobreEliMedia = await getSobreEliMedia()
+  const ua = (await headers()).get("user-agent") ?? ""
+  const mobileSafeGrid = detectMobileSafeGridFromUserAgent(ua)
 
   return (
     <main className="min-h-screen">
       <Header />
       <HeroSection />
-      <ServicesSection />
+      <ServicesSection mobileSafeGrid={mobileSafeGrid} />
       <SobreEliSection
         cartaParrafos={ELI_CARTA_PRESENTACION_DEFAULT}
         eliPhoto={

@@ -394,19 +394,21 @@ function ComoReservarTurnoPestanas() {
 }
 
 /**
- * Móvil: 1 columna, tarjeta horizontal (foto izq.), mitad de servicios + "Cargar más".
- * Desktop: grilla 2–4 columnas, tarjeta vertical.
+ * Chrome Android: 1 col, tarjetas verticales grandes, solo 3 servicios + "Cargar más".
+ * Desktop: grilla 2–4 columnas.
  */
 function ServiceGrid({
   services,
   onOpenService,
   layout,
+  mobileSafeGrid,
 }: {
   services: ServiceItem[]
   onOpenService: (s: ServiceItem) => void
   layout: "pestanas-ext" | "pestanas-trat" | "category"
+  mobileSafeGrid: boolean
 }) {
-  const { needsLightGrid, expand } = useProgressiveServiceGrid(services.length)
+  const { needsLightGrid, expand } = useProgressiveServiceGrid(services.length, mobileSafeGrid)
 
   const containerClass =
     layout === "pestanas-ext"
@@ -458,37 +460,36 @@ function ServiceCard({
     <button
       type="button"
       onClick={() => onOpen(service)}
-      className="group relative flex w-full min-w-0 flex-row items-stretch overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:gap-0 lg:flex-col lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
+      className="group relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:shadow-none lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      {/* Móvil: miniatura a la izquierda */}
-      <div className="relative h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden bg-muted/40 sm:h-[5.25rem] sm:w-[5.25rem] lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-t-2xl">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40 lg:rounded-t-2xl">
         {service.photos.length > 0 ? (
           <Image
             src={service.photos[0].src}
             alt={service.photos[0].alt}
             fill
             className="object-cover max-lg:transition-none lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
-            sizes="(max-width: 1024px) 88px, (max-width: 1280px) 33vw, 25vw"
+            sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, 25vw"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-secondary to-muted/40">
-            <Sparkles className="h-5 w-5 text-primary/25 lg:h-7 lg:w-7" />
+          <div className="flex h-full w-full items-center justify-center bg-muted/50 max-lg:bg-secondary/80">
+            <Sparkles className="h-7 w-7 text-primary/25" />
           </div>
         )}
         {service.tag && (
-          <span className="absolute right-1 top-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-primary-foreground lg:right-2 lg:top-2 lg:px-2.5 lg:text-[10px]">
+          <span className="absolute right-2 top-2 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-foreground">
             {service.tag}
           </span>
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 px-3 py-2.5 lg:gap-1 lg:px-3.5 lg:py-3">
-        <p className="text-xs font-semibold leading-snug text-foreground/90 sm:text-sm lg:leading-tight lg:transition-colors lg:group-hover:text-primary">
+      <div className="flex flex-col gap-1 px-3.5 py-3">
+        <p className="text-sm font-semibold leading-tight text-foreground/90 max-lg:text-base lg:transition-colors lg:group-hover:text-primary">
           {service.name}
         </p>
         <p
-          className={`line-clamp-2 text-[11px] leading-snug sm:text-xs sm:leading-relaxed lg:line-clamp-2 ${
+          className={`line-clamp-2 text-xs leading-relaxed sm:text-sm ${
             service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
               ? "text-muted-foreground/85 italic"
               : "text-muted-foreground"
@@ -703,9 +704,11 @@ function ServiceModal({
 function CategoryContent({
   category,
   onOpenService,
+  mobileSafeGrid,
 }: {
   category: ServiceCategory
   onOpenService: (s: ServiceItem) => void
+  mobileSafeGrid: boolean
 }) {
   if (category.id === "pestanas") {
     const extensions = category.services.filter((s) => s.group === "extension")
@@ -729,6 +732,7 @@ function CategoryContent({
             services={extensions}
             onOpenService={onOpenService}
             layout="pestanas-ext"
+            mobileSafeGrid={mobileSafeGrid}
           />
         </div>
 
@@ -744,6 +748,7 @@ function CategoryContent({
               services={treatments}
               onOpenService={onOpenService}
               layout="pestanas-trat"
+              mobileSafeGrid={mobileSafeGrid}
             />
           </div>
         )}
@@ -764,13 +769,14 @@ function CategoryContent({
       services={category.services}
       onOpenService={onOpenService}
       layout="category"
+      mobileSafeGrid={mobileSafeGrid}
     />
   )
 }
 
 /* ─── Main section ────────────────────────────────────────────────────────── */
 
-export function ServicesSection() {
+export function ServicesSection({ mobileSafeGrid = false }: { mobileSafeGrid?: boolean }) {
   const [activeService, setActiveService] = useState<ServiceItem | null>(null)
   const [activeTab, setActiveTab] = useState<ServiceCategory["id"]>("pestanas")
   const activeCategory = SERVICES_CATALOG.find((c) => c.id === activeTab)
@@ -828,7 +834,11 @@ export function ServicesSection() {
 
               {activeCategory ? (
                 <TabsContent key={activeTab} value={activeTab} className="mt-2 outline-none">
-                  <CategoryContent category={activeCategory} onOpenService={setActiveService} />
+                  <CategoryContent
+                    category={activeCategory}
+                    onOpenService={setActiveService}
+                    mobileSafeGrid={mobileSafeGrid}
+                  />
                 </TabsContent>
               ) : null}
             </Tabs>
