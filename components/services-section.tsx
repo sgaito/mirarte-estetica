@@ -244,93 +244,80 @@ function AsesoramientoCallout() {
   )
 }
 
-function ComoAsistirCitaPestanas() {
+/** Acordeón simple: sin animar altura (Chrome móvil rompe con height:auto + overflow-hidden). */
+function PestanasAccordion({
+  title,
+  listType,
+  items,
+}: {
+  title: string
+  listType: "ul" | "ol"
+  items: readonly string[]
+}) {
   const [open, setOpen] = useState(false)
+  const listClass =
+    "mt-3 space-y-2 pl-5 text-sm leading-relaxed text-foreground/85 sm:text-[15px] " +
+    (listType === "ol"
+      ? "list-decimal marker:text-primary/70"
+      : "list-disc marker:text-primary/70")
 
   return (
     <div
-      className="rounded-2xl border border-border/60 bg-card/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
+      className="rounded-2xl border border-border/60 bg-card px-4 py-4 sm:px-5 sm:py-5"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-          Cómo asistir a tu cita
+          {title}
         </p>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/15 sm:self-auto"
+          className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary lg:self-auto lg:transition-colors lg:hover:bg-primary/15"
           aria-expanded={open}
         >
           {open ? "Ver menos" : "Ver más"}
           <ChevronDown
-            className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`h-4 w-4 shrink-0 max-lg:transition-none ${open ? "rotate-180" : ""}`}
           />
         </button>
       </div>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-foreground/85 marker:text-primary/70 sm:text-[15px]">
-              {ELI_COMO_ASISTIR_CITA_PESTANAS.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {open ? (
+        listType === "ul" ? (
+          <ul className={listClass}>
+            {items.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        ) : (
+          <ol className={listClass}>
+            {items.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ol>
+        )
+      ) : null}
     </div>
   )
 }
 
-function ComoReservarTurnoPestanas() {
-  const [open, setOpen] = useState(false)
-
+function ComoAsistirCitaPestanas() {
   return (
-    <div
-      className="rounded-2xl border border-border/60 bg-card/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
-      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-    >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-          ¿Cómo reservar mi turno?
-        </p>
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/15 sm:self-auto"
-          aria-expanded={open}
-        >
-          {open ? "Ver menos" : "Ver más"}
-          <ChevronDown
-            className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          />
-        </button>
-      </div>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-foreground/85 marker:text-primary/70 sm:text-[15px]">
-              {ELI_COMO_RESERVAR_TURNO_PESTANAS.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ol>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    <PestanasAccordion
+      title="Cómo asistir a tu cita"
+      listType="ul"
+      items={ELI_COMO_ASISTIR_CITA_PESTANAS}
+    />
+  )
+}
+
+function ComoReservarTurnoPestanas() {
+  return (
+    <PestanasAccordion
+      title="¿Cómo reservar mi turno?"
+      listType="ol"
+      items={ELI_COMO_RESERVAR_TURNO_PESTANAS}
+    />
   )
 }
 
