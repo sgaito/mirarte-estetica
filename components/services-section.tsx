@@ -40,11 +40,6 @@ const WA_SERVICE = (name: string) =>
 const SECTION_SURFACE_CLASS =
   "bg-gradient-to-b from-[var(--hero-services-seam)] via-[oklch(0.976_0.012_178)] to-[oklch(0.964_0.022_75/0.22)]"
 
-/** 2 columnas en móvil; tarjetas sin ring-offset ni animaciones hasta breakpoint lg. */
-const GRID_PESTANAS_EXT = "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
-const GRID_PESTANAS_TRAT = "grid grid-cols-2 gap-3 sm:grid-cols-3"
-const GRID_CATEGORY = "grid grid-cols-2 gap-3 sm:grid-cols-3"
-
 /* ─── WhatsApp icon ───────────────────────────────────────────────────────── */
 
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -396,6 +391,40 @@ function ComoReservarTurnoPestanas() {
   )
 }
 
+/**
+ * Móvil/tablet: 2 (o 3) columnas con flex — Chrome rompe `display:grid` + 2 cols.
+ * Desktop (lg+): CSS grid como el diseño original.
+ */
+function ServiceGrid({
+  services,
+  onOpenService,
+  layout,
+}: {
+  services: ServiceItem[]
+  onOpenService: (s: ServiceItem) => void
+  layout: "pestanas-ext" | "pestanas-trat" | "category"
+}) {
+  const containerClass =
+    layout === "pestanas-ext"
+      ? "flex flex-wrap gap-3 lg:grid lg:grid-cols-4 lg:gap-3"
+      : layout === "pestanas-trat"
+        ? "flex flex-wrap gap-3 lg:grid lg:grid-cols-3 lg:gap-3"
+        : "flex flex-wrap gap-3 lg:grid lg:grid-cols-3 lg:gap-3"
+
+  const itemClass =
+    "min-w-0 w-[calc(50%-0.375rem)] sm:w-[calc((100%-1.5rem)/3)] lg:w-full"
+
+  return (
+    <div className={containerClass}>
+      {services.map((s) => (
+        <div key={s.slug} className={itemClass}>
+          <ServiceCard service={s} onOpen={onOpenService} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 /* ─── Service card ────────────────────────────────────────────────────────── */
 
 function ServiceCard({
@@ -672,11 +701,11 @@ function CategoryContent({
           >
             Opciones de pestañas
           </p>
-          <div className={GRID_PESTANAS_EXT}>
-            {extensions.map((s) => (
-              <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
-            ))}
-          </div>
+          <ServiceGrid
+            services={extensions}
+            onOpenService={onOpenService}
+            layout="pestanas-ext"
+          />
         </div>
 
         {treatments.length > 0 && (
@@ -687,27 +716,31 @@ function CategoryContent({
             >
               Tratamientos
             </p>
-            <div className={GRID_PESTANAS_TRAT}>
-              {treatments.map((s) => (
-                <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
-              ))}
-            </div>
+            <ServiceGrid
+              services={treatments}
+              onOpenService={onOpenService}
+              layout="pestanas-trat"
+            />
           </div>
         )}
       </div>
     )
   }
 
+  if (category.services.length === 1) {
+    return (
+      <div className="max-w-xs">
+        <ServiceCard service={category.services[0]} onOpen={onOpenService} />
+      </div>
+    )
+  }
+
   return (
-    <div
-      className={`gap-3 ${
-        category.services.length === 1 ? "max-w-xs grid grid-cols-1" : GRID_CATEGORY
-      }`}
-    >
-      {category.services.map((s) => (
-        <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
-      ))}
-    </div>
+    <ServiceGrid
+      services={category.services}
+      onOpenService={onOpenService}
+      layout="category"
+    />
   )
 }
 
