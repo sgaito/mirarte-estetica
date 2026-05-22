@@ -392,8 +392,8 @@ function ComoReservarTurnoPestanas() {
 }
 
 /**
- * Móvil/tablet: 2 (o 3) columnas con flex — Chrome rompe `display:grid` + 2 cols.
- * Desktop (lg+): CSS grid como el diseño original.
+ * Chrome Android: grid de 2+ columnas en móvil rompe el compositor (tearing).
+ * 1 columna hasta lg; desde ahí el layout original de 2–4 columnas.
  */
 function ServiceGrid({
   services,
@@ -406,20 +406,15 @@ function ServiceGrid({
 }) {
   const containerClass =
     layout === "pestanas-ext"
-      ? "flex flex-wrap gap-3 lg:grid lg:grid-cols-4 lg:gap-3"
+      ? "grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-4"
       : layout === "pestanas-trat"
-        ? "flex flex-wrap gap-3 lg:grid lg:grid-cols-3 lg:gap-3"
-        : "flex flex-wrap gap-3 lg:grid lg:grid-cols-3 lg:gap-3"
-
-  const itemClass =
-    "min-w-0 w-[calc(50%-0.375rem)] sm:w-[calc((100%-1.5rem)/3)] lg:w-full"
+        ? "grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3"
+        : "grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3"
 
   return (
     <div className={containerClass}>
       {services.map((s) => (
-        <div key={s.slug} className={itemClass}>
-          <ServiceCard service={s} onOpen={onOpenService} />
-        </div>
+        <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
       ))}
     </div>
   )
