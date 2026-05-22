@@ -1,10 +1,11 @@
 /**
- * Grilla de servicios con "Cargar más" solo en dispositivos donde el
- * compositor de Chrome en Android suele saturarse (móvil + Chromium + Android).
- * Desktop, iOS y Firefox móvil muestran todas las tarjetas de entrada.
+ * Grilla liviana en Chrome Android móvil: menos tarjetas al inicio + "Cargar más".
+ * No confundir "expandir lista" con "desactivar modo seguro" (bug anterior).
  */
 
-const STORAGE_KEY = "mirarte:progressive-service-grid"
+const LEGACY_KEY = "mirarte:progressive-service-grid"
+const DEVICE_KEY = "mirarte:gpu-safe-grid-device"
+const LEGACY_EXPANDED_KEY = "mirarte:services-grid-expanded"
 
 /** Mitad superior de la lista (mínimo 1 tarjeta visible). */
 export function getInitialVisibleCount(total: number): number {
@@ -12,7 +13,7 @@ export function getInitialVisibleCount(total: number): number {
   return Math.ceil(total / 2)
 }
 
-export function detectProgressiveServiceGrid(): boolean {
+export function detectGpuSafeGridDevice(): boolean {
   if (typeof window === "undefined") return false
 
   if (!window.matchMedia("(max-width: 1023px)").matches) return false
@@ -20,24 +21,29 @@ export function detectProgressiveServiceGrid(): boolean {
   const ua = navigator.userAgent
   if (!/Android/i.test(ua)) return false
 
-  // Chromium en Android (Chrome, Edge, Samsung Internet, etc.)
   return /Chrome/i.test(ua) && !/Firefox|FxiOS/i.test(ua)
 }
 
-export function readProgressiveGridPreference(): boolean | null {
-  if (typeof window === "undefined") return null
-  const v = sessionStorage.getItem(STORAGE_KEY)
-  if (v === "1") return true
-  if (v === "0") return false
-  return null
+/** Limpia claves viejas que ocultaban "Cargar más" o desactivaban el modo seguro. */
+function migrateLegacyStorage(): void {
+  const legacy = sessionStorage.getItem(LEGACY_KEY)
+  if (legacy === "1") sessionStorage.setItem(DEVICE_KEY, "1")
+  sessionStorage.removeItem(LEGACY_KEY)
+  sessionStorage.removeItem(LEGACY_EXPANDED_KEY)
 }
 
-export function saveProgressiveGridPreference(enabled: boolean): void {
-  sessionStorage.setItem(STORAGE_KEY, enabled ? "1" : "0")
+/** Dispositivo que necesita grilla liviana (persiste en la pestaña). */
+export function isGpuSafeGridDevice(): boolean {
+  if (typeof window === "undefined") return false
+
+  migrateLegacyStorage()
+
+  const stored = sessionStorage.getItem(DEVICE_KEY)
+  if (stored === "1") return true
+
+  const detected = detectGpuSafeGridDevice()
+  if (detected) sessionStorage.setItem(DEVICE_KEY, "1")
+  return detected
 }
 
-export function resolveProgressiveServiceGrid(): boolean {
-  const pref = readProgressiveGridPreference()
-  if (pref !== null) return pref
-  return detectProgressiveServiceGrid()
-}
+

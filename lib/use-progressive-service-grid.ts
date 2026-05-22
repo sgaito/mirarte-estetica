@@ -1,17 +1,24 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { resolveProgressiveServiceGrid } from "@/lib/progressive-service-grid"
+import { isGpuSafeGridDevice } from "@/lib/progressive-service-grid"
 
-/** `enabled` solo es true tras montar en cliente (evita hydration mismatch). */
 export function useProgressiveServiceGrid() {
-  const [enabled, setEnabled] = useState(false)
+  const [device, setDevice] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    setEnabled(resolveProgressiveServiceGrid())
+    setDevice(isGpuSafeGridDevice())
     setReady(true)
   }, [])
 
-  return { enabled: ready && enabled, ready }
+  const needsLightGrid = ready && device && !expanded
+
+  return {
+    ready,
+    device: ready && device,
+    needsLightGrid,
+    expand: () => setExpanded(true),
+  }
 }
