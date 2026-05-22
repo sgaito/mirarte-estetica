@@ -25,11 +25,14 @@ import {
   ELI_COMO_ASISTIR_CITA_PESTANAS,
   ELI_COMO_RESERVAR_TURNO_PESTANAS,
   DESCRIPCION_SERVICIO_PENDIENTE,
-  getServiceCardPhotos,
   type ServiceItem,
   type ServiceCategory,
-  type ServiceVariant,
 } from "@/lib/services-catalog"
+import {
+  getInitialVisibleCount,
+  saveProgressiveGridPreference,
+} from "@/lib/progressive-service-grid"
+import { useProgressiveServiceGrid } from "@/lib/use-progressive-service-grid"
 
 /* ─── Constants ───────────────────────────────────────────────────────────── */
 
@@ -406,6 +409,15 @@ function ServiceGrid({
   onOpenService: (s: ServiceItem) => void
   layout: "pestanas-ext" | "pestanas-trat" | "category"
 }) {
+  const { enabled: progressive, ready } = useProgressiveServiceGrid()
+  const [showAll, setShowAll] = useState(true)
+
+  useEffect(() => {
+    if (!ready) return
+    if (progressive) setShowAll(false)
+    else setShowAll(true)
+  }, [ready, progressive])
+
   const containerClass =
     layout === "pestanas-ext"
       ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-4"
@@ -413,11 +425,35 @@ function ServiceGrid({
         ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
         : "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
 
+  const initialVisible = getInitialVisibleCount(services.length)
+  const usePartial = ready && progressive && !showAll && services.length > 1
+  const visibleServices = usePartial ? services.slice(0, initialVisible) : services
+  const remainingCount = services.length - initialVisible
+
   return (
-    <div className={containerClass}>
-      {services.map((s) => (
-        <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
-      ))}
+    <div className="space-y-3">
+      <div className={containerClass}>
+        {visibleServices.map((s) => (
+          <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
+        ))}
+      </div>
+      {usePartial && remainingCount > 0 ? (
+        <button
+          type="button"
+          onClick={() => {
+            setShowAll(true)
+            saveProgressiveGridPreference(false)
+          }}
+          className="w-full rounded-xl border border-primary/25 bg-primary/5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 active:scale-[0.98]"
+          style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+        >
+          Cargar más
+          <span className="font-normal text-primary/80">
+            {" "}
+            ({remainingCount} {remainingCount === 1 ? "servicio" : "servicios"})
+          </span>
+        </button>
+      ) : null}
     </div>
   )
 }
@@ -431,9 +467,6 @@ function ServiceCard({
   service: ServiceItem
   onOpen: (s: ServiceItem) => void
 }) {
-  const cardPhotos = getServiceCardPhotos(service)
-  const variantCount = service.variants?.length ?? 0
-
   return (
     <button
       type="button"
@@ -442,10 +475,10 @@ function ServiceCard({
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40 lg:rounded-t-2xl">
-        {cardPhotos.length > 0 ? (
+        {service.photos.length > 0 ? (
           <Image
-            src={cardPhotos[0].src}
-            alt={cardPhotos[0].alt}
+            src={service.photos[0].src}
+            alt={service.photos[0].alt}
             fill
             className="object-cover lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
             sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, 25vw"
@@ -458,11 +491,6 @@ function ServiceCard({
         {service.tag && (
           <span className="absolute right-2 top-2 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-foreground">
             {service.tag}
-          </span>
-        )}
-        {variantCount > 1 && (
-          <span className="absolute bottom-2 left-2 rounded-full bg-background/90 px-2.5 py-0.5 text-[10px] font-semibold text-foreground/80 shadow-sm backdrop-blur-[2px]">
-            {variantCount} opciones
           </span>
         )}
       </div>
@@ -579,45 +607,6 @@ function ServiceModalPhotoCarousel({
   )
 }
 
-function ServiceVariantBlock({ variant }: { variant: ServiceVariant }) {
-  return (
-    <article
-      id={`variant-${variant.slug}`}
-      className="scroll-mt-4 rounded-2xl border border-border/60 bg-muted/20 p-4"
-    >
-      <h4 className="text-sm font-semibold text-foreground">{variant.name}</h4>
-      <p
-        className={`mt-2 text-sm leading-relaxed ${
-          variant.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
-            ? "text-muted-foreground/90 italic"
-            : "text-muted-foreground"
-        }`}
-      >
-        {variant.fullDesc}
-      </p>
-      {variant.details && variant.details.length > 0 && (
-        <ul className="mt-3 space-y-2">
-          {variant.details.map((d) => (
-            <li key={d} className="flex items-center gap-3 text-sm text-foreground/75">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-              {d}
-            </li>
-          ))}
-        </ul>
-      )}
-      <a
-        href={WA_SERVICE(variant.name)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-4 flex items-center justify-center gap-2 rounded-full border border-primary/25 bg-primary/5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 active:scale-[0.98]"
-      >
-        <WhatsAppIcon className="h-4 w-4" />
-        Consultar por {variant.name}
-      </a>
-    </article>
-  )
-}
-
 function ServiceModal({
   service,
   onClose,
@@ -625,19 +614,6 @@ function ServiceModal({
   service: ServiceItem
   onClose: () => void
 }) {
-  const variants = service.variants ?? []
-  const hasVariants = variants.length > 0
-  const [variantIdx, setVariantIdx] = useState(0)
-
-  const activeVariant = hasVariants ? variants[variantIdx] : null
-  const carouselPhotos = activeVariant?.photos.length
-    ? activeVariant.photos
-    : getServiceCardPhotos(service)
-
-  useEffect(() => {
-    setVariantIdx(0)
-  }, [service.slug])
-
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
@@ -664,7 +640,7 @@ function ServiceModal({
         <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-border sm:hidden" />
 
         <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
-          <div className="min-w-0 pr-3">
+          <div>
             {service.tag && (
               <p
                 className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary"
@@ -679,118 +655,55 @@ function ServiceModal({
             >
               {service.name}
             </h3>
-            {hasVariants && (
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                {variants.length} opciones · elegí la que te interese
-              </p>
-            )}
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-muted hover:text-foreground active:scale-90"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-muted hover:text-foreground active:scale-90"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto">
-          {hasVariants ? (
-            <>
-              {carouselPhotos.length > 0 && (
-                <ServiceModalPhotoCarousel key={`${service.slug}-${variantIdx}`} photos={carouselPhotos} />
-              )}
+          <ServiceModalPhotoCarousel photos={service.photos} />
 
-              <div
-                className="space-y-4 px-5 pb-7 pt-5"
-                style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-              >
-                {service.fullDesc !== DESCRIPCION_SERVICIO_PENDIENTE && (
-                  <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">{service.fullDesc}</p>
-                )}
+          <div
+            className="space-y-4 px-5 pb-7 pt-5"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            <p
+              className={`text-sm leading-relaxed sm:text-base ${
+                service.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
+                  ? "text-muted-foreground/90 italic"
+                  : "text-muted-foreground"
+              }`}
+            >
+              {service.fullDesc}
+            </p>
 
-                <div
-                  className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                  role="tablist"
-                  aria-label="Opciones del servicio"
-                >
-                  {variants.map((v, i) => (
-                    <button
-                      key={v.slug}
-                      type="button"
-                      role="tab"
-                      aria-selected={i === variantIdx}
-                      onClick={() => setVariantIdx(i)}
-                      className={`shrink-0 rounded-full px-3.5 py-2 text-xs font-semibold transition-colors ${
-                        i === variantIdx
-                          ? "bg-primary text-primary-foreground"
-                          : "border border-border bg-muted/40 text-foreground/75 hover:bg-muted"
-                      }`}
-                    >
-                      {v.name}
-                    </button>
-                  ))}
-                </div>
+            {service.details && service.details.length > 0 && (
+              <ul className="space-y-2.5">
+                {service.details.map((d) => (
+                  <li key={d} className="flex items-center gap-3 text-sm text-foreground/75">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            )}
 
-                {activeVariant ? (
-                  <div role="tabpanel">
-                    <ServiceVariantBlock key={activeVariant.slug} variant={activeVariant} />
-                  </div>
-                ) : null}
-
-                <a
-                  href={WA_SERVICE(service.name)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-105 hover:shadow-md active:scale-95"
-                >
-                  <WhatsAppIcon className="h-4 w-4" />
-                  Consultar por WhatsApp
-                </a>
-              </div>
-            </>
-          ) : (
-            <>
-              <ServiceModalPhotoCarousel photos={service.photos} />
-
-              <div
-                className="space-y-4 px-5 pb-7 pt-5"
-                style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-              >
-                <p
-                  className={`text-sm leading-relaxed sm:text-base ${
-                    service.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
-                      ? "text-muted-foreground/90 italic"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {service.fullDesc}
-                </p>
-
-                {service.details && service.details.length > 0 && (
-                  <ul className="space-y-2.5">
-                    {service.details.map((d) => (
-                      <li key={d} className="flex items-center gap-3 text-sm text-foreground/75">
-                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                <a
-                  href={WA_SERVICE(service.name)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-105 hover:shadow-md active:scale-95"
-                >
-                  <WhatsAppIcon className="h-4 w-4" />
-                  Consultar por {service.name}
-                </a>
-              </div>
-            </>
-          )}
+            <a
+              href={WA_SERVICE(service.name)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2.5 rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-105 hover:shadow-md active:scale-95"
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+              Consultar por {service.name}
+            </a>
+          </div>
         </div>
       </div>
     </div>
