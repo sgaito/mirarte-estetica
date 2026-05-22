@@ -1,23 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { isGpuSafeGridDevice } from "@/lib/progressive-service-grid"
+import { useLayoutEffect, useState } from "react"
+import { shouldLimitInitialServices } from "@/lib/progressive-service-grid"
 
-export function useProgressiveServiceGrid() {
-  const [device, setDevice] = useState(false)
+export function useProgressiveServiceGrid(serviceCount: number) {
   const [expanded, setExpanded] = useState(false)
-  const [ready, setReady] = useState(false)
+  const [needsLightGrid, setNeedsLightGrid] = useState(false)
 
-  useEffect(() => {
-    setDevice(isGpuSafeGridDevice())
-    setReady(true)
-  }, [])
-
-  const needsLightGrid = ready && device && !expanded
+  useLayoutEffect(() => {
+    setNeedsLightGrid(!expanded && shouldLimitInitialServices(serviceCount))
+  }, [expanded, serviceCount])
 
   return {
-    ready,
-    device: ready && device,
     needsLightGrid,
     expand: () => setExpanded(true),
   }

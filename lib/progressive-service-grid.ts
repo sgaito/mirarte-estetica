@@ -33,6 +33,11 @@ function migrateLegacyStorage(): void {
 }
 
 /** Dispositivo que necesita grilla liviana (persiste en la pestaña). */
+export function isMobileViewport(): boolean {
+  if (typeof window === "undefined") return false
+  return window.matchMedia("(max-width: 1023px)").matches
+}
+
 export function isGpuSafeGridDevice(): boolean {
   if (typeof window === "undefined") return false
 
@@ -44,6 +49,12 @@ export function isGpuSafeGridDevice(): boolean {
   const detected = detectGpuSafeGridDevice()
   if (detected) sessionStorage.setItem(DEVICE_KEY, "1")
   return detected
+}
+
+/** Mitad de tarjetas + botón en móvil (listas con 3+ ítems). */
+export function shouldLimitInitialServices(total: number): boolean {
+  if (total <= 2) return false
+  return isMobileViewport()
 }
 
 

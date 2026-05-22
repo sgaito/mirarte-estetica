@@ -394,8 +394,8 @@ function ComoReservarTurnoPestanas() {
 }
 
 /**
- * Chrome Android: 1 columna + mitad de tarjetas + "Cargar más" (estable).
- * Resto móvil: 2 columnas. Desktop: 2–4 columnas (lg / xl).
+ * Móvil: 1 columna, tarjeta horizontal (foto izq.), mitad de servicios + "Cargar más".
+ * Desktop: grilla 2–4 columnas, tarjeta vertical.
  */
 function ServiceGrid({
   services,
@@ -406,30 +406,28 @@ function ServiceGrid({
   onOpenService: (s: ServiceItem) => void
   layout: "pestanas-ext" | "pestanas-trat" | "category"
 }) {
-  const { ready, device, needsLightGrid, expand } = useProgressiveServiceGrid()
+  const { needsLightGrid, expand } = useProgressiveServiceGrid(services.length)
 
-  /** Chrome Android: siempre 1 col en móvil (2 col rompe el compositor). */
-  const mobileCols = device ? "grid-cols-1" : "grid-cols-2"
   const containerClass =
     layout === "pestanas-ext"
-      ? `grid ${mobileCols} gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-4`
+      ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-4"
       : layout === "pestanas-trat"
-        ? `grid ${mobileCols} gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3`
-        : `grid ${mobileCols} gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3`
+        ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
+        : "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
 
   const initialVisible = getInitialVisibleCount(services.length)
-  const usePartial = needsLightGrid && services.length > 1
-  const visibleServices = usePartial ? services.slice(0, initialVisible) : services
+  const visibleServices = needsLightGrid ? services.slice(0, initialVisible) : services
   const remainingCount = services.length - initialVisible
+  const showLoadMore = needsLightGrid && remainingCount > 0
 
   return (
     <div className="space-y-3">
       <div className={containerClass}>
         {visibleServices.map((s) => (
-          <ServiceCard key={s.slug} service={s} onOpen={onOpenService} compact={needsLightGrid} />
+          <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
         ))}
       </div>
-      {usePartial && remainingCount > 0 ? (
+      {showLoadMore ? (
         <button
           type="button"
           onClick={() => expand()}
@@ -452,72 +450,45 @@ function ServiceGrid({
 function ServiceCard({
   service,
   onOpen,
-  compact = false,
 }: {
   service: ServiceItem
   onOpen: (s: ServiceItem) => void
-  compact?: boolean
 }) {
   return (
     <button
       type="button"
       onClick={() => onOpen(service)}
-      className="group relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
+      className="group relative flex w-full min-w-0 flex-row items-stretch overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:gap-0 lg:flex-col lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      <div
-        className={`relative w-full overflow-hidden bg-muted/40 lg:rounded-t-2xl ${
-          compact ? "aspect-[4/3]" : "aspect-[5/4] max-lg:aspect-[5/4] lg:aspect-[4/3]"
-        }`}
-      >
+      {/* Móvil: miniatura a la izquierda */}
+      <div className="relative h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden bg-muted/40 sm:h-[5.25rem] sm:w-[5.25rem] lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-t-2xl">
         {service.photos.length > 0 ? (
           <Image
             src={service.photos[0].src}
             alt={service.photos[0].alt}
             fill
             className="object-cover max-lg:transition-none lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
-            sizes={
-              compact
-                ? "(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, 25vw"
-                : "(max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-            }
+            sizes="(max-width: 1024px) 88px, (max-width: 1280px) 33vw, 25vw"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-secondary to-muted/40">
-            <Sparkles className={`text-primary/25 ${compact ? "h-7 w-7" : "h-5 w-5 lg:h-7 lg:w-7"}`} />
+            <Sparkles className="h-5 w-5 text-primary/25 lg:h-7 lg:w-7" />
           </div>
         )}
         {service.tag && (
-          <span
-            className={`absolute rounded-full bg-primary font-semibold uppercase text-primary-foreground ${
-              compact
-                ? "right-2 top-2 px-2.5 py-0.5 text-[10px] tracking-[0.12em]"
-                : "right-1.5 top-1.5 px-1.5 py-0.5 text-[9px] tracking-[0.1em] lg:right-2 lg:top-2 lg:px-2.5 lg:text-[10px]"
-            }`}
-          >
+          <span className="absolute right-1 top-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-primary-foreground lg:right-2 lg:top-2 lg:px-2.5 lg:text-[10px]">
             {service.tag}
           </span>
         )}
       </div>
 
-      <div
-        className={`flex flex-col gap-1 ${
-          compact ? "px-3.5 py-3" : "gap-0.5 px-2.5 py-2 max-lg:min-h-[3.25rem] lg:gap-1 lg:px-3.5 lg:py-3"
-        }`}
-      >
-        <p
-          className={`font-semibold leading-tight text-foreground/90 lg:transition-colors lg:group-hover:text-primary ${
-            compact
-              ? "text-sm leading-tight"
-              : "line-clamp-2 text-[11px] leading-snug sm:text-xs lg:line-clamp-none lg:text-sm"
-          }`}
-        >
+      <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 px-3 py-2.5 lg:gap-1 lg:px-3.5 lg:py-3">
+        <p className="text-xs font-semibold leading-snug text-foreground/90 sm:text-sm lg:leading-tight lg:transition-colors lg:group-hover:text-primary">
           {service.name}
         </p>
         <p
-          className={`line-clamp-2 leading-relaxed ${
-            compact ? "text-xs" : "text-[10px] leading-snug sm:text-[11px] sm:leading-relaxed lg:text-xs"
-          } ${
+          className={`line-clamp-2 text-[11px] leading-snug sm:text-xs sm:leading-relaxed lg:line-clamp-2 ${
             service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
               ? "text-muted-foreground/85 italic"
               : "text-muted-foreground"
