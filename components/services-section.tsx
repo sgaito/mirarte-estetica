@@ -246,8 +246,11 @@ function AsesoramientoCallout() {
 
 const pestanasBlockFont = { fontFamily: "var(--font-display), Montserrat, sans-serif" } as const
 
-/** Móvil: bloque estático (sin botón ni estado — Chrome rompe el acordeón interactivo). */
-function PestanasInfoBlock({
+/**
+ * Móvil: <details> nativo (Ver más / Ver menos sin React ni animar altura).
+ * Chrome Android rompe con useState + motion height:auto + overflow-hidden.
+ */
+function PestanasAccordionMobile({
   title,
   listType,
   items,
@@ -260,28 +263,38 @@ function PestanasInfoBlock({
     "mt-3 space-y-2 pl-4 text-sm leading-relaxed text-foreground/85 " +
     (listType === "ol" ? "list-decimal" : "list-disc")
 
+  const list =
+    listType === "ul" ? (
+      <ul className={listClass}>
+        {items.map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+    ) : (
+      <ol className={listClass}>
+        {items.map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ol>
+    )
+
   return (
-    <div
-      className="rounded-2xl border border-border/60 bg-card px-4 py-4 sm:px-5 sm:py-5"
+    <details
+      className="group rounded-2xl border border-border/60 bg-card px-4 py-4 sm:px-5 sm:py-5"
       style={pestanasBlockFont}
     >
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-        {title}
-      </p>
-      {listType === "ul" ? (
-        <ul className={listClass}>
-          {items.map((line) => (
-            <li key={line}>{line}</li>
-          ))}
-        </ul>
-      ) : (
-        <ol className={listClass}>
-          {items.map((line) => (
-            <li key={line}>{line}</li>
-          ))}
-        </ol>
-      )}
-    </div>
+      <summary className="flex cursor-pointer list-none flex-col gap-3 [&::-webkit-details-marker]:hidden">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+          {title}
+        </span>
+        <span className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary">
+          <span className="group-open:hidden">Ver más</span>
+          <span className="hidden group-open:inline">Ver menos</span>
+          <ChevronDown className="h-4 w-4 shrink-0 group-open:rotate-180" />
+        </span>
+      </summary>
+      {list}
+    </details>
   )
 }
 
@@ -348,7 +361,7 @@ function PestanasAccordion(props: {
   return (
     <>
       <div className="lg:hidden">
-        <PestanasInfoBlock {...props} />
+        <PestanasAccordionMobile {...props} />
       </div>
       <div className="hidden lg:block">
         <PestanasAccordionDesktop {...props} />
