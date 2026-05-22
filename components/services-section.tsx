@@ -220,8 +220,8 @@ function ExtensionesPremiumIntro() {
 
 function AsesoramientoCallout() {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-primary/25 bg-gradient-to-br from-[oklch(0.9_0.08_178/0.45)] via-[oklch(0.94_0.05_178/0.35)] to-[oklch(0.96_0.02_190/0.4)] px-5 py-5 shadow-sm sm:px-6 sm:py-6">
-      <div className="relative flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-5">
+    <div className="rounded-2xl border border-primary/25 bg-primary/8 px-5 py-5 sm:px-6 sm:py-6 lg:bg-gradient-to-br lg:from-[oklch(0.9_0.08_178/0.45)] lg:via-[oklch(0.94_0.05_178/0.35)] lg:to-[oklch(0.96_0.02_190/0.4)]">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:gap-5">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/20 text-primary">
           <MessageCircleHeart className="h-5 w-5" />
         </div>
@@ -244,8 +244,49 @@ function AsesoramientoCallout() {
   )
 }
 
-/** Acordeón simple: sin animar altura (Chrome móvil rompe con height:auto + overflow-hidden). */
-function PestanasAccordion({
+const pestanasBlockFont = { fontFamily: "var(--font-display), Montserrat, sans-serif" } as const
+
+/** Móvil: bloque estático (sin botón ni estado — Chrome rompe el acordeón interactivo). */
+function PestanasInfoBlock({
+  title,
+  listType,
+  items,
+}: {
+  title: string
+  listType: "ul" | "ol"
+  items: readonly string[]
+}) {
+  const listClass =
+    "mt-3 space-y-2 pl-4 text-sm leading-relaxed text-foreground/85 " +
+    (listType === "ol" ? "list-decimal" : "list-disc")
+
+  return (
+    <div
+      className="rounded-2xl border border-border/60 bg-card px-4 py-4 sm:px-5 sm:py-5"
+      style={pestanasBlockFont}
+    >
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+        {title}
+      </p>
+      {listType === "ul" ? (
+        <ul className={listClass}>
+          {items.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      ) : (
+        <ol className={listClass}>
+          {items.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ol>
+      )}
+    </div>
+  )
+}
+
+/** Desktop: acordeón con Ver más / Ver menos. */
+function PestanasAccordionDesktop({
   title,
   listType,
   items,
@@ -256,29 +297,27 @@ function PestanasAccordion({
 }) {
   const [open, setOpen] = useState(false)
   const listClass =
-    "mt-3 space-y-2 pl-5 text-sm leading-relaxed text-foreground/85 sm:text-[15px] " +
-    (listType === "ol"
-      ? "list-decimal marker:text-primary/70"
-      : "list-disc marker:text-primary/70")
+    "mt-3 space-y-2 pl-5 text-sm leading-relaxed text-foreground/85 " +
+    (listType === "ol" ? "list-decimal marker:text-primary/70" : "list-disc marker:text-primary/70")
 
   return (
     <div
       className="rounded-2xl border border-border/60 bg-card px-4 py-4 sm:px-5 sm:py-5"
-      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+      style={pestanasBlockFont}
     >
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+      <div className="flex flex-row items-center justify-between gap-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
           {title}
         </p>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary lg:self-auto lg:transition-colors lg:hover:bg-primary/15"
+          className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/15"
           aria-expanded={open}
         >
           {open ? "Ver menos" : "Ver más"}
           <ChevronDown
-            className={`h-4 w-4 shrink-0 max-lg:transition-none ${open ? "rotate-180" : ""}`}
+            className={`h-4 w-4 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
       </div>
@@ -298,6 +337,23 @@ function PestanasAccordion({
         )
       ) : null}
     </div>
+  )
+}
+
+function PestanasAccordion(props: {
+  title: string
+  listType: "ul" | "ol"
+  items: readonly string[]
+}) {
+  return (
+    <>
+      <div className="lg:hidden">
+        <PestanasInfoBlock {...props} />
+      </div>
+      <div className="hidden lg:block">
+        <PestanasAccordionDesktop {...props} />
+      </div>
+    </>
   )
 }
 
@@ -650,19 +706,19 @@ export function ServicesSection() {
   return (
     <section
       id="servicios"
-      className={`relative scroll-mt-20 overflow-hidden py-24 lg:py-32 ${SECTION_SURFACE_CLASS}`}
+      className={`relative scroll-mt-20 overflow-x-hidden py-24 lg:overflow-hidden lg:py-32 ${SECTION_SURFACE_CLASS}`}
     >
-      {/* Decorative logos — blur suave para no saturar la GPU */}
+      {/* Logos decorativos: solo desktop (blur-xl + scroll en móvil = tearing) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-32 -top-32 h-[480px] w-[480px] -rotate-12 opacity-[0.04] blur-xl"
+        className="pointer-events-none absolute -left-32 -top-32 hidden h-[480px] w-[480px] -rotate-12 opacity-[0.04] blur-xl lg:block"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.png" alt="" className="h-full w-full object-contain" />
       </div>
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-32 -right-32 h-[480px] w-[480px] rotate-12 opacity-[0.04] blur-xl"
+        className="pointer-events-none absolute -bottom-32 -right-32 hidden h-[480px] w-[480px] rotate-12 opacity-[0.04] blur-xl lg:block"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.png" alt="" className="h-full w-full object-contain" />
