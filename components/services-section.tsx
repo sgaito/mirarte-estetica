@@ -100,38 +100,36 @@ function ExtensionesPremiumIntro() {
           Extensiones de pestaña — seda premium
         </p>
 
-        <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-start md:gap-6">
-          <div className="min-w-0 flex-1 space-y-4">
-            <p
-              className="text-sm leading-relaxed text-foreground/85 sm:text-base"
-              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-            >
-              {ELI_EXTENSIONES_PREMIUM_INTRO}
-            </p>
-            <ul className="grid gap-3" aria-label="Certificaciones y materiales">
-              {ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS.map((text, index) => {
-                const Icon = premiumHighlightIcons[index] ?? Sparkles
+        <div className="mt-4 space-y-5">
+          <p
+            className="text-sm leading-relaxed text-foreground/85 sm:text-base"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            {ELI_EXTENSIONES_PREMIUM_INTRO}
+          </p>
+          <ul className="grid grid-cols-1 gap-3" aria-label="Certificaciones y materiales">
+            {ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS.map((text, index) => {
+              const Icon = premiumHighlightIcons[index] ?? Sparkles
 
-                return (
+              return (
                 <li
                   key={text}
-                  className="relative overflow-hidden rounded-2xl border border-emerald-700/15 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/70 p-3.5 shadow-[0_10px_30px_-22px_rgba(5,150,105,0.75)] dark:border-emerald-400/25 dark:from-emerald-950/25 dark:via-card dark:to-emerald-900/15"
+                  className="rounded-2xl border border-emerald-700/15 bg-emerald-50 p-3.5 dark:border-emerald-400/25 dark:bg-emerald-950/20"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600/12 text-emerald-700 ring-1 ring-emerald-600/15 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-400/20">
+                  <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-600/20 bg-emerald-600/10 text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-500/15 dark:text-emerald-300">
                       <Icon className="h-4.5 w-4.5" />
                     </div>
-                    <p className="text-sm font-semibold leading-snug text-foreground/90">
+                    <p className="min-w-0 text-sm font-semibold leading-snug text-foreground/90">
                       {text}
                     </p>
                   </div>
                 </li>
-                )
-              })}
-            </ul>
-          </div>
+              )
+            })}
+          </ul>
 
-          <div className="mx-auto grid w-full max-w-md shrink-0 grid-cols-2 gap-3 md:mx-0 md:self-center md:w-[min(100%,400px)] lg:w-[min(100%,440px)]">
+          <div className="mx-auto grid w-full max-w-md grid-cols-1 gap-3 lg:max-w-lg lg:grid-cols-2 xl:max-w-xl">
             {ELI_EXTENSIONES_PREMIUM_IMAGES.map((image, index) => (
               <button
                 key={image.src}
@@ -349,7 +347,7 @@ function ServiceCard({
     <button
       type="button"
       onClick={() => onOpen(service)}
-      className="group relative flex flex-col items-start overflow-hidden rounded-2xl border border-border/50 bg-card/80 text-left shadow-sm ring-offset-2 ring-offset-background transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.97]"
+      className="group relative flex w-full flex-col items-start overflow-hidden rounded-2xl border border-border/50 bg-card/80 text-left shadow-sm ring-offset-2 ring-offset-background transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.97]"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
       {/* Thumbnail */}
@@ -614,7 +612,7 @@ function CategoryContent({
           >
             Opciones de pestañas
           </p>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-4">
             {extensions.map((s) => (
               <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
             ))}
@@ -629,7 +627,7 @@ function CategoryContent({
             >
               Tratamientos
             </p>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
               {treatments.map((s) => (
                 <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
               ))}
@@ -645,7 +643,7 @@ function CategoryContent({
       className={`grid gap-3 ${
         category.services.length === 1
           ? "max-w-xs grid-cols-1"
-          : "grid-cols-2 sm:grid-cols-3"
+          : "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
       }`}
     >
       {category.services.map((s) => (
