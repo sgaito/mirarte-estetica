@@ -40,6 +40,11 @@ const WA_SERVICE = (name: string) =>
 const SECTION_SURFACE_CLASS =
   "bg-gradient-to-b from-[var(--hero-services-seam)] via-[oklch(0.976_0.012_178)] to-[oklch(0.964_0.022_75/0.22)]"
 
+/** 2 columnas en móvil; tarjetas sin ring-offset ni animaciones hasta breakpoint lg. */
+const GRID_PESTANAS_EXT = "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+const GRID_PESTANAS_TRAT = "grid grid-cols-2 gap-3 sm:grid-cols-3"
+const GRID_CATEGORY = "grid grid-cols-2 gap-3 sm:grid-cols-3"
+
 /* ─── WhatsApp icon ───────────────────────────────────────────────────────── */
 
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -404,17 +409,16 @@ function ServiceCard({
     <button
       type="button"
       onClick={() => onOpen(service)}
-      className="group relative flex w-full flex-col items-start overflow-hidden rounded-2xl border border-border/50 bg-card/80 text-left shadow-sm ring-offset-2 ring-offset-background transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.97]"
+      className="group relative flex w-full min-w-0 flex-col items-stretch rounded-2xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:overflow-visible lg:overflow-hidden lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      {/* Thumbnail */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40">
+      <div className="relative aspect-[4/3] w-full min-w-0 overflow-hidden rounded-t-2xl bg-muted/40">
         {service.photos.length > 0 ? (
           <Image
             src={service.photos[0].src}
             alt={service.photos[0].alt}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+            className="object-cover lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
         ) : (
@@ -423,15 +427,14 @@ function ServiceCard({
           </div>
         )}
         {service.tag && (
-          <span className="absolute right-2 top-2 rounded-full bg-primary/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground shadow-sm backdrop-blur-sm">
+          <span className="absolute right-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground shadow-sm">
             {service.tag}
           </span>
         )}
       </div>
 
-      {/* Text */}
-      <div className="flex flex-1 flex-col gap-1 px-3.5 py-3">
-        <p className="text-sm font-semibold leading-tight text-foreground/90 transition-colors group-hover:text-primary">
+      <div className="flex min-w-0 flex-1 flex-col gap-1 px-3.5 py-3">
+        <p className="text-sm font-semibold leading-tight text-foreground/90 lg:transition-colors lg:group-hover:text-primary">
           {service.name}
         </p>
         <p
@@ -669,7 +672,7 @@ function CategoryContent({
           >
             Opciones de pestañas
           </p>
-          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-4">
+          <div className={GRID_PESTANAS_EXT}>
             {extensions.map((s) => (
               <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
             ))}
@@ -684,7 +687,7 @@ function CategoryContent({
             >
               Tratamientos
             </p>
-            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
+            <div className={GRID_PESTANAS_TRAT}>
               {treatments.map((s) => (
                 <ServiceCard key={s.slug} service={s} onOpen={onOpenService} />
               ))}
@@ -697,10 +700,8 @@ function CategoryContent({
 
   return (
     <div
-      className={`grid gap-3 ${
-        category.services.length === 1
-          ? "max-w-xs grid-cols-1"
-          : "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
+      className={`gap-3 ${
+        category.services.length === 1 ? "max-w-xs grid grid-cols-1" : GRID_CATEGORY
       }`}
     >
       {category.services.map((s) => (
