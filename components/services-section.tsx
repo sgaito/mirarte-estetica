@@ -397,8 +397,8 @@ function ComoReservarTurnoPestanas() {
 }
 
 /**
- * Chrome Android: grid de 2+ columnas en móvil rompe el compositor (tearing).
- * 1 columna hasta lg; desde ahí el layout original de 2–4 columnas.
+ * Móvil: 2 columnas. Chrome Android + "Cargar más" limita tarjetas montadas.
+ * Desktop: 2–4 columnas según pestaña (lg / xl).
  */
 function ServiceGrid({
   services,
@@ -420,10 +420,10 @@ function ServiceGrid({
 
   const containerClass =
     layout === "pestanas-ext"
-      ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-4"
+      ? "grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-2 lg:gap-3 xl:grid-cols-4"
       : layout === "pestanas-trat"
-        ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
-        : "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
+        ? "grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-2 lg:gap-3 xl:grid-cols-3"
+        : "grid grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-2 lg:gap-3 xl:grid-cols-3"
 
   const initialVisible = getInitialVisibleCount(services.length)
   const usePartial = ready && progressive && !showAll && services.length > 1
@@ -474,33 +474,33 @@ function ServiceCard({
       className="group relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40 lg:rounded-t-2xl">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40 max-lg:aspect-[5/4] lg:rounded-t-2xl">
         {service.photos.length > 0 ? (
           <Image
             src={service.photos[0].src}
             alt={service.photos[0].alt}
             fill
-            className="object-cover lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
-            sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, 25vw"
+            className="object-cover max-lg:transition-none lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
+            sizes="(max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-secondary to-muted/40">
-            <Sparkles className="h-7 w-7 text-primary/25" />
+            <Sparkles className="h-5 w-5 text-primary/25 lg:h-7 lg:w-7" />
           </div>
         )}
         {service.tag && (
-          <span className="absolute right-2 top-2 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-foreground">
+          <span className="absolute right-1.5 top-1.5 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-primary-foreground lg:right-2 lg:top-2 lg:px-2.5 lg:text-[10px]">
             {service.tag}
           </span>
         )}
       </div>
 
-      <div className="flex flex-col gap-1 px-3.5 py-3">
-        <p className="text-sm font-semibold leading-tight text-foreground/90 lg:transition-colors lg:group-hover:text-primary">
+      <div className="flex flex-col gap-0.5 px-2.5 py-2 max-lg:min-h-[3.25rem] lg:gap-1 lg:px-3.5 lg:py-3">
+        <p className="line-clamp-2 text-[11px] font-semibold leading-snug text-foreground/90 sm:text-xs lg:line-clamp-none lg:text-sm lg:leading-tight lg:transition-colors lg:group-hover:text-primary">
           {service.name}
         </p>
         <p
-          className={`line-clamp-2 text-xs leading-relaxed ${
+          className={`line-clamp-2 text-[10px] leading-snug sm:text-[11px] sm:leading-relaxed lg:text-xs ${
             service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
               ? "text-muted-foreground/85 italic"
               : "text-muted-foreground"
