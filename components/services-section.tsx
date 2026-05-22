@@ -25,8 +25,10 @@ import {
   ELI_COMO_ASISTIR_CITA_PESTANAS,
   ELI_COMO_RESERVAR_TURNO_PESTANAS,
   DESCRIPCION_SERVICIO_PENDIENTE,
+  getServiceCardPhotos,
   type ServiceItem,
   type ServiceCategory,
+  type ServiceVariant,
 } from "@/lib/services-catalog"
 
 /* ─── Constants ───────────────────────────────────────────────────────────── */
@@ -429,40 +431,48 @@ function ServiceCard({
   service: ServiceItem
   onOpen: (s: ServiceItem) => void
 }) {
+  const cardPhotos = getServiceCardPhotos(service)
+  const variantCount = service.variants?.length ?? 0
+
   return (
     <button
       type="button"
       onClick={() => onOpen(service)}
-      className="group relative flex w-full min-w-0 flex-row items-stretch overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:gap-0 lg:flex-col lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
+      className="group relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      <div className="relative h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden bg-muted/40 sm:h-[5.25rem] sm:w-[5.25rem] lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-t-2xl">
-        {service.photos.length > 0 ? (
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40 lg:rounded-t-2xl">
+        {cardPhotos.length > 0 ? (
           <Image
-            src={service.photos[0].src}
-            alt={service.photos[0].alt}
+            src={cardPhotos[0].src}
+            alt={cardPhotos[0].alt}
             fill
             className="object-cover lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
-            sizes="(max-width: 1024px) 88px, (max-width: 1024px) 33vw, 25vw"
+            sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, 25vw"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-secondary to-muted/40">
-            <Sparkles className="h-5 w-5 text-primary/25 lg:h-7 lg:w-7" />
+            <Sparkles className="h-7 w-7 text-primary/25" />
           </div>
         )}
         {service.tag && (
-          <span className="absolute right-1 top-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-primary-foreground lg:right-2 lg:top-2 lg:px-2.5 lg:text-[10px]">
+          <span className="absolute right-2 top-2 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-foreground">
             {service.tag}
+          </span>
+        )}
+        {variantCount > 1 && (
+          <span className="absolute bottom-2 left-2 rounded-full bg-background/90 px-2.5 py-0.5 text-[10px] font-semibold text-foreground/80 shadow-sm backdrop-blur-[2px]">
+            {variantCount} opciones
           </span>
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 px-3 py-2.5 lg:gap-1 lg:px-3.5 lg:py-3">
-        <p className="text-xs font-semibold leading-snug text-foreground/90 sm:text-sm lg:leading-tight lg:transition-colors lg:group-hover:text-primary">
+      <div className="flex flex-col gap-1 px-3.5 py-3">
+        <p className="text-sm font-semibold leading-tight text-foreground/90 lg:transition-colors lg:group-hover:text-primary">
           {service.name}
         </p>
         <p
-          className={`line-clamp-2 text-[11px] leading-snug sm:text-xs sm:leading-relaxed lg:line-clamp-2 ${
+          className={`line-clamp-2 text-xs leading-relaxed ${
             service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
               ? "text-muted-foreground/85 italic"
               : "text-muted-foreground"
@@ -477,6 +487,137 @@ function ServiceCard({
 
 /* ─── Service modal ───────────────────────────────────────────────────────── */
 
+function ServiceModalPhotoCarousel({
+  photos,
+}: {
+  photos: { src: string; alt: string }[]
+}) {
+  const [photoIdx, setPhotoIdx] = useState(0)
+
+  const prevPhoto = useCallback(
+    () => setPhotoIdx((p) => (p - 1 + photos.length) % photos.length),
+    [photos.length],
+  )
+  const nextPhoto = useCallback(
+    () => setPhotoIdx((p) => (p + 1) % photos.length),
+    [photos.length],
+  )
+
+  if (photos.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2.5 bg-muted/25 py-10">
+        <ImageIcon className="h-9 w-9 text-muted-foreground/30" />
+        <p className="text-xs text-muted-foreground/60">Sin fotos en la carpeta del servicio</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative aspect-[4/3] w-full bg-muted sm:aspect-[16/9]">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={photoIdx}
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+        >
+          <Image
+            src={photos[photoIdx].src}
+            alt={photos[photoIdx].alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, 560px"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {photos.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              prevPhoto()
+            }}
+            aria-label="Foto anterior"
+            className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              nextPhoto()
+            }}
+            aria-label="Foto siguiente"
+            className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+            {photos.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setPhotoIdx(i)
+                }}
+                aria-label={`Foto ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-200 ${
+                  i === photoIdx ? "w-5 bg-white" : "w-1.5 bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function ServiceVariantBlock({ variant }: { variant: ServiceVariant }) {
+  return (
+    <article
+      id={`variant-${variant.slug}`}
+      className="scroll-mt-4 rounded-2xl border border-border/60 bg-muted/20 p-4"
+    >
+      <h4 className="text-sm font-semibold text-foreground">{variant.name}</h4>
+      <p
+        className={`mt-2 text-sm leading-relaxed ${
+          variant.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
+            ? "text-muted-foreground/90 italic"
+            : "text-muted-foreground"
+        }`}
+      >
+        {variant.fullDesc}
+      </p>
+      {variant.details && variant.details.length > 0 && (
+        <ul className="mt-3 space-y-2">
+          {variant.details.map((d) => (
+            <li key={d} className="flex items-center gap-3 text-sm text-foreground/75">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+              {d}
+            </li>
+          ))}
+        </ul>
+      )}
+      <a
+        href={WA_SERVICE(variant.name)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 flex items-center justify-center gap-2 rounded-full border border-primary/25 bg-primary/5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 active:scale-[0.98]"
+      >
+        <WhatsAppIcon className="h-4 w-4" />
+        Consultar por {variant.name}
+      </a>
+    </article>
+  )
+}
+
 function ServiceModal({
   service,
   onClose,
@@ -484,23 +625,22 @@ function ServiceModal({
   service: ServiceItem
   onClose: () => void
 }) {
-  const [photoIdx, setPhotoIdx] = useState(0)
-  const hasPhotos = service.photos.length > 0
+  const variants = service.variants ?? []
+  const hasVariants = variants.length > 0
+  const [variantIdx, setVariantIdx] = useState(0)
 
-  const prevPhoto = useCallback(
-    () => setPhotoIdx((p) => (p - 1 + service.photos.length) % service.photos.length),
-    [service.photos.length],
-  )
-  const nextPhoto = useCallback(
-    () => setPhotoIdx((p) => (p + 1) % service.photos.length),
-    [service.photos.length],
-  )
+  const activeVariant = hasVariants ? variants[variantIdx] : null
+  const carouselPhotos = activeVariant?.photos.length
+    ? activeVariant.photos
+    : getServiceCardPhotos(service)
+
+  useEffect(() => {
+    setVariantIdx(0)
+  }, [service.slug])
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
-      if (e.key === "ArrowLeft" && hasPhotos) prevPhoto()
-      if (e.key === "ArrowRight" && hasPhotos) nextPhoto()
     }
     const prevOverflow = document.body.style.overflow
     document.addEventListener("keydown", h)
@@ -509,7 +649,7 @@ function ServiceModal({
       document.removeEventListener("keydown", h)
       document.body.style.overflow = prevOverflow
     }
-  }, [onClose, hasPhotos, prevPhoto, nextPhoto])
+  }, [onClose])
 
   return (
     <div
@@ -521,12 +661,10 @@ function ServiceModal({
         style={{ maxHeight: "90dvh" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Drag handle (mobile) */}
         <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-border sm:hidden" />
 
-        {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
-          <div>
+          <div className="min-w-0 pr-3">
             {service.tag && (
               <p
                 className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary"
@@ -541,128 +679,118 @@ function ServiceModal({
             >
               {service.name}
             </h3>
+            {hasVariants && (
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                {variants.length} opciones · elegí la que te interese
+              </p>
+            )}
           </div>
-          {/* Big touch-friendly close button */}
           <button
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-muted hover:text-foreground active:scale-90"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-muted hover:text-foreground active:scale-90"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Scrollable body */}
         <div className="min-h-0 flex-1 overflow-y-auto">
-          {/* Image carousel */}
-          {hasPhotos ? (
-            <div className="relative aspect-[4/3] w-full bg-muted sm:aspect-[16/9]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={photoIdx}
-                  className="absolute inset-0"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.18 }}
-                >
-                  <Image
-                    src={service.photos[photoIdx].src}
-                    alt={service.photos[photoIdx].alt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 100vw, 560px"
-                  />
-                </motion.div>
-              </AnimatePresence>
-
-              {service.photos.length > 1 && (
-                <>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      prevPhoto()
-                    }}
-                    aria-label="Foto anterior"
-                    className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      nextPhoto()
-                    }}
-                    aria-label="Foto siguiente"
-                    className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/65"
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </button>
-                  <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-                    {service.photos.map((_, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setPhotoIdx(i)
-                        }}
-                        aria-label={`Foto ${i + 1}`}
-                        className={`h-1.5 rounded-full transition-all duration-200 ${
-                          i === photoIdx ? "w-5 bg-white" : "w-1.5 bg-white/50"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </>
+          {hasVariants ? (
+            <>
+              {carouselPhotos.length > 0 && (
+                <ServiceModalPhotoCarousel key={`${service.slug}-${variantIdx}`} photos={carouselPhotos} />
               )}
-            </div>
+
+              <div
+                className="space-y-4 px-5 pb-7 pt-5"
+                style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+              >
+                {service.fullDesc !== DESCRIPCION_SERVICIO_PENDIENTE && (
+                  <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">{service.fullDesc}</p>
+                )}
+
+                <div
+                  className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                  role="tablist"
+                  aria-label="Opciones del servicio"
+                >
+                  {variants.map((v, i) => (
+                    <button
+                      key={v.slug}
+                      type="button"
+                      role="tab"
+                      aria-selected={i === variantIdx}
+                      onClick={() => setVariantIdx(i)}
+                      className={`shrink-0 rounded-full px-3.5 py-2 text-xs font-semibold transition-colors ${
+                        i === variantIdx
+                          ? "bg-primary text-primary-foreground"
+                          : "border border-border bg-muted/40 text-foreground/75 hover:bg-muted"
+                      }`}
+                    >
+                      {v.name}
+                    </button>
+                  ))}
+                </div>
+
+                {activeVariant ? (
+                  <div role="tabpanel">
+                    <ServiceVariantBlock key={activeVariant.slug} variant={activeVariant} />
+                  </div>
+                ) : null}
+
+                <a
+                  href={WA_SERVICE(service.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2.5 rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-105 hover:shadow-md active:scale-95"
+                >
+                  <WhatsAppIcon className="h-4 w-4" />
+                  Consultar por WhatsApp
+                </a>
+              </div>
+            </>
           ) : (
-            <div className="flex flex-col items-center justify-center gap-2.5 bg-muted/25 py-10">
-              <ImageIcon className="h-9 w-9 text-muted-foreground/30" />
-              <p className="text-xs text-muted-foreground/60">Sin fotos en la carpeta del servicio</p>
-            </div>
+            <>
+              <ServiceModalPhotoCarousel photos={service.photos} />
+
+              <div
+                className="space-y-4 px-5 pb-7 pt-5"
+                style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+              >
+                <p
+                  className={`text-sm leading-relaxed sm:text-base ${
+                    service.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
+                      ? "text-muted-foreground/90 italic"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {service.fullDesc}
+                </p>
+
+                {service.details && service.details.length > 0 && (
+                  <ul className="space-y-2.5">
+                    {service.details.map((d) => (
+                      <li key={d} className="flex items-center gap-3 text-sm text-foreground/75">
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <a
+                  href={WA_SERVICE(service.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2.5 rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-105 hover:shadow-md active:scale-95"
+                >
+                  <WhatsAppIcon className="h-4 w-4" />
+                  Consultar por {service.name}
+                </a>
+              </div>
+            </>
           )}
-
-          {/* Text content */}
-          <div
-            className="space-y-4 px-5 pb-7 pt-5"
-            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-          >
-            <p
-              className={`text-sm leading-relaxed sm:text-base ${
-                service.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
-                  ? "text-muted-foreground/90 italic"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {service.fullDesc}
-            </p>
-
-            {service.details && service.details.length > 0 && (
-              <ul className="space-y-2.5">
-                {service.details.map((d) => (
-                  <li key={d} className="flex items-center gap-3 text-sm text-foreground/75">
-                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                    {d}
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <a
-              href={WA_SERVICE(service.name)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2.5 rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:brightness-105 hover:shadow-md active:scale-95"
-            >
-              <WhatsAppIcon className="h-4 w-4" />
-              Consultar por {service.name}
-            </a>
-          </div>
         </div>
       </div>
     </div>
