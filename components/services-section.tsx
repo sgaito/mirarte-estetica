@@ -406,10 +406,10 @@ function ServiceGrid({
 }) {
   const containerClass =
     layout === "pestanas-ext"
-      ? "grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-4"
+      ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-4"
       : layout === "pestanas-trat"
-        ? "grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3"
-        : "grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3"
+        ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
+        : "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
 
   return (
     <div className={containerClass}>
@@ -433,36 +433,36 @@ function ServiceCard({
     <button
       type="button"
       onClick={() => onOpen(service)}
-      className="group relative flex w-full min-w-0 flex-col items-stretch rounded-2xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:overflow-visible lg:overflow-hidden lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
+      className="group relative flex w-full min-w-0 flex-row items-stretch overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:gap-0 lg:flex-col lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      <div className="relative aspect-[4/3] w-full min-w-0 overflow-hidden rounded-t-2xl bg-muted/40">
+      <div className="relative h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden bg-muted/40 sm:h-[5.25rem] sm:w-[5.25rem] lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-t-2xl">
         {service.photos.length > 0 ? (
           <Image
             src={service.photos[0].src}
             alt={service.photos[0].alt}
             fill
             className="object-cover lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            sizes="(max-width: 1024px) 88px, (max-width: 1024px) 33vw, 25vw"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-secondary to-muted/40">
-            <Sparkles className="h-7 w-7 text-primary/25" />
+            <Sparkles className="h-5 w-5 text-primary/25 lg:h-7 lg:w-7" />
           </div>
         )}
         {service.tag && (
-          <span className="absolute right-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground shadow-sm">
+          <span className="absolute right-1 top-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-primary-foreground lg:right-2 lg:top-2 lg:px-2.5 lg:text-[10px]">
             {service.tag}
           </span>
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-1 px-3.5 py-3">
-        <p className="text-sm font-semibold leading-tight text-foreground/90 lg:transition-colors lg:group-hover:text-primary">
+      <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 px-3 py-2.5 lg:gap-1 lg:px-3.5 lg:py-3">
+        <p className="text-xs font-semibold leading-snug text-foreground/90 sm:text-sm lg:leading-tight lg:transition-colors lg:group-hover:text-primary">
           {service.name}
         </p>
         <p
-          className={`line-clamp-2 text-xs leading-relaxed ${
+          className={`line-clamp-2 text-[11px] leading-snug sm:text-xs sm:leading-relaxed lg:line-clamp-2 ${
             service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
               ? "text-muted-foreground/85 italic"
               : "text-muted-foreground"
