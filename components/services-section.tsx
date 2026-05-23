@@ -95,35 +95,35 @@ function ExtensionesPremiumIntro() {
   return (
     <>
       <div
-        className="rounded-xl border border-border/60 bg-card/90 px-3 py-2.5 shadow-sm max-lg:mx-auto max-lg:max-w-[18rem] sm:rounded-2xl sm:px-4 sm:py-3 lg:max-w-none lg:px-5 lg:py-5"
+        className="rounded-2xl border border-border/60 bg-card/90 px-4 py-4 shadow-sm sm:px-5 sm:py-5"
         style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
       >
-        <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-primary sm:text-[10px] lg:text-[11px] lg:tracking-[0.2em]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
           Extensiones de pestaña — seda premium
         </p>
 
-        <div className="mt-2.5 lg:mt-4 lg:flex lg:items-start lg:gap-6 xl:gap-8">
-          <div className="min-w-0 flex-1 space-y-2.5 lg:space-y-4">
+        <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6 xl:gap-8">
+          <div className="min-w-0 flex-1 space-y-4 sm:space-y-5">
             <p
-              className="text-[11px] leading-snug text-foreground/85 sm:text-xs sm:leading-relaxed lg:text-sm lg:leading-relaxed xl:text-base"
+              className="text-sm leading-relaxed text-foreground/85 sm:text-base"
               style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
             >
               {ELI_EXTENSIONES_PREMIUM_INTRO}
             </p>
-            <ul className="grid grid-cols-1 gap-1.5 lg:gap-2.5" aria-label="Certificaciones y materiales">
+            <ul className="grid grid-cols-1 gap-3" aria-label="Certificaciones y materiales">
               {ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS.map((text, index) => {
                 const Icon = premiumHighlightIcons[index] ?? Sparkles
 
                 return (
                   <li
                     key={text}
-                    className="rounded-lg border border-emerald-700/15 bg-emerald-50 p-2 dark:border-emerald-400/25 dark:bg-emerald-950/20 lg:rounded-2xl lg:p-3"
+                    className="rounded-2xl border border-emerald-700/15 bg-emerald-50 p-3.5 dark:border-emerald-400/25 dark:bg-emerald-950/20"
                   >
-                    <div className="flex items-center gap-2 lg:gap-3">
-                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-600/20 bg-emerald-600/10 text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-500/15 dark:text-emerald-300 lg:h-8 lg:w-8 lg:rounded-xl">
-                        <Icon className="h-3 w-3 lg:h-4 lg:w-4" />
+                    <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:gap-3">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-600/20 bg-emerald-600/10 text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-500/15 dark:text-emerald-300">
+                        <Icon className="h-4.5 w-4.5" />
                       </div>
-                      <p className="min-w-0 text-[10px] font-semibold leading-snug text-foreground/90 lg:text-xs xl:text-sm">
+                      <p className="min-w-0 text-sm font-semibold leading-snug text-foreground/90">
                         {text}
                       </p>
                     </div>
@@ -133,13 +133,16 @@ function ExtensionesPremiumIntro() {
             </ul>
           </div>
 
-          <div className="mx-auto mt-2.5 grid w-full max-w-[10.5rem] grid-cols-2 gap-1.5 sm:max-w-[11.5rem] sm:gap-2 lg:mx-0 lg:mt-0 lg:w-[12.5rem] lg:max-w-none lg:shrink-0 lg:grid-cols-1 lg:gap-2.5 xl:w-[14rem]">
+          <div
+            className="mx-auto grid w-full max-w-[10.5rem] shrink-0 grid-cols-2 gap-2 sm:max-w-[11.5rem] lg:mx-0 lg:w-[13.5rem] lg:max-w-none xl:w-[15rem] xl:gap-2.5"
+            aria-label="Fotos de extensiones seda premium"
+          >
             {ELI_EXTENSIONES_PREMIUM_IMAGES.map((image, index) => (
               <button
                 key={image.src}
                 type="button"
                 onClick={() => setSelectedIdx(index)}
-                className="group relative aspect-[4/5] overflow-hidden rounded-lg border border-border/50 bg-muted/30 shadow-sm ring-offset-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:transition-none lg:aspect-[5/7] lg:rounded-xl lg:transition-transform lg:hover:-translate-y-0.5"
+                className="group relative aspect-[3/4] overflow-hidden rounded-lg border border-border/50 bg-muted/30 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:aspect-[4/5] lg:rounded-xl lg:transition-transform lg:hover:-translate-y-0.5"
                 aria-label={`Abrir imagen ${index + 1} de extensiones de pestañas`}
               >
                 <Image
@@ -147,7 +150,7 @@ function ExtensionesPremiumIntro() {
                   alt={image.alt}
                   fill
                   className="object-cover max-lg:transition-none lg:transition-transform lg:duration-300 lg:group-hover:scale-[1.03]"
-                  sizes="(max-width: 1024px) 88px, 224px"
+                  sizes="(max-width: 1024px) 88px, 200px"
                 />
                 <div className="absolute inset-0 bg-black/0 lg:transition-colors lg:group-hover:bg-black/10" />
               </button>
