@@ -26,8 +26,14 @@ import {
   ELI_COMO_RESERVAR_TURNO_PESTANAS,
   DESCRIPCION_SERVICIO_PENDIENTE,
   CURSOS_DESCRIPCION,
+  TEXTO_PROXIMAMENTE,
+  ELI_EXTENSIONES_BENEFICIOS,
+  ELI_EXTENSIONES_PROCEDIMIENTO_INTRO,
+  ELI_EXTENSIONES_DURACION,
+  isServiceComingSoon,
   type ServiceItem,
   type ServiceCategory,
+  type ServiceDetailSection,
 } from "@/lib/services-catalog"
 import { getInitialVisibleCount } from "@/lib/progressive-service-grid"
 import { useProgressiveServiceGrid } from "@/lib/use-progressive-service-grid"
@@ -250,6 +256,68 @@ function ExtensionesPremiumIntro() {
 }
 
 /* ─── Asesoramiento (turquesa) — solo texto de Eli ───────────────────────── */
+
+/** Sección desplegable del modal (Beneficios, Procedimiento, etc.). */
+function ServiceDetailAccordion({ section }: { section: ServiceDetailSection }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="rounded-xl border border-border/60 bg-muted/15 px-4 py-3">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-3 text-left"
+        aria-expanded={open}
+      >
+        <span
+          className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary"
+          style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+        >
+          {section.title}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-primary transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open ? (
+        <div className="mt-3 space-y-3">
+          {section.intro ? (
+            <p className="text-sm leading-relaxed text-muted-foreground">{section.intro}</p>
+          ) : null}
+          <ul className="space-y-2 pl-4 text-sm leading-relaxed text-foreground/80 list-disc marker:text-primary/60">
+            {section.items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+function ExtensionesInfoAccordions() {
+  return (
+    <div className="space-y-4">
+      <ServiceDetailAccordion
+        section={{
+          title: "Beneficios",
+          items: [...ELI_EXTENSIONES_BENEFICIOS],
+        }}
+      />
+      <ServiceDetailAccordion
+        section={{
+          title: "Procedimiento",
+          intro: ELI_EXTENSIONES_PROCEDIMIENTO_INTRO,
+          items: [],
+        }}
+      />
+      <p className="rounded-xl border border-border/60 bg-card/80 px-4 py-3 text-sm leading-relaxed text-foreground/85">
+        <span className="font-semibold text-primary">Duración: </span>
+        {ELI_EXTENSIONES_DURACION}
+      </p>
+    </div>
+  )
+}
 
 function AsesoramientoCallout() {
   return (
@@ -521,9 +589,11 @@ function ServiceCard({
         </p>
         <p
           className={`line-clamp-2 text-[11px] leading-snug sm:text-xs sm:leading-relaxed lg:text-sm ${
-            service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
-              ? "text-muted-foreground/85 italic"
-              : "text-muted-foreground"
+            isServiceComingSoon(service)
+              ? "font-semibold text-primary"
+              : service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
+                ? "text-muted-foreground/85 italic"
+                : "text-muted-foreground"
           }`}
         >
           {service.shortDesc}
@@ -693,26 +763,34 @@ function ServiceModal({
             className="space-y-4 px-5 pb-7 pt-5"
             style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
           >
-            <p
-              className={`text-sm leading-relaxed sm:text-base ${
-                service.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
-                  ? "text-muted-foreground/90 italic"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {service.fullDesc}
-            </p>
+            {service.comingSoon && service.fullDesc !== TEXTO_PROXIMAMENTE ? (
+              <p className="text-sm font-semibold text-primary sm:text-base">{TEXTO_PROXIMAMENTE}</p>
+            ) : null}
 
-            {service.details && service.details.length > 0 && (
-              <ul className="space-y-2.5">
-                {service.details.map((d) => (
-                  <li key={d} className="flex items-center gap-3 text-sm text-foreground/75">
-                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                    {d}
-                  </li>
-                ))}
-              </ul>
+            {isServiceComingSoon(service) && service.fullDesc === TEXTO_PROXIMAMENTE ? (
+              <p className="text-base font-semibold text-primary sm:text-lg">{TEXTO_PROXIMAMENTE}</p>
+            ) : (
+              <p
+                className={`text-sm leading-relaxed sm:text-base ${
+                  service.fullDesc === DESCRIPCION_SERVICIO_PENDIENTE
+                    ? "text-muted-foreground/90 italic"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {service.fullDesc}
+              </p>
             )}
+
+            {service.sections?.map((sec) => (
+              <ServiceDetailAccordion key={sec.title} section={sec} />
+            ))}
+
+            {service.duration ? (
+              <p className="text-sm leading-relaxed text-foreground/85">
+                <span className="font-semibold text-primary">Duración: </span>
+                {service.duration}
+              </p>
+            ) : null}
 
             <a
               href={WA_SERVICE(service.name)}
@@ -760,6 +838,7 @@ function CategoryContent({
       <div className="space-y-8">
         <ExtensionesPremiumIntro />
         <AsesoramientoCallout />
+        <ExtensionesInfoAccordions />
         <ComoAsistirCitaPestanas />
         <ComoReservarTurnoPestanas />
 
