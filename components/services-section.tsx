@@ -394,8 +394,8 @@ function ComoReservarTurnoPestanas() {
 }
 
 /**
- * Chrome Android: 1 col, tarjetas verticales grandes, solo 3 servicios + "Cargar más".
- * Desktop: grilla 2–4 columnas.
+ * Móvil: tarjetas verticales compactas (ancho máx. ~264px). Android: 3 + "Cargar más".
+ * Desktop: grilla 2–4 columnas a ancho completo.
  */
 function ServiceGrid({
   services,
@@ -412,10 +412,10 @@ function ServiceGrid({
 
   const containerClass =
     layout === "pestanas-ext"
-      ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-4"
+      ? "mx-auto grid w-full grid-cols-1 gap-2 max-lg:max-w-[16.5rem] sm:gap-2.5 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:gap-3 xl:grid-cols-4"
       : layout === "pestanas-trat"
-        ? "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
-        : "grid grid-cols-1 gap-2.5 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3"
+        ? "mx-auto grid w-full grid-cols-1 gap-2 max-lg:max-w-[16.5rem] sm:gap-2.5 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:gap-3 xl:grid-cols-3"
+        : "mx-auto grid w-full grid-cols-1 gap-2 max-lg:max-w-[16.5rem] sm:gap-2.5 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:gap-3 xl:grid-cols-3"
 
   const initialVisible = getInitialVisibleCount(services.length)
   const visibleServices = needsLightGrid ? services.slice(0, initialVisible) : services
@@ -433,7 +433,7 @@ function ServiceGrid({
         <button
           type="button"
           onClick={() => expand()}
-          className="w-full rounded-xl border border-primary/25 bg-primary/5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 active:scale-[0.98]"
+          className="mx-auto w-full max-w-[16.5rem] rounded-xl border border-primary/25 bg-primary/5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 active:scale-[0.98] lg:max-w-none lg:py-3"
           style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
         >
           Cargar más
@@ -460,36 +460,36 @@ function ServiceCard({
     <button
       type="button"
       onClick={() => onOpen(service)}
-      className="group relative flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:shadow-none lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
+      className="group relative flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-border/50 bg-card text-left shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary max-lg:shadow-none lg:rounded-2xl lg:transition-[border-color,box-shadow] lg:duration-300 lg:hover:-translate-y-0.5 lg:hover:border-primary/30 lg:hover:shadow-md lg:active:scale-[0.97]"
       style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/40 lg:rounded-t-2xl">
+      <div className="relative aspect-[2/1] w-full overflow-hidden bg-muted/40 max-lg:aspect-[5/3] lg:aspect-[4/3] lg:rounded-t-2xl">
         {service.photos.length > 0 ? (
           <Image
             src={service.photos[0].src}
             alt={service.photos[0].alt}
             fill
             className="object-cover max-lg:transition-none lg:transition-transform lg:duration-500 lg:group-hover:scale-[1.06]"
-            sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 50vw, 25vw"
+            sizes="(max-width: 1024px) 264px, (max-width: 1280px) 50vw, 25vw"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-muted/50 max-lg:bg-secondary/80">
-            <Sparkles className="h-7 w-7 text-primary/25" />
+            <Sparkles className="h-5 w-5 text-primary/25 lg:h-7 lg:w-7" />
           </div>
         )}
         {service.tag && (
-          <span className="absolute right-2 top-2 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-foreground">
+          <span className="absolute right-1.5 top-1.5 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-primary-foreground lg:right-2 lg:top-2 lg:px-2.5 lg:text-[10px]">
             {service.tag}
           </span>
         )}
       </div>
 
-      <div className="flex flex-col gap-1 px-3.5 py-3">
-        <p className="text-sm font-semibold leading-tight text-foreground/90 max-lg:text-base lg:transition-colors lg:group-hover:text-primary">
+      <div className="flex flex-col gap-0.5 px-2.5 py-2 lg:gap-1 lg:px-3.5 lg:py-3">
+        <p className="text-xs font-semibold leading-snug text-foreground/90 sm:text-sm lg:leading-tight lg:transition-colors lg:group-hover:text-primary">
           {service.name}
         </p>
         <p
-          className={`line-clamp-2 text-xs leading-relaxed sm:text-sm ${
+          className={`line-clamp-2 text-[11px] leading-snug sm:text-xs sm:leading-relaxed lg:text-sm ${
             service.shortDesc === DESCRIPCION_SERVICIO_PENDIENTE
               ? "text-muted-foreground/85 italic"
               : "text-muted-foreground"
