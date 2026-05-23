@@ -8,6 +8,9 @@
 export const DESCRIPCION_SERVICIO_PENDIENTE =
   "Aún no hay descripción publicada para este servicio. Podés escribirnos por WhatsApp y te contamos con gusto."
 
+/** Pestaña Cursos — copy temporal hasta tener el programa armado. */
+export const CURSOS_DESCRIPCION = "Proximamente"
+
 /** A) Extensiones de pestaña de seda premium — mismo contenido que Eli, redacción fluida. */
 export const ELI_EXTENSIONES_PREMIUM_INTRO =
   "Trabajo con técnica pelo por pelo en Clásica y Volúmen. Uso productos de alta calidad: hipoalergénicos, de larga duración y resistentes al agua. Las pestañas son de seda premium importadas; el resultado se ve natural, respeta tus pestañas naturales y no les suma peso."
@@ -268,6 +271,11 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         photos: photos("labios", "baby-botox", []),
       },
     ],
+  },
+  {
+    id: "cursos",
+    label: "Cursos",
+    services: [],
   },
   {
     id: "bronceado",

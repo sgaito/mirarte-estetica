@@ -56,6 +56,10 @@ const STEPS = [
 
 const SLIDE_INTERVAL = 3000
 
+const PROMOTER_INITIAL_IMAGE = THUMBNAILS.findIndex((t) =>
+  t.src.includes("popup-ingredientes"),
+)
+
 /* ─── Lightbox ───────────────────────────────────────────── */
 
 function ImageLightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
@@ -103,7 +107,9 @@ function ImageLightbox({ src, alt, onClose }: { src: string; alt: string; onClos
 /* ─── Modal del producto ─────────────────────────────────── */
 
 function ProductModal({ onClose }: { onClose: () => void }) {
-  const [mainImg, setMainImg]   = useState(0)
+  const [mainImg, setMainImg] = useState(
+    PROMOTER_INITIAL_IMAGE >= 0 ? PROMOTER_INITIAL_IMAGE : 0,
+  )
   const [zoomed, setZoomed]     = useState(false)
   const [zoomedImage, setZoomedImage] = useState<{ src: string; alt: string } | null>(null)
   const timerRef                = useRef<ReturnType<typeof setInterval> | null>(null)

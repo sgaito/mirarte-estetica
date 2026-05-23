@@ -25,6 +25,7 @@ import {
   ELI_COMO_ASISTIR_CITA_PESTANAS,
   ELI_COMO_RESERVAR_TURNO_PESTANAS,
   DESCRIPCION_SERVICIO_PENDIENTE,
+  CURSOS_DESCRIPCION,
   type ServiceItem,
   type ServiceCategory,
 } from "@/lib/services-catalog"
@@ -740,6 +741,17 @@ function CategoryContent({
   onOpenService: (s: ServiceItem) => void
   mobileSafeGrid: boolean
 }) {
+  if (category.id === "cursos") {
+    return (
+      <div
+        className="rounded-2xl border border-border/60 bg-card/90 px-6 py-10 text-center shadow-sm sm:px-8 sm:py-12"
+        style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+      >
+        <p className="text-base font-medium text-foreground/90 sm:text-lg">{CURSOS_DESCRIPCION}</p>
+      </div>
+    )
+  }
+
   if (category.id === "pestanas") {
     const extensions = category.services.filter((s) => s.group === "extension")
     const treatments = category.services.filter((s) => s.group === "tratamiento")
