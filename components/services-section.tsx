@@ -102,8 +102,8 @@ function ExtensionesPremiumIntro() {
           Extensiones de pestaña — seda premium
         </p>
 
-        <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-stretch md:gap-6 xl:gap-8">
-          <div className="min-w-0 flex-1 space-y-4 sm:space-y-5 md:py-0.5">
+        <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-stretch md:gap-8">
+          <div className="min-w-0 flex-1 space-y-4">
             <p
               className="text-sm leading-relaxed text-foreground/85 sm:text-base"
               style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
@@ -119,7 +119,7 @@ function ExtensionesPremiumIntro() {
                     key={text}
                     className="rounded-2xl border border-emerald-700/15 bg-emerald-50 p-3.5 dark:border-emerald-400/25 dark:bg-emerald-950/20"
                   >
-                    <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:gap-3">
+                    <div className="flex items-start gap-3">
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-600/20 bg-emerald-600/10 text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-500/15 dark:text-emerald-300">
                         <Icon className="h-4.5 w-4.5" />
                       </div>
@@ -133,26 +133,51 @@ function ExtensionesPremiumIntro() {
             </ul>
           </div>
 
+          {/* Móvil: miniaturas centradas */}
           <div
-            className="mx-auto grid w-full max-w-[12.5rem] shrink-0 grid-cols-2 gap-2.5 sm:max-w-[13rem] md:mx-0 md:h-full md:w-[min(100%,26rem)] md:max-w-[440px] md:self-stretch md:gap-3"
+            className="mx-auto grid w-full max-w-[13rem] grid-cols-2 gap-2.5 md:hidden"
             aria-label="Fotos de extensiones seda premium"
           >
             {ELI_EXTENSIONES_PREMIUM_IMAGES.map((image, index) => (
               <button
-                key={image.src}
+                key={`mobile-${image.src}`}
                 type="button"
                 onClick={() => setSelectedIdx(index)}
-                className="group relative aspect-[4/5] min-h-[5.5rem] overflow-hidden rounded-lg border border-border/50 bg-muted/30 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:aspect-[5/7] md:aspect-auto md:h-full md:min-h-0 md:rounded-xl md:transition-transform md:hover:-translate-y-0.5"
+                className="group relative aspect-[5/7] w-full overflow-hidden rounded-lg border border-border/50 bg-muted/30 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 aria-label={`Abrir imagen ${index + 1} de extensiones de pestañas`}
               >
                 <Image
                   src={image.src}
                   alt={image.alt}
                   fill
-                  className="object-cover max-md:transition-none md:transition-transform md:duration-300 md:group-hover:scale-[1.03]"
-                  sizes="(max-width: 768px) 104px, 220px"
+                  className="object-cover"
+                  sizes="104px"
                 />
-                <div className="absolute inset-0 bg-black/0 md:transition-colors md:group-hover:bg-black/10" />
+              </button>
+            ))}
+          </div>
+
+          {/* PC: altura de la caja de texto, dos fotos lado a lado */}
+          <div
+            className="hidden h-full min-h-[16rem] w-[min(40%,22rem)] max-w-[420px] shrink-0 gap-3 md:flex md:self-stretch lg:min-h-[18rem]"
+            aria-label="Fotos de extensiones seda premium"
+          >
+            {ELI_EXTENSIONES_PREMIUM_IMAGES.map((image, index) => (
+              <button
+                key={`desktop-${image.src}`}
+                type="button"
+                onClick={() => setSelectedIdx(index)}
+                className="group relative h-full min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border border-border/50 bg-muted/30 shadow-sm transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label={`Abrir imagen ${index + 1} de extensiones de pestañas`}
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  sizes="210px"
+                />
+                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
               </button>
             ))}
           </div>
