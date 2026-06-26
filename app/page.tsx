@@ -42,8 +42,8 @@ export default async function HomePage() {
       <GallerySection />
       <LocationSection />
       <FeaturedProductSection />
-      <FaqSection />
       <ReviewsSection />
+      <FaqSection />
       <Footer />
     </main>
   )

@@ -10,8 +10,8 @@ const navLinks = [
   { sectionId: "galeria", label: "Galería" },
   { sectionId: "ubicacion", label: "Ubicación" },
   { sectionId: "promoter", label: "Promoter" },
-  { sectionId: "faq", label: "Preguntas" },
   { sectionId: "resenas", label: "Reseñas" },
+  { sectionId: "faq", label: "Preguntas" },
 ] as const
 
 const mid = Math.ceil(navLinks.length / 2)
