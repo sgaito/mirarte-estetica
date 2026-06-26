@@ -220,7 +220,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
           ], BIOSEGURIDAD_PESTANAS),
         ],
         duration: "45 minutos",
-        photos: photos("pestanas", "lash-lifting-botox", ["IMG_2354.png", "IMG_2356.png"]),
+        photos: photos("pestanas", "lash-lifting-botox", ["1.jpeg", "IMG_2354.png", "IMG_2356.png"]),
       },
       {
         slug: "full-botox",
