@@ -1,3 +1,4 @@
+import { MapPin } from "lucide-react"
 import { FadeIn } from "@/components/fade-in"
 
 const HORARIOS = [
@@ -6,13 +7,13 @@ const HORARIOS = [
   { dia: "Domingos",        hora: "Cerrado" },
 ]
 
-/*
-  Mapa: para reemplazar por el embed oficial, en Google Maps:
-  Compartir → Incorporar un mapa → copiar el valor del atributo src del iframe
-  y pegarlo en MAP_EMBED_SRC.
-*/
-const MAP_EMBED_SRC =
-  "https://maps.google.com/maps?q=mirarte+estetica+rosario+argentina&output=embed&hl=es&z=16"
+const ADDRESS = "Sarmiento 1073, Rosario Centro"
+const MAP_QUERY = "Sarmiento+1073,+Rosario,+Argentina"
+const MAP_EMBED_SRC = `https://maps.google.com/maps?q=${MAP_QUERY}&output=embed&hl=es&z=16`
+const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`
+const WA_RESERVA_URL =
+  "https://wa.me/5493416367119?text=" +
+  encodeURIComponent("Hola Mirarte Estética! Quiero reservar un turno.")
 
 export function LocationSection() {
   return (
@@ -30,17 +31,35 @@ export function LocationSection() {
 
         <div className="mt-16 grid gap-8 lg:grid-cols-2">
 
-          {/* Mapa */}
+          {/* Mapa + dirección */}
           <FadeIn delay={0.1} direction="none">
-            <div className="overflow-hidden rounded-2xl shadow-sm h-full">
-              <iframe
-                src={MAP_EMBED_SRC}
-                className="h-full min-h-80 w-full border-0 lg:min-h-96"
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación Mirarte Estética"
-              />
+            <div className="flex h-full flex-col gap-4">
+              <a
+                href={MAP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-start gap-3 rounded-2xl border border-border/60 bg-card px-5 py-4 shadow-sm transition-colors hover:border-primary/30 hover:bg-card/90"
+              >
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <span>
+                  <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+                    Dirección
+                  </span>
+                  <span className="mt-1 block text-base font-medium text-foreground group-hover:text-primary">
+                    {ADDRESS}
+                  </span>
+                </span>
+              </a>
+              <div className="overflow-hidden rounded-2xl shadow-sm">
+                <iframe
+                  src={MAP_EMBED_SRC}
+                  className="min-h-80 w-full border-0 lg:min-h-96"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Ubicación Mirarte Estética"
+                />
+              </div>
             </div>
           </FadeIn>
 
@@ -70,7 +89,9 @@ export function LocationSection() {
               </div>
 
               <a
-                href="#"
+                href={WA_RESERVA_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full rounded-full bg-primary py-4 text-center text-base font-medium text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-105 active:scale-95"
               >
                 Reservar Turno

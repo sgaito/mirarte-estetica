@@ -197,6 +197,31 @@ export function SobreEliSection({
       />
 
       <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
+        {studioPhotos.length > 0 && (
+          <div className="mb-16 lg:mb-20">
+            <FadeIn>
+              <div className="mb-8 text-center">
+                <p
+                  className="text-base text-primary/60 sm:text-lg"
+                  style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
+                >
+                  El estudio
+                </p>
+              </div>
+            </FadeIn>
+            <div className="mx-auto grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-3">
+              {studioPhotos.map((photo, i) => (
+                <PhotoThumb
+                  key={photo.src}
+                  photo={photo}
+                  delay={0.06 * i}
+                  onOpen={() => setLightbox({ src: photo.src, alt: photo.alt })}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         <FadeIn>
           <div className="mb-12 text-center lg:mb-16">
             <p
@@ -318,30 +343,6 @@ export function SobreEliSection({
                 </div>
               </>
             )}
-
-            {/* Separador */}
-            <div className="flex items-center gap-3">
-              <div className="h-px flex-1 bg-border" />
-              <p
-                className="text-base text-primary/60 sm:text-lg"
-                style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
-              >
-                El estudio
-              </p>
-              <div className="h-px flex-1 bg-border" />
-            </div>
-
-            {/* Mosaico del estudio */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {studioPhotos.map((photo, i) => (
-                <PhotoThumb
-                  key={photo.src}
-                  photo={photo}
-                  delay={0.06 * i}
-                  onOpen={() => setLightbox({ src: photo.src, alt: photo.alt })}
-                />
-              ))}
-            </div>
           </FadeIn>
         </div>
       </div>

@@ -3,10 +3,10 @@ import { HeroSection } from "@/components/hero-section"
 import { ServicesSection } from "@/components/services-section"
 import { SobreEliSection } from "@/components/sobre-eli-section"
 import { GallerySection } from "@/components/gallery-section"
-import { ReviewsSection } from "@/components/reviews-section"
 import { FeaturedProductSection } from "@/components/featured-product-section"
 import { FaqSection } from "@/components/faq-section"
 import { LocationSection } from "@/components/location-section"
+import { ReviewsSection } from "@/components/reviews-section"
 import { Footer } from "@/components/footer"
 import { ELI_CARTA_PRESENTACION_DEFAULT } from "@/lib/eli-presentacion"
 import { getSobreEliMedia } from "@/lib/google-drive"
@@ -40,10 +40,10 @@ export default async function HomePage() {
         }))}
       />
       <GallerySection />
-      <ReviewsSection />
-      <FeaturedProductSection />
       <LocationSection />
+      <FeaturedProductSection />
       <FaqSection />
+      <ReviewsSection />
       <Footer />
     </main>
   )

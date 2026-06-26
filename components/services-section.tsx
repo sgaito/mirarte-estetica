@@ -109,7 +109,7 @@ function ExtensionesPremiumIntro() {
           Extensiones de pestaña — seda premium
         </p>
 
-        <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-stretch md:gap-8">
+        <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-start md:gap-6 lg:gap-8">
           <div className="min-w-0 flex-1 space-y-4">
             <p
               className="text-sm leading-relaxed text-foreground/85 sm:text-base"
@@ -140,51 +140,26 @@ function ExtensionesPremiumIntro() {
             </ul>
           </div>
 
-          {/* Móvil: miniaturas centradas */}
           <div
-            className="mx-auto grid w-full max-w-[13rem] grid-cols-2 gap-2.5 md:hidden"
+            className="mx-auto grid w-full shrink-0 grid-cols-2 gap-2.5 max-md:max-w-[13.5rem] md:mx-0 md:w-[min(100%,400px)] md:max-w-[440px] md:gap-3 md:self-center"
             aria-label="Fotos de extensiones seda premium"
           >
             {ELI_EXTENSIONES_PREMIUM_IMAGES.map((image, index) => (
               <button
-                key={`mobile-${image.src}`}
+                key={image.src}
                 type="button"
                 onClick={() => setSelectedIdx(index)}
-                className="group relative aspect-[5/7] w-full overflow-hidden rounded-lg border border-border/50 bg-muted/30 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="group relative block aspect-[5/7] w-full overflow-hidden rounded-lg border border-border/50 bg-muted/30 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:aspect-[4/6] md:rounded-xl md:transition-transform md:hover:-translate-y-0.5 lg:aspect-[5/8]"
                 aria-label={`Abrir imagen ${index + 1} de extensiones de pestañas`}
               >
                 <Image
                   src={image.src}
                   alt={image.alt}
                   fill
-                  className="object-cover"
-                  sizes="104px"
+                  sizes="(max-width: 768px) 108px, 220px"
+                  className="object-cover max-md:transition-none md:transition-transform md:duration-300 md:group-hover:scale-[1.03]"
+                  priority={index === 0}
                 />
-              </button>
-            ))}
-          </div>
-
-          {/* PC: altura de la caja de texto, dos fotos lado a lado */}
-          <div
-            className="hidden h-full min-h-[16rem] w-[min(40%,22rem)] max-w-[420px] shrink-0 gap-3 md:flex md:self-stretch lg:min-h-[18rem]"
-            aria-label="Fotos de extensiones seda premium"
-          >
-            {ELI_EXTENSIONES_PREMIUM_IMAGES.map((image, index) => (
-              <button
-                key={`desktop-${image.src}`}
-                type="button"
-                onClick={() => setSelectedIdx(index)}
-                className="group relative h-full min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border border-border/50 bg-muted/30 shadow-sm transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                aria-label={`Abrir imagen ${index + 1} de extensiones de pestañas`}
-              >
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                  sizes="210px"
-                />
-                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
               </button>
             ))}
           </div>
@@ -839,8 +814,6 @@ function CategoryContent({
         <ExtensionesPremiumIntro />
         <AsesoramientoCallout />
         <ExtensionesInfoAccordions />
-        <ComoAsistirCitaPestanas />
-        <ComoReservarTurnoPestanas />
 
         <div>
           <p
@@ -873,6 +846,9 @@ function CategoryContent({
             />
           </div>
         )}
+
+        <ComoAsistirCitaPestanas />
+        <ComoReservarTurnoPestanas />
       </div>
     )
   }
