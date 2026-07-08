@@ -13,6 +13,10 @@ import {
   ImageIcon,
   Sparkles,
   FlaskConical,
+  Eye,
+  Heart,
+  GraduationCap,
+  Sun,
 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -49,6 +53,39 @@ const WA_SERVICE = (name: string) =>
 /** Continúa desde el mismo tono opaco que el final del Hero (`--hero-services-seam`). */
 const SECTION_SURFACE_CLASS =
   "bg-gradient-to-b from-[var(--hero-services-seam)] via-[oklch(0.976_0.012_178)] to-[oklch(0.964_0.022_75/0.22)]"
+
+type CategoryNavMeta = {
+  icon: typeof Eye
+  subtitle: string
+  shortLabel?: string
+  comingSoon?: boolean
+}
+
+const CATEGORY_NAV: Record<ServiceCategory["id"], CategoryNavMeta> = {
+  pestanas: {
+    icon: Eye,
+    subtitle: "Extensiones, lifting y tratamientos para tu mirada.",
+  },
+  cejas: {
+    icon: Sparkles,
+    subtitle: "Diseño, laminado y perfilado de cejas.",
+  },
+  labios: {
+    icon: Heart,
+    subtitle: "Perfilado y tratamientos labiales.",
+  },
+  cursos: {
+    icon: GraduationCap,
+    subtitle: "Capacitaciones profesionales — próximamente.",
+    comingSoon: true,
+  },
+  bronceado: {
+    icon: Sun,
+    subtitle: "Bronceado natural y orgánico — próximamente.",
+    shortLabel: "Bronceado",
+    comingSoon: true,
+  },
+}
 
 /* ─── WhatsApp icon ───────────────────────────────────────────────────────── */
 
@@ -877,6 +914,63 @@ function CategoryContent({
   )
 }
 
+/* ─── Category tab bar ────────────────────────────────────────────────────── */
+
+function ServiceCategoryNav({ activeId }: { activeId: ServiceCategory["id"] }) {
+  const meta = CATEGORY_NAV[activeId]
+
+  return (
+    <div className="space-y-4">
+      <TabsList
+        className="
+          grid h-auto w-full grid-cols-2 gap-2 bg-transparent p-0
+          lg:grid-cols-5 lg:gap-1.5 lg:rounded-2xl lg:border lg:border-primary/10
+          lg:bg-white/75 lg:p-2 lg:shadow-sm
+        "
+        style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+      >
+        {SERVICES_CATALOG.map((cat) => {
+          const nav = CATEGORY_NAV[cat.id]
+          const Icon = nav.icon
+          const isWide = cat.id === "bronceado"
+
+          return (
+            <TabsTrigger
+              key={cat.id}
+              value={cat.id}
+              className={`
+                group flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-xl border
+                border-border/55 bg-white/85 px-2 py-2.5 text-xs font-semibold text-foreground/75
+                shadow-sm transition-all
+                data-[state=active]:border-primary data-[state=active]:bg-primary
+                data-[state=active]:text-primary-foreground data-[state=active]:shadow-md
+                lg:min-h-0 lg:flex-row lg:gap-2 lg:rounded-xl lg:px-3 lg:py-2.5 lg:text-sm
+                ${isWide ? "col-span-2 lg:col-span-1" : ""}
+                ${nav.comingSoon ? "data-[state=inactive]:opacity-80" : ""}
+              `}
+            >
+              <Icon className="h-4 w-4 shrink-0 opacity-90" strokeWidth={1.75} />
+              <span className="text-center leading-tight">
+                <span className="lg:hidden">{nav.shortLabel ?? cat.label}</span>
+                <span className="hidden lg:inline">{cat.label}</span>
+              </span>
+              {nav.comingSoon ? (
+                <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-primary group-data-[state=active]:bg-white/20 group-data-[state=active]:text-primary-foreground lg:hidden">
+                  Pronto
+                </span>
+              ) : null}
+            </TabsTrigger>
+          )
+        })}
+      </TabsList>
+
+      <p className="text-center text-sm leading-relaxed text-muted-foreground" style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}>
+        {meta.subtitle}
+      </p>
+    </div>
+  )
+}
+
 /* ─── Main section ────────────────────────────────────────────────────────── */
 
 export function ServicesSection({ mobileSafeGrid = false }: { mobileSafeGrid?: boolean }) {
@@ -917,31 +1011,22 @@ export function ServicesSection({ mobileSafeGrid = false }: { mobileSafeGrid?: b
         <FadeIn delay={0.12}>
           <div className="mx-auto mt-14 max-w-5xl">
             <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ServiceCategory["id"])} className="gap-6">
-              {/* Scrollable tab bar */}
-              <div className="overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                <TabsList
-                  className="inline-flex h-auto w-max min-w-full gap-1 rounded-xl bg-muted/80 p-1.5 shadow-inner"
-                  style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-                >
-                  {SERVICES_CATALOG.map((cat) => (
-                    <TabsTrigger
-                      key={cat.id}
-                      value={cat.id}
-                      className="flex-1 rounded-lg px-4 py-2.5 text-sm data-[state=active]:text-primary"
-                    >
-                      {cat.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </div>
+              <ServiceCategoryNav activeId={activeTab} />
 
               {activeCategory ? (
-                <TabsContent key={activeTab} value={activeTab} className="mt-2 outline-none">
-                  <CategoryContent
-                    category={activeCategory}
-                    onOpenService={setActiveService}
-                    mobileSafeGrid={mobileSafeGrid}
-                  />
+                <TabsContent value={activeTab} className="mt-2 outline-none">
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.22, ease: "easeOut" }}
+                  >
+                    <CategoryContent
+                      category={activeCategory}
+                      onOpenService={setActiveService}
+                      mobileSafeGrid={mobileSafeGrid}
+                    />
+                  </motion.div>
                 </TabsContent>
               ) : null}
             </Tabs>
