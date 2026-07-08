@@ -55,7 +55,7 @@ export function HeroSection() {
             className="max-w-[min(100%,20rem)] text-pretty text-xl leading-snug text-foreground/55 sm:max-w-none sm:text-3xl md:text-4xl"
             style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
           >
-            N °1 en Pestañas y cejas en Rosario
+            N °1 en Rosario
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export function HeroSection() {
           className="inline-flex items-center justify-center rounded-full bg-primary px-9 py-3.5 text-sm font-medium text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-105 active:scale-95 sm:px-11 sm:py-4 sm:text-base"
           style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
         >
-          Reservar Turno
+          Reservar turno por Whatsapp
         </Link>
       </div>
     </section>
