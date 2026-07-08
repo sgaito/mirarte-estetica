@@ -21,13 +21,13 @@ export function HomePhotosSection() {
           {HOME_PHOTOS.map((photo, i) => (
             <FadeIn key={photo.src} delay={0.08 * i} direction="none">
               <div className="relative overflow-hidden rounded-xl shadow-sm ring-1 ring-black/[0.04] sm:rounded-2xl">
-                <div className="relative aspect-[16/10] w-full sm:aspect-[5/3]">
+                <div className="relative aspect-[3/4] w-full sm:aspect-[16/10] md:aspect-[5/3]">
                   <Image
                     src={photo.src}
                     alt={photo.alt}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 640px) 100vw, 33vw"
+                    sizes="(max-width: 640px) 33vw, 33vw"
                     priority={i === 0}
                   />
                 </div>
