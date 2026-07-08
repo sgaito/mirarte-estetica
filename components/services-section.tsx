@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   ImageIcon,
   Sparkles,
+  FlaskConical,
 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -64,7 +65,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 function ExtensionesPremiumIntro() {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
   const hasMultipleImages = ELI_EXTENSIONES_PREMIUM_IMAGES.length > 1
-  const premiumHighlightIcons = [ShieldCheck, Leaf, Sparkles] as const
+  const premiumHighlightIcons = [ShieldCheck, FlaskConical, Sparkles, Leaf] as const
 
   const prevImage = useCallback(() => {
     setSelectedIdx((current) => {
@@ -126,7 +127,7 @@ function ExtensionesPremiumIntro() {
                     key={text}
                     className="rounded-2xl border border-emerald-700/15 bg-emerald-50 p-3.5 dark:border-emerald-400/25 dark:bg-emerald-950/20"
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-600/20 bg-emerald-600/10 text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-500/15 dark:text-emerald-300">
                         <Icon className="h-4.5 w-4.5" />
                       </div>
@@ -259,20 +260,23 @@ function ServiceDetailAccordion({ section }: { section: ServiceDetailSection }) 
           {section.intro ? (
             <p className="text-sm leading-relaxed text-muted-foreground">{section.intro}</p>
           ) : null}
-          <ul className="space-y-2 pl-4 text-sm leading-relaxed text-foreground/80 list-disc marker:text-primary/60">
-            {section.items.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+          {section.items.length > 0 ? (
+            <ul className="space-y-2 pl-4 text-sm leading-relaxed text-foreground/80 list-disc marker:text-primary/60">
+              {section.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          ) : null}
         </div>
       ) : null}
     </div>
   )
 }
 
-function ExtensionesInfoAccordions() {
+function PestanasDetailsSection() {
   return (
     <div className="space-y-4">
+      <AsesoramientoCallout />
       <ServiceDetailAccordion
         section={{
           title: "Beneficios",
@@ -286,10 +290,15 @@ function ExtensionesInfoAccordions() {
           items: [],
         }}
       />
-      <p className="rounded-xl border border-border/60 bg-card/80 px-4 py-3 text-sm leading-relaxed text-foreground/85">
-        <span className="font-semibold text-primary">Duración: </span>
-        {ELI_EXTENSIONES_DURACION}
-      </p>
+      <ServiceDetailAccordion
+        section={{
+          title: "Duración",
+          intro: ELI_EXTENSIONES_DURACION,
+          items: [],
+        }}
+      />
+      <ComoReservarTurnoPestanas />
+      <ComoAsistirCitaPestanas />
     </div>
   )
 }
@@ -812,8 +821,6 @@ function CategoryContent({
     return (
       <div className="space-y-8">
         <ExtensionesPremiumIntro />
-        <AsesoramientoCallout />
-        <ExtensionesInfoAccordions />
 
         <div>
           <p
@@ -847,8 +854,7 @@ function CategoryContent({
           </div>
         )}
 
-        <ComoAsistirCitaPestanas />
-        <ComoReservarTurnoPestanas />
+        <PestanasDetailsSection />
       </div>
     )
   }
@@ -881,7 +887,7 @@ export function ServicesSection({ mobileSafeGrid = false }: { mobileSafeGrid?: b
   return (
     <section
       id="servicios"
-      className={`relative scroll-mt-20 overflow-x-hidden py-24 lg:overflow-hidden lg:py-32 ${SECTION_SURFACE_CLASS}`}
+      className={`relative scroll-mt-20 overflow-x-hidden pt-10 pb-24 lg:overflow-hidden lg:pt-12 lg:pb-32 ${SECTION_SURFACE_CLASS}`}
     >
       {/* Logos decorativos: solo desktop (blur-xl + scroll en móvil = tearing) */}
       <div

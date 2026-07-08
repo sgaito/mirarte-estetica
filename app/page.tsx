@@ -1,5 +1,6 @@
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
+import { HomePhotosSection } from "@/components/home-photos-section"
 import { ServicesSection } from "@/components/services-section"
 import { SobreEliSection } from "@/components/sobre-eli-section"
 import { GallerySection } from "@/components/gallery-section"
@@ -22,6 +23,7 @@ export default async function HomePage() {
     <main className="min-h-screen">
       <Header />
       <HeroSection />
+      <HomePhotosSection />
       <ServicesSection mobileSafeGrid={mobileSafeGrid} />
       <SobreEliSection
         cartaParrafos={ELI_CARTA_PRESENTACION_DEFAULT}

@@ -13,12 +13,13 @@ export const CURSOS_DESCRIPCION = TEXTO_PROXIMAMENTE
 
 /** A) Extensiones de pestaña de seda premium */
 export const ELI_EXTENSIONES_PREMIUM_INTRO =
-  "Trabajo con técnica pelo por pelo en Clásica y Volúmen. Uso productos de alta calidad: hipoalergénicos, de larga duración y resistentes al agua. Las pestañas son de seda premium importadas; el resultado se ve natural, respeta tus pestañas naturales y no les suma peso."
+  "Trabajo con técnica pelo por pelo en Clásica y Volúmen. Uso productos de alta calidad, de larga duración y resistentes al agua. Las extensiones de pestañas brindan un resultado natural, respeta tus pestañas naturales y no les suma peso."
 
 export const ELI_EXTENSIONES_PREMIUM_HIGHLIGHTS = [
   "Productos certificados por ANMAT",
-  "Cruelty free",
+  "Hipoalergénicos",
   "Extensiones de seda importadas “London Lash” y de Fibras tecnológicas",
+  "Cruelty free",
 ] as const
 
 export const ELI_EXTENSIONES_PREMIUM_IMAGES = [
@@ -122,7 +123,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         group: "extension",
         shortDesc: "Look natural con técnica pelo por pelo.",
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "style-natural", []),
+        photos: photos("pestanas", "style-natural", ["IMG_5152.PNG"]),
       },
       {
         slug: "clasicas",
@@ -130,7 +131,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         group: "extension",
         shortDesc: "Extensiones clásicas pelo por pelo.",
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "clasicas", []),
+        photos: photos("pestanas", "clasicas", ["FFE91095-D3DB-44CD-8764-7743C2A6DBF4.PNG"]),
       },
       {
         slug: "volumen-2d-y-3d",
@@ -140,7 +141,11 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
           "Sutiles y naturales: abanicos artesanales de 2 a 3 extensiones; mirada destacada y audaz.",
         fullDesc:
           "Sutiles y naturales, ideales para comenzar: son abanicos artesanales de 2 a 3 extensiones creados en el momento, aplicados en el 100% de tus pestañas para lograr una mirada destacada y audaz.",
-        photos: photos("pestanas", "volumen-2d-y-3d", []),
+        photos: photos("pestanas", "volumen-2d-y-3d", [
+          "C2FD5858-64C1-4D35-8C93-320239207714.jpg",
+          "7F93B8BA-4C63-4A96-BADC-87F0D8875678.jpg",
+          "72A41572-B22B-4D11-8056-D989E0CC3E9A.jpg",
+        ]),
       },
       {
         slug: "volumen-4d",
