@@ -999,7 +999,17 @@ export function ServicesSection({ mobileSafeGrid = false }: { mobileSafeGrid?: b
         <img src="/logo.png" alt="" className="h-full w-full object-contain" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+      {/* Puente inferior hacia El estudio (misma lógica que Hero → Servicios) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[min(26vh,10.5rem)] sm:h-[min(28vh,12rem)] md:h-[min(30vh,13.5rem)]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom, transparent 0%, transparent 52%, color-mix(in oklch, var(--services-estudio-seam) 18%, transparent) 68%, color-mix(in oklch, var(--services-estudio-seam) 58%, transparent) 82%, color-mix(in oklch, var(--services-estudio-seam) 92%, transparent) 93%, var(--services-estudio-seam) 100%)",
+        }}
+      />
+
+      <div className="relative z-[2] mx-auto max-w-7xl px-6 lg:px-8">
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">

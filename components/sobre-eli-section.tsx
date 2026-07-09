@@ -183,7 +183,7 @@ export function SobreEliSection({
   const eliAlt = eliPhoto?.alt ?? "Eli — fundadora de Mirarte Estética"
 
   return (
-    <section id="sobre-eli" className="relative scroll-mt-20 overflow-hidden bg-secondary py-20 lg:py-28">
+    <section id="sobre-eli" className="relative scroll-mt-20 overflow-hidden bg-[var(--services-estudio-seam)] py-20 lg:py-28">
       {/* Destellos decorativos */}
       <div
         aria-hidden
