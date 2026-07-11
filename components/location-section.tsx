@@ -7,7 +7,7 @@ const HORARIOS = [
   { dia: "Domingos",        hora: "Cerrado" },
 ]
 
-const ADDRESS = "Sarmiento 1073, Rosario Centro"
+const ADDRESS = "Sarmiento 1073, Rosario centro, Santa Fe, Argentina."
 const MAP_QUERY = "Sarmiento+1073,+Rosario,+Argentina"
 const MAP_EMBED_SRC = `https://maps.google.com/maps?q=${MAP_QUERY}&output=embed&hl=es&z=16`
 const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`

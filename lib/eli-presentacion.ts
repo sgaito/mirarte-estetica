@@ -1,9 +1,12 @@
 /**
  * Carta de presentación por defecto para “Conocé a Eli”.
  * Podés reemplazarla desde `app/page.tsx` pasando `cartaParrafos` a `SobreEliSection`.
+ *
+ * El último párrafo se destaca como cierre. El resto: el primero como lead, los del medio como cuerpo.
  */
 export const ELI_CARTA_PRESENTACION_DEFAULT: string[] = [
-  "Desde siempre me apasionó el mundo de la estética y cómo un pequeño detalle puede transformar la confianza de una persona. Me certifiqué como Lashista Profesional y pasé años perfeccionando técnicas de realce natural.",
-  "Mirarte Estética nació de un sueño: crear un espacio donde la delicadeza, la calidad premium y la atención personalizada sean la prioridad.",
-  "Te invito a mi estudio, diseñado para tu relax, donde cada servicio es un arte dedicado a resaltar tu belleza única.",
+  "Soy Eliana Gerkelis, fundadora de MIRARTE y especialista en extensiones de pestañas, lash lifting y diseño de cejas.",
+  "Desde 2019 me dedico a perfeccionar este arte con pasión, dedicación y una formación constante.",
+  "Fui una de las primeras profesionales en especializarse en este servicio en Rosario. Continúo capacitándome con certificaciones nacionales e internacionales para incorporar las técnicas más innovadoras y seguir elevando el nivel de mi trabajo.",
+  "Para mí, cada mirada es única. Mi objetivo es potenciar la belleza natural de cada mujer.",
 ]

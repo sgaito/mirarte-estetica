@@ -270,36 +270,6 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
     label: "Cejas",
     services: [
       {
-        slug: "microblading",
-        name: "Microblading",
-        group: "main",
-        comingSoon: true,
-        shortDesc: TEXTO_PROXIMAMENTE,
-        fullDesc:
-          "Es una técnica de diseño de cejas pelo por pelo que permite lograr un resultado natural y definido. Se implanta pigmento de manera superficial en la piel para reconstruir, rellenar o mejorar la forma de las cejas según cada rostro.",
-        sections: [
-          section("Beneficios", [
-            "Resultado semi permanente",
-            "Se ven resultados desde la primera sesión",
-            "Rellena espacios despoblados",
-            "Corrige forma y simetría",
-            "Aporta volumen y definición",
-            "Resalta la mirada",
-          ]),
-          section(
-            "Procedimiento",
-            [
-              "Perfilado: se retira el exceso de vello manteniendo la forma natural",
-              "Diseño: se define la forma ideal según tu rostro con medición profesional",
-              "Elección del pigmento: se selecciona el tono adecuado a tu piel y cabello",
-              "Relleno: se realiza la técnica pelo por pelo siguiendo el diseño acordado",
-            ],
-            `${BIOSEGURIDAD_CEJAS} El tratamiento se realiza en una primera sesión y un retoque dentro de los 60 días, con mantenimiento aproximado cada 8 a 12 meses.`,
-          ),
-        ],
-        photos: photos("cejas", "microblading", ["1.jpeg", "2.jpeg", "3.jpeg"]),
-      },
-      {
         slug: "diseno-perfilado",
         name: "Diseño y Perfilado de cejas",
         group: "main",
@@ -379,6 +349,36 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
         photos: photos("cejas", "full-botox-brow", ["IMG_20260626_040956.png"]),
       },
+      {
+        slug: "microblading",
+        name: "Microblading",
+        group: "main",
+        comingSoon: true,
+        shortDesc: TEXTO_PROXIMAMENTE,
+        fullDesc:
+          "Es una técnica de diseño de cejas pelo por pelo que permite lograr un resultado natural y definido. Se implanta pigmento de manera superficial en la piel para reconstruir, rellenar o mejorar la forma de las cejas según cada rostro.",
+        sections: [
+          section("Beneficios", [
+            "Resultado semi permanente",
+            "Se ven resultados desde la primera sesión",
+            "Rellena espacios despoblados",
+            "Corrige forma y simetría",
+            "Aporta volumen y definición",
+            "Resalta la mirada",
+          ]),
+          section(
+            "Procedimiento",
+            [
+              "Perfilado: se retira el exceso de vello manteniendo la forma natural",
+              "Diseño: se define la forma ideal según tu rostro con medición profesional",
+              "Elección del pigmento: se selecciona el tono adecuado a tu piel y cabello",
+              "Relleno: se realiza la técnica pelo por pelo siguiendo el diseño acordado",
+            ],
+            `${BIOSEGURIDAD_CEJAS} El tratamiento se realiza en una primera sesión y un retoque dentro de los 60 días, con mantenimiento aproximado cada 8 a 12 meses.`,
+          ),
+        ],
+        photos: photos("cejas", "microblading", ["1.jpeg", "2.jpeg", "3.jpeg"]),
+      },
     ],
   },
   {
@@ -409,21 +409,6 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
     id: "cursos",
     label: "Cursos",
     services: [],
-  },
-  {
-    id: "bronceado",
-    label: "Bronceado Orgánico",
-    services: [
-      {
-        slug: "bronceado-organico",
-        name: "Bronceado Orgánico",
-        group: "main",
-        comingSoon: true,
-        shortDesc: TEXTO_PROXIMAMENTE,
-        fullDesc: TEXTO_PROXIMAMENTE,
-        photos: photos("bronceado", "bronceado-organico", []),
-      },
-    ],
   },
 ]
 

@@ -41,8 +41,8 @@ export default async function HomePage() {
           alt: `Eli trabajando — ${img.name}`,
         }))}
       />
-      <GallerySection />
       <LocationSection />
+      <GallerySection />
       <FeaturedProductSection />
       <ReviewsSection />
       <FaqSection />

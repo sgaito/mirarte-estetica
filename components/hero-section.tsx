@@ -64,8 +64,7 @@ export function HeroSection() {
           className="max-w-md text-pretty text-sm leading-relaxed text-foreground/60 sm:text-base"
           style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
         >
-          Espacio de belleza y bienestar. Extensiones de pestañas, lifting, diseño de cejas
-          y tratamientos con dedicación y calidad premium.
+          Nos especializamos en pestañas y cejas, combinando técnicas de alta calidad, atención personalizada y un profundo compromiso con la seguridad y el bienestar de cada clienta. Porque más que realzar tu belleza, queremos que te sientas única, confiada y verdaderamente cuidada.
         </p>
 
         {/* CTA */}

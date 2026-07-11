@@ -29,6 +29,9 @@ const CERTIFICACION_FLAGS = [
   { code: "pe", label: "Perú" },
 ] as const
 
+/** Temporal: "plain" para feedback de clienta. Volver a "rich" cuando apruebe el estilo. */
+const CARTA_UX: "plain" | "rich" = "plain"
+
 /** Detecta si una imagen viene de nuestro proxy Drive (cualquier versión). */
 function isDriveProxySrc(src: string) {
   return src.startsWith("/api/image-proxy") || src.startsWith("/api/drive-image")
@@ -312,10 +315,60 @@ export function SobreEliSection({
               </p>
             </div>
 
-            <div className="flex flex-col gap-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {cartaParrafos.map((bloque, i) => (
-                <p key={i}>{bloque}</p>
-              ))}
+            <div
+              className="flex max-w-prose flex-col gap-4 sm:gap-5"
+              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+            >
+              {CARTA_UX === "rich"
+                ? cartaParrafos.map((bloque, i) => (
+                    <p
+                      key={i}
+                      className="text-sm leading-relaxed text-muted-foreground sm:text-base"
+                    >
+                      {bloque}
+                    </p>
+                  ))
+                : cartaParrafos.map((bloque, i) => {
+                    const isFirst = i === 0
+                    const isLast = i === cartaParrafos.length - 1
+
+                    if (isLast) {
+                      const [cita, ...resto] = bloque.split(/(?<=\.)\s+/)
+                      const cierre = resto.join(" ")
+
+                      return (
+                        <blockquote
+                          key={i}
+                          className="mt-1 border-l-2 border-primary/40 pl-4 sm:pl-5"
+                        >
+                          <p
+                            className="text-xl leading-snug text-primary/85 sm:text-2xl"
+                            style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
+                          >
+                            {cita}
+                          </p>
+                          {cierre ? (
+                            <p className="mt-2 text-sm leading-relaxed text-foreground/70 sm:text-[0.95rem]">
+                              {cierre}
+                            </p>
+                          ) : null}
+                        </blockquote>
+                      )
+                    }
+
+                    return (
+                      <p
+                        key={i}
+                        className={
+                          isFirst
+                            ? "text-[0.95rem] font-medium leading-relaxed text-foreground/80 sm:text-base"
+                            : "text-sm leading-relaxed text-muted-foreground sm:text-[0.95rem] sm:leading-7"
+                        }
+                      >
+                        {bloque}
+                      </p>
+                    )
+                  })}
             </div>
 
             {/* Fotos de Eli trabajando (si Drive las tiene) */}

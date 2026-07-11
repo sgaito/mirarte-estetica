@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, type ComponentType } from "react"
 import {
   X,
   ChevronLeft,
@@ -14,9 +14,8 @@ import {
   Sparkles,
   FlaskConical,
   Eye,
-  Heart,
   GraduationCap,
-  Sun,
+  type LucideProps,
 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -55,9 +54,8 @@ const SECTION_SURFACE_CLASS =
   "bg-gradient-to-b from-[var(--hero-services-seam)] via-[oklch(0.976_0.012_178)] to-[oklch(0.964_0.022_75/0.22)]"
 
 type CategoryNavMeta = {
-  icon: typeof Eye
+  icon: ComponentType<{ className?: string }>
   subtitle: string
-  shortLabel?: string
   comingSoon?: boolean
 }
 
@@ -71,7 +69,7 @@ const CATEGORY_NAV: Record<ServiceCategory["id"], CategoryNavMeta> = {
     subtitle: "Diseño, laminado y perfilado de cejas.",
   },
   labios: {
-    icon: Heart,
+    icon: LipsIcon,
     subtitle: "Perfilado y tratamientos labiales.",
   },
   cursos: {
@@ -79,12 +77,28 @@ const CATEGORY_NAV: Record<ServiceCategory["id"], CategoryNavMeta> = {
     subtitle: "Capacitaciones profesionales — próximamente.",
     comingSoon: true,
   },
-  bronceado: {
-    icon: Sun,
-    subtitle: "Bronceado natural y orgánico — próximamente.",
-    shortLabel: "Bronceado",
-    comingSoon: true,
-  },
+}
+
+/* ─── Lips icon ───────────────────────────────────────────────────────────── */
+
+function LipsIcon({ className, ...props }: LucideProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <path d="M7 11c1.5-2.5 3.5-3.5 5-3.5s3.5 1 5 3.5" />
+      <path d="M4.5 12.5c2-1.2 4.2-1.8 7.5-1.8s5.5.6 7.5 1.8c-1.2 2.8-3.8 4.8-7.5 4.8s-6.3-2-7.5-4.8Z" />
+      <path d="M4.5 12.5c2.2.9 4.8 1.3 7.5 1.3s5.3-.4 7.5-1.3" />
+    </svg>
+  )
 }
 
 /* ─── WhatsApp icon ───────────────────────────────────────────────────────── */
@@ -923,8 +937,8 @@ function ServiceCategoryNav({ activeId }: { activeId: ServiceCategory["id"] }) {
     <div className="space-y-4">
       <TabsList
         className="
-          grid h-auto w-full grid-cols-2 gap-2 bg-transparent p-0
-          lg:grid-cols-5 lg:gap-1.5 lg:rounded-2xl lg:border lg:border-primary/10
+          grid h-auto w-full grid-cols-3 gap-2 bg-transparent p-0
+          lg:grid-cols-4 lg:gap-1.5 lg:rounded-2xl lg:border lg:border-primary/10
           lg:bg-white/75 lg:p-2 lg:shadow-sm
         "
         style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
@@ -932,7 +946,7 @@ function ServiceCategoryNav({ activeId }: { activeId: ServiceCategory["id"] }) {
         {SERVICES_CATALOG.map((cat) => {
           const nav = CATEGORY_NAV[cat.id]
           const Icon = nav.icon
-          const isWide = cat.id === "bronceado"
+          const isPestanas = cat.id === "pestanas"
 
           return (
             <TabsTrigger
@@ -944,16 +958,13 @@ function ServiceCategoryNav({ activeId }: { activeId: ServiceCategory["id"] }) {
                 shadow-sm transition-all
                 data-[state=active]:border-primary data-[state=active]:bg-primary
                 data-[state=active]:text-primary-foreground data-[state=active]:shadow-md
-                lg:min-h-0 lg:flex-row lg:gap-2 lg:rounded-xl lg:px-3 lg:py-2.5 lg:text-sm
-                ${isWide ? "col-span-2 lg:col-span-1" : ""}
+                lg:col-span-1 lg:min-h-0 lg:flex-row lg:gap-2 lg:rounded-xl lg:px-3 lg:py-2.5 lg:text-sm
+                ${isPestanas ? "col-span-3" : "col-span-1"}
                 ${nav.comingSoon ? "data-[state=inactive]:opacity-80" : ""}
               `}
             >
               <Icon className="h-4 w-4 shrink-0 opacity-90" strokeWidth={1.75} />
-              <span className="text-center leading-tight">
-                <span className="lg:hidden">{nav.shortLabel ?? cat.label}</span>
-                <span className="hidden lg:inline">{cat.label}</span>
-              </span>
+              <span className="text-center leading-tight">{cat.label}</span>
               {nav.comingSoon ? (
                 <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-primary group-data-[state=active]:bg-white/20 group-data-[state=active]:text-primary-foreground lg:hidden">
                   Pronto
