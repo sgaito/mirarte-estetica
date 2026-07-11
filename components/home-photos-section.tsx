@@ -2,7 +2,7 @@ import Image from "next/image"
 import { FadeIn } from "@/components/fade-in"
 
 const HOME_PHOTOS = [
-  { src: "/home/4.JPG", alt: "Mirarte Estética — ambiente del estudio" },
+  { src: "/home/4.jpg", alt: "Mirarte Estética — ambiente del estudio" },
   { src: "/home/IMG_4900.jpg", alt: "Mirarte Estética — trabajo de pestañas" },
   {
     src: "/home/B763073A-A3AD-4B5B-A1F5-9E58E9F70130.JPG.jpeg",
