@@ -22,7 +22,7 @@ export function LocationSection() {
       id="ubicacion"
       className="relative scroll-mt-20 overflow-hidden bg-secondary py-24 lg:py-32"
     >
-      <SectionSeam edge="bottom" to="var(--background)" />
+      <SectionSeam edge="bottom" to="var(--services-estudio-seam)" />
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
 
         <FadeIn>

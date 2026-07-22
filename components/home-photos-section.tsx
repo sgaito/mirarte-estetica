@@ -18,7 +18,7 @@ const TRUST_ITEMS = [
     Icon: Star,
   },
   {
-    text: "Una de las pioneras en especializarse en este servicio en Rosario.",
+    text: "Pionera en Rosario.",
     Icon: Sparkles,
   },
   {

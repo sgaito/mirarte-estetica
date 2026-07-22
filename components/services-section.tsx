@@ -20,6 +20,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FadeIn } from "@/components/fade-in"
+import { LocationSection } from "@/components/location-section"
 import {
   SERVICES_CATALOG,
   ELI_EXTENSIONES_PREMIUM_INTRO,
@@ -54,6 +55,8 @@ const WA_CHAT =
   "https://wa.me/5493416367119?text=" +
   encodeURIComponent("Hola Mirarte Estética! Quiero reservar un turno.")
 
+const CALL_URL = "tel:+5493416367119"
+
 function WaLink({ href }: { href: string }) {
   return (
     <a
@@ -63,6 +66,17 @@ function WaLink({ href }: { href: string }) {
       className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
     >
       WhatsApp
+    </a>
+  )
+}
+
+function CallLink() {
+  return (
+    <a
+      href={CALL_URL}
+      className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+    >
+      llamada
     </a>
   )
 }
@@ -558,7 +572,8 @@ function ComoReservarTurnoPestanas() {
   return (
     <PestanasAccordion title="¿Cómo reservar mi turno?">
       <p>
-        Escribinos por <WaLink href={WA_CHAT} /> para reservar tu turno.
+        Escribinos por <WaLink href={WA_CHAT} /> para reservar tu turno, o por{" "}
+        <CallLink />.
       </p>
     </PestanasAccordion>
   )
@@ -951,8 +966,6 @@ function CategoryContent({
             />
           </div>
         )}
-
-        <PestanasDetailsSection />
       </div>
     )
   }
@@ -1037,78 +1050,93 @@ export function ServicesSection({ mobileSafeGrid = false }: { mobileSafeGrid?: b
   const activeCategory = SERVICES_CATALOG.find((c) => c.id === activeTab)
 
   return (
-    <section
-      id="servicios"
-      className={`relative scroll-mt-20 overflow-x-hidden pt-10 pb-24 lg:overflow-hidden lg:pt-12 lg:pb-32 ${SECTION_SURFACE_CLASS}`}
-    >
-      {/* Logos decorativos: solo desktop (blur-xl + scroll en móvil = tearing) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-32 -top-32 hidden h-[480px] w-[480px] -rotate-12 opacity-[0.04] blur-xl lg:block"
+    <>
+      <section
+        id="servicios"
+        className={`relative scroll-mt-20 overflow-x-hidden pt-10 pb-24 lg:overflow-hidden lg:pt-12 lg:pb-32 ${SECTION_SURFACE_CLASS}`}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.png" alt="" className="h-full w-full object-contain" />
-      </div>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-32 -right-32 hidden h-[480px] w-[480px] rotate-12 opacity-[0.04] blur-xl lg:block"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.png" alt="" className="h-full w-full object-contain" />
-      </div>
+        {/* Logos decorativos: solo desktop (blur-xl + scroll en móvil = tearing) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-32 -top-32 hidden h-[480px] w-[480px] -rotate-12 opacity-[0.04] blur-xl lg:block"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="" className="h-full w-full object-contain" />
+        </div>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-32 -right-32 hidden h-[480px] w-[480px] rotate-12 opacity-[0.04] blur-xl lg:block"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="" className="h-full w-full object-contain" />
+        </div>
 
-      {/* Puente inferior hacia El estudio (misma lógica que Hero → Servicios) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[min(26vh,10.5rem)] sm:h-[min(28vh,12rem)] md:h-[min(30vh,13.5rem)]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to bottom, transparent 0%, transparent 52%, color-mix(in oklch, var(--services-estudio-seam) 18%, transparent) 68%, color-mix(in oklch, var(--services-estudio-seam) 58%, transparent) 82%, color-mix(in oklch, var(--services-estudio-seam) 92%, transparent) 93%, var(--services-estudio-seam) 100%)",
-        }}
-      />
-
-      <div className="relative z-[2] mx-auto max-w-7xl px-6 lg:px-8">
-        <FadeIn>
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-              Nuestros <span className="heading-emphasis">Servicios</span>
-            </h2>
-          </div>
-        </FadeIn>
-
-        <FadeIn delay={0.12}>
-          <div className="mx-auto mt-14 max-w-5xl">
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ServiceCategory["id"])} className="gap-6">
-              <ServiceCategoryNav activeId={activeTab} />
-
-              {activeCategory ? (
-                <TabsContent value={activeTab} className="mt-2 outline-none">
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.22, ease: "easeOut" }}
-                  >
-                    <CategoryContent
-                      category={activeCategory}
-                      onOpenService={setActiveService}
-                      mobileSafeGrid={mobileSafeGrid}
-                    />
-                  </motion.div>
-                </TabsContent>
-              ) : null}
-            </Tabs>
-          </div>
-        </FadeIn>
-      </div>
-
-      {activeService ? (
-        <ServiceModal
-          key={activeService.slug}
-          service={activeService}
-          onClose={() => setActiveService(null)}
+        {/* Puente inferior hacia Ubicación */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[min(26vh,10.5rem)] sm:h-[min(28vh,12rem)] md:h-[min(30vh,13.5rem)]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to bottom, transparent 0%, transparent 52%, color-mix(in oklch, var(--secondary) 18%, transparent) 68%, color-mix(in oklch, var(--secondary) 58%, transparent) 82%, color-mix(in oklch, var(--secondary) 92%, transparent) 93%, var(--secondary) 100%)",
+          }}
         />
+
+        <div className="relative z-[2] mx-auto max-w-7xl px-6 lg:px-8">
+          <FadeIn>
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
+                Nuestros <span className="heading-emphasis">Servicios</span>
+              </h2>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.12}>
+            <div className="mx-auto mt-14 max-w-5xl">
+              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ServiceCategory["id"])} className="gap-6">
+                <ServiceCategoryNav activeId={activeTab} />
+
+                {activeCategory ? (
+                  <TabsContent value={activeTab} className="mt-2 outline-none">
+                    <motion.div
+                      key={activeTab}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.22, ease: "easeOut" }}
+                    >
+                      <CategoryContent
+                        category={activeCategory}
+                        onOpenService={setActiveService}
+                        mobileSafeGrid={mobileSafeGrid}
+                      />
+                    </motion.div>
+                  </TabsContent>
+                ) : null}
+              </Tabs>
+            </div>
+          </FadeIn>
+        </div>
+
+        {activeService ? (
+          <ServiceModal
+            key={activeService.slug}
+            service={activeService}
+            onClose={() => setActiveService(null)}
+          />
+        ) : null}
+      </section>
+
+      <LocationSection />
+
+      {activeTab === "pestanas" ? (
+        <section
+          className="relative overflow-x-hidden bg-[var(--services-estudio-seam)] py-16 lg:overflow-hidden lg:py-20"
+          aria-label="Asesoramiento y detalles de pestañas"
+        >
+          <div className="relative z-[2] mx-auto max-w-5xl px-6 lg:px-8">
+            <PestanasDetailsSection />
+          </div>
+        </section>
       ) : null}
-    </section>
+    </>
   )
 }

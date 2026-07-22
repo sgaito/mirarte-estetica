@@ -14,8 +14,11 @@ function WhatsAppIcon({ className }: { className?: string }) {
   )
 }
 
-const ctaClassName =
-  "inline-flex h-[3.25rem] w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-4 text-[13px] font-medium text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-105 active:scale-95 sm:h-14 sm:gap-2.5 sm:px-6 sm:text-base"
+const ctaPrimary =
+  "inline-flex h-[3.5rem] w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-6 text-sm font-semibold tracking-wide text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 active:scale-[0.98] sm:h-14 sm:text-[15px]"
+
+const ctaSecondary =
+  "inline-flex h-[3.5rem] w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-primary/20 bg-white/50 px-6 text-sm font-medium tracking-wide text-primary shadow-sm backdrop-blur-md transition-all hover:bg-white/80 hover:border-primary/40 active:scale-[0.98] sm:h-14 sm:text-[15px]"
 
 export function HeroSection() {
   return (
@@ -49,55 +52,37 @@ export function HeroSection() {
       />
 
       {/* ── Contenido centrado ── */}
-      <div className="relative z-10 flex flex-col items-center gap-6 px-6 py-16 text-center sm:gap-7 sm:py-20 md:gap-8">
-
-        {/* Título */}
-        <div className="flex flex-col items-center gap-2">
-          <p
-            className="text-[11px] font-medium uppercase tracking-[0.28em] text-foreground/45 sm:text-xs"
-            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-          >
+      <div className="relative z-10 flex flex-col items-center gap-8 px-6 py-16 text-center sm:py-24">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-foreground/60 sm:text-xs">
             Since 2019
           </p>
-          <h1
-            className="max-w-2xl text-balance text-3xl font-semibold uppercase tracking-[0.12em] text-foreground/85 sm:text-4xl md:text-5xl lg:text-6xl"
-            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-          >
-            Tu mirada habla por vos
+
+          <h1 className="flex flex-col items-center">
+            <span className="block max-w-xl text-balance text-[2rem] font-medium leading-[1.1] tracking-[-0.03em] text-foreground sm:text-5xl lg:text-6xl">
+              Colocación de extensiones
+            </span>
+            <span className="mt-4 block text-[1rem] font-light tracking-[0.2em] uppercase text-foreground/70 sm:text-lg">
+              Lash lifting · Cejas · Laminado
+            </span>
           </h1>
+
           <p
-            className="max-w-[min(100%,20rem)] text-pretty text-xl leading-snug text-foreground/55 sm:max-w-none sm:text-3xl md:text-4xl"
+            className="mt-2 max-w-lg text-pretty text-3xl italic text-foreground/80 sm:text-4xl"
             style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
           >
-            N °1 en Rosario
+            Tu mirada habla por vos
           </p>
         </div>
 
-        {/* Bajada */}
-        <p
-          className="max-w-md text-pretty text-sm leading-relaxed text-foreground/60 sm:text-base"
-          style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-        >
-          Nos especializamos en pestañas y cejas, combinando técnicas de alta calidad, atención personalizada y un profundo compromiso con la seguridad y el bienestar de cada clienta. Porque más que realzar tu belleza, queremos que te sientas única, confiada y verdaderamente cuidada.
-        </p>
-
-        {/* CTAs */}
-        <div
-          className="flex w-full max-w-sm flex-col items-stretch gap-3 sm:max-w-md"
-          style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-        >
-          <Link
-            href={WA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={ctaClassName}
-          >
-            <WhatsAppIcon className="h-5 w-5 shrink-0" />
-            Reserva tu turno por WhatsApp
+        <div className="flex w-full max-w-xs flex-col items-stretch gap-4 sm:max-w-md">
+          <Link href={WA_URL} target="_blank" rel="noopener noreferrer" className={ctaPrimary}>
+            <WhatsAppIcon className="h-5 w-5" />
+            Reservar por WhatsApp
           </Link>
-          <a href={CALL_URL} className={ctaClassName}>
-            <Phone className="h-5 w-5 shrink-0" strokeWidth={2} />
-            Reserva tu turno por llamada
+          <a href={CALL_URL} className={ctaSecondary}>
+            <Phone className="h-5 w-5" strokeWidth={2.5} />
+            Llamar ahora
           </a>
         </div>
       </div>

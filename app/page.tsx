@@ -6,7 +6,6 @@ import { SobreEliSection } from "@/components/sobre-eli-section"
 import { GallerySection } from "@/components/gallery-section"
 import { FeaturedProductSection } from "@/components/featured-product-section"
 import { FaqSection } from "@/components/faq-section"
-import { LocationSection } from "@/components/location-section"
 import { ReviewsSection } from "@/components/reviews-section"
 import { Footer } from "@/components/footer"
 import { ELI_CARTA_PRESENTACION_DEFAULT } from "@/lib/eli-presentacion"
@@ -41,7 +40,6 @@ export default async function HomePage() {
           alt: `Eli trabajando — ${img.name}`,
         }))}
       />
-      <LocationSection />
       <GallerySection />
       <FeaturedProductSection />
       <ReviewsSection />

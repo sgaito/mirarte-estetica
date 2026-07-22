@@ -6,8 +6,8 @@ import { Menu, X } from "lucide-react"
 const navLinks = [
   { sectionId: "reservar", label: "Inicio" },
   { sectionId: "servicios", label: "Servicios" },
-  { sectionId: "sobre-eli", label: "Eli & Mirarte" },
   { sectionId: "ubicacion", label: "Ubicación" },
+  { sectionId: "sobre-eli", label: "Eli & Mirarte" },
   { sectionId: "galeria", label: "Galería" },
   { sectionId: "promoter", label: "Promoter" },
   { sectionId: "resenas", label: "Reseñas" },

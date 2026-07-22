@@ -179,6 +179,14 @@ export function SobreEliSection({
 
   return (
     <section id="sobre-eli" className="relative scroll-mt-20 overflow-hidden bg-[var(--services-estudio-seam)] py-20 lg:py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[min(18vh,7rem)] sm:h-[min(20vh,8rem)]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom, transparent 0%, color-mix(in oklch, var(--background) 35%, transparent) 55%, color-mix(in oklch, var(--background) 75%, transparent) 82%, var(--background) 100%)",
+        }}
+      />
       {/* Destellos decorativos */}
       <div
         aria-hidden
