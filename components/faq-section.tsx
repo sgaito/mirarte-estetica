@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { FadeIn } from "@/components/fade-in"
+import { SectionSeam } from "@/components/section-seam"
 
 const FAQS = [
   {
@@ -134,6 +135,7 @@ export function FaqSection() {
         `.trim(),
       }}
     >
+      <SectionSeam edge="bottom" to="var(--background)" />
       <div className="relative mx-auto max-w-5xl px-6 lg:px-8">
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">

@@ -4,6 +4,7 @@ import { useRef, useLayoutEffect, useEffect } from "react"
 import { motion, useMotionValue, useAnimationFrame } from "framer-motion"
 import { Star } from "lucide-react"
 import { FadeIn } from "@/components/fade-in"
+import { SectionSeam } from "@/components/section-seam"
 
 const reviews = [
   {
@@ -139,15 +140,16 @@ function ReviewsCarousel() {
 
 export function ReviewsSection() {
   return (
-    <section id="resenas" className="scroll-mt-20 bg-secondary py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section id="resenas" className="relative scroll-mt-20 overflow-hidden bg-secondary py-24 lg:py-32">
+      <SectionSeam edge="bottom" to="oklch(0.977 0.003 240)" />
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
-              Lo que dicen nuestras <span className="heading-emphasis">Clientas</span>
+              <span className="heading-emphasis">Número 1</span> en Rosario según reseñas en Google
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              La satisfacción de quienes nos visitan es nuestra mayor recompensa.
+              Lo que dicen nuestras clientas
             </p>
           </div>
         </FadeIn>
@@ -155,7 +157,7 @@ export function ReviewsSection() {
 
       {/* Carrusel full-width fuera del contenedor para que sangre hasta los bordes */}
       <FadeIn delay={0.1} direction="none">
-        <div className="mt-16">
+        <div className="relative mt-16">
           <ReviewsCarousel />
         </div>
       </FadeIn>

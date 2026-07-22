@@ -62,8 +62,6 @@ export const ELI_COMO_ASISTIR_CITA_PESTANAS = [
   "No realizamos retoques de otros estudios.",
 ]
 
-export const ELI_COMO_RESERVAR_TURNO_PESTANAS = ["Proximamente: Texto Correspondiente."]
-
 export interface ServicePhoto {
   src: string
   alt: string
@@ -123,7 +121,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         group: "extension",
         shortDesc: "Look natural con técnica pelo por pelo.",
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "style-natural", ["IMG_5152.PNG"]),
+        photos: photos("pestanas", "style-natural", ["1.PNG","2.PNG"]),
       },
       {
         slug: "clasicas",

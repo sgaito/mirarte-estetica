@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { X } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 import { FadeIn } from "@/components/fade-in"
+import { CERTIFICACION_FLAGS } from "@/lib/certificacion-flags"
 
 export interface SobreEliImageSlot {
   src: string
@@ -19,15 +20,6 @@ export interface SobreEliSectionProps {
   /** Fotos de Eli trabajando (carpeta TRABAJANDO en Drive). */
   trabajandoPhotos?: SobreEliImageSlot[]
 }
-
-/** Banderas como imágenes (los emoji suelen verse como “AR”, “US”, etc. en Windows). */
-const CERTIFICACION_FLAGS = [
-  { code: "ar", label: "Argentina" },
-  { code: "us", label: "Estados Unidos" },
-  { code: "mx", label: "México" },
-  { code: "gb", label: "Reino Unido" },
-  { code: "pe", label: "Perú" },
-] as const
 
 /** Temporal: "plain" para feedback de clienta. Volver a "rich" cuando apruebe el estilo. */
 const CARTA_UX: "plain" | "rich" = "plain"

@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useEffect, useCallback, type ComponentType } from "react"
+import { useState, useEffect, useCallback, type ComponentType, type ReactNode } from "react"
 import {
   X,
   ChevronLeft,
@@ -27,7 +27,6 @@ import {
   ELI_EXTENSIONES_PREMIUM_IMAGES,
   ELI_ASESORAMIENTO_EXTENSIONES,
   ELI_COMO_ASISTIR_CITA_PESTANAS,
-  ELI_COMO_RESERVAR_TURNO_PESTANAS,
   DESCRIPCION_SERVICIO_PENDIENTE,
   CURSOS_DESCRIPCION,
   TEXTO_PROXIMAMENTE,
@@ -48,6 +47,25 @@ const WA_SERVICE = (name: string) =>
   `https://wa.me/5493416367119?text=${encodeURIComponent(
     `Hola Mirarte Estética! Quiero consultar por el servicio de ${name}.`,
   )}`
+
+const WA_CATALOG = "https://wa.me/c/20607253110970"
+
+const WA_CHAT =
+  "https://wa.me/5493416367119?text=" +
+  encodeURIComponent("Hola Mirarte Estética! Quiero reservar un turno.")
+
+function WaLink({ href }: { href: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+    >
+      WhatsApp
+    </a>
+  )
+}
 
 /** Continúa desde el mismo tono opaco que el final del Hero (`--hero-services-seam`). */
 const SECTION_SURFACE_CLASS =
@@ -349,6 +367,7 @@ function PestanasDetailsSection() {
         }}
       />
       <ComoReservarTurnoPestanas />
+      <DondeEncuentroValoresServicios />
       <ComoAsistirCitaPestanas />
     </div>
   )
@@ -386,14 +405,49 @@ const pestanasBlockFont = { fontFamily: "var(--font-display), Montserrat, sans-s
  * Móvil: toggle simple. Chrome rompe el estado CERRADO con <details> o con
  * pastilla redonda + ChevronDown (capas GPU). Abierto = solo texto + lista.
  */
+function PestanasAccordionBody({
+  listType,
+  items,
+  children,
+  listClass,
+}: {
+  listType?: "ul" | "ol"
+  items?: readonly string[]
+  children?: ReactNode
+  listClass: string
+}) {
+  if (children) {
+    return <div className="mt-3 text-sm leading-relaxed text-foreground/85">{children}</div>
+  }
+  if (!items || !listType) return null
+  if (listType === "ul") {
+    return (
+      <ul className={listClass}>
+        {items.map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+    )
+  }
+  return (
+    <ol className={listClass}>
+      {items.map((line) => (
+        <li key={line}>{line}</li>
+      ))}
+    </ol>
+  )
+}
+
 function PestanasAccordionMobile({
   title,
   listType,
   items,
+  children,
 }: {
   title: string
-  listType: "ul" | "ol"
-  items: readonly string[]
+  listType?: "ul" | "ol"
+  items?: readonly string[]
+  children?: ReactNode
 }) {
   const [open, setOpen] = useState(false)
   const listClass =
@@ -417,19 +471,9 @@ function PestanasAccordionMobile({
         {open ? "Ver menos" : "Ver más"}
       </button>
       {open ? (
-        listType === "ul" ? (
-          <ul className={listClass}>
-            {items.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-        ) : (
-          <ol className={listClass}>
-            {items.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ol>
-        )
+        <PestanasAccordionBody listType={listType} items={items} listClass={listClass}>
+          {children}
+        </PestanasAccordionBody>
       ) : null}
     </div>
   )
@@ -440,10 +484,12 @@ function PestanasAccordionDesktop({
   title,
   listType,
   items,
+  children,
 }: {
   title: string
-  listType: "ul" | "ol"
-  items: readonly string[]
+  listType?: "ul" | "ol"
+  items?: readonly string[]
+  children?: ReactNode
 }) {
   const [open, setOpen] = useState(false)
   const listClass =
@@ -472,19 +518,9 @@ function PestanasAccordionDesktop({
         </button>
       </div>
       {open ? (
-        listType === "ul" ? (
-          <ul className={listClass}>
-            {items.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-        ) : (
-          <ol className={listClass}>
-            {items.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ol>
-        )
+        <PestanasAccordionBody listType={listType} items={items} listClass={listClass}>
+          {children}
+        </PestanasAccordionBody>
       ) : null}
     </div>
   )
@@ -492,8 +528,9 @@ function PestanasAccordionDesktop({
 
 function PestanasAccordion(props: {
   title: string
-  listType: "ul" | "ol"
-  items: readonly string[]
+  listType?: "ul" | "ol"
+  items?: readonly string[]
+  children?: ReactNode
 }) {
   return (
     <>
@@ -519,11 +556,21 @@ function ComoAsistirCitaPestanas() {
 
 function ComoReservarTurnoPestanas() {
   return (
-    <PestanasAccordion
-      title="¿Cómo reservar mi turno?"
-      listType="ol"
-      items={ELI_COMO_RESERVAR_TURNO_PESTANAS}
-    />
+    <PestanasAccordion title="¿Cómo reservar mi turno?">
+      <p>
+        Escribinos por <WaLink href={WA_CHAT} /> para reservar tu turno.
+      </p>
+    </PestanasAccordion>
+  )
+}
+
+function DondeEncuentroValoresServicios() {
+  return (
+    <PestanasAccordion title="¿Dónde encuentro los valores de los servicios?">
+      <p>
+        Los podes encontrar en el catálogo de <WaLink href={WA_CATALOG} />.
+      </p>
+    </PestanasAccordion>
   )
 }
 

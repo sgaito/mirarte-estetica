@@ -14,8 +14,8 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export function Footer() {
   return (
-    <footer id="contacto" className="bg-background border-t border-border scroll-mt-20">
-      <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+    <footer id="contacto" className="relative scroll-mt-20 overflow-hidden bg-background">
+      <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8">
         <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
 
           {/* Logo */}

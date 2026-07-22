@@ -1,5 +1,6 @@
 import { MapPin } from "lucide-react"
 import { FadeIn } from "@/components/fade-in"
+import { SectionSeam } from "@/components/section-seam"
 
 const HORARIOS = [
   { dia: "Lunes – Viernes", hora: "8:30 – 21:00" },
@@ -17,8 +18,12 @@ const WA_RESERVA_URL =
 
 export function LocationSection() {
   return (
-    <section id="ubicacion" className="bg-secondary py-24 scroll-mt-20 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section
+      id="ubicacion"
+      className="relative scroll-mt-20 overflow-hidden bg-secondary py-24 lg:py-32"
+    >
+      <SectionSeam edge="bottom" to="var(--background)" />
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
 
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
