@@ -160,18 +160,16 @@ function ProductModal({ onClose }: { onClose: () => void }) {
         transition={{ duration: 0.22 }}
         onClick={onClose}
       >
-        {/* Alto fijo = 90dvh → el body llena el espacio restante; scroll solo aparece si el zoom del browser achica el contenido */}
         <motion.div
-          className="relative flex w-[95%] max-w-3xl flex-col rounded-3xl bg-background shadow-2xl md:max-w-[76rem]"
-          style={{ height: "90dvh" }}
+          className="relative flex max-h-[90dvh] w-[95%] max-w-3xl flex-col overflow-hidden rounded-3xl bg-background shadow-2xl md:max-w-5xl"
           initial={{ scale: 0.94, opacity: 0, y: 16 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.94, opacity: 0, y: 16 }}
           transition={{ duration: 0.26, ease: "easeOut" }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Cabecera compacta */}
-          <div className="flex flex-shrink-0 items-center justify-between border-b border-border px-4 py-3 sm:px-6">
+          {/* Cabecera */}
+          <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3 sm:px-6">
             <div>
               <p
                 className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary"
@@ -195,183 +193,164 @@ function ProductModal({ onClose }: { onClose: () => void }) {
             </button>
           </div>
 
-          {/* Cuerpo: flex-1 min-h-0 → llena el alto disponible; overflow-y-auto = fallback para zoom alto */}
-          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto sm:flex-row sm:overflow-hidden">
-            <div className="flex h-full flex-col gap-0 sm:flex-row sm:items-stretch">
-
-              {/* ── Galería ── */}
-              <div className="flex w-full flex-col gap-2 p-4 sm:w-[42%] sm:flex-shrink-0 sm:p-5">
-                {/* Imagen: 1:1 en mobile, flex-1 en desktop (llena el alto disponible) */}
-                <div className="group relative aspect-square w-full overflow-hidden rounded-xl sm:aspect-auto sm:flex-1 sm:min-h-0">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={mainImg}
-                      className="absolute inset-0"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Image
-                        src={THUMBNAILS[mainImg].src}
-                        alt={THUMBNAILS[mainImg].alt}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 90vw, 380px"
-                      />
-                    </motion.div>
-                  </AnimatePresence>
-
-                  {/* Zoom */}
-                  <button
-                    onClick={() => {
-                      setZoomedImage(THUMBNAILS[mainImg])
-                      setZoomed(true)
-                    }}
-                    aria-label="Ver imagen completa"
-                    className="absolute inset-0 flex items-end justify-end p-2.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          {/* Cuerpo */}
+          <div className="grid min-h-0 flex-1 grid-cols-1 overflow-y-auto sm:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] sm:overflow-hidden">
+            {/* Galería */}
+            <div className="flex flex-col gap-2 border-border p-4 sm:border-r sm:p-5">
+              <div className="group relative aspect-square w-full overflow-hidden rounded-xl sm:aspect-[4/5]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={mainImg}
+                    className="absolute inset-0"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <span className="flex items-center gap-1 rounded-full bg-background/85 px-2.5 py-1 text-[10px] font-semibold text-primary shadow backdrop-blur-sm">
-                      <ZoomIn className="h-3 w-3" />
-                      Ampliar
-                    </span>
-                  </button>
+                    <Image
+                      src={THUMBNAILS[mainImg].src}
+                      alt={THUMBNAILS[mainImg].alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 90vw, 420px"
+                    />
+                  </motion.div>
+                </AnimatePresence>
 
-                  {/* Indicadores */}
-                  <div className="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 gap-1.5">
-                    {THUMBNAILS.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleThumbClick(i)}
-                        aria-label={`Foto ${i + 1}`}
-                        className={`h-1 rounded-full transition-all duration-300 ${
-                          mainImg === i ? "w-4 bg-primary" : "w-1 bg-white/60"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
+                <button
+                  onClick={() => {
+                    setZoomedImage(THUMBNAILS[mainImg])
+                    setZoomed(true)
+                  }}
+                  aria-label="Ver imagen completa"
+                  className="absolute inset-0 flex items-end justify-end p-2.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                >
+                  <span className="flex items-center gap-1 rounded-full bg-background/85 px-2.5 py-1 text-[10px] font-semibold text-primary shadow backdrop-blur-sm">
+                    <ZoomIn className="h-3 w-3" />
+                    Ampliar
+                  </span>
+                </button>
 
-                {/* Thumbnails */}
-                <div className="flex flex-shrink-0 gap-1.5 overflow-x-auto">
-                  {THUMBNAILS.map((t, i) => (
+                <div className="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 gap-1.5">
+                  {THUMBNAILS.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => handleThumbClick(i)}
-                      aria-label={t.alt}
-                      className={`relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-lg transition-all active:scale-95 sm:h-12 sm:w-12 ${
-                        mainImg === i ? "ring-2 ring-primary shadow-sm" : "opacity-50 hover:opacity-85"
+                      aria-label={`Foto ${i + 1}`}
+                      className={`h-1 rounded-full transition-all duration-300 ${
+                        mainImg === i ? "w-4 bg-primary" : "w-1 bg-white/60"
                       }`}
-                    >
-                      <Image src={t.src} alt={t.alt} fill className="object-cover" sizes="48px" />
-                    </button>
+                    />
                   ))}
                 </div>
               </div>
 
-              {/* Divisor vertical */}
-              <div className="hidden w-px flex-shrink-0 bg-border sm:block" />
+              <div className="flex shrink-0 gap-1.5 overflow-x-auto pb-0.5">
+                {THUMBNAILS.map((t, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleThumbClick(i)}
+                    aria-label={t.alt}
+                    className={`relative h-11 w-11 shrink-0 overflow-hidden rounded-lg transition-all active:scale-95 sm:h-12 sm:w-12 ${
+                      mainImg === i ? "ring-2 ring-primary shadow-sm" : "opacity-50 hover:opacity-85"
+                    }`}
+                  >
+                    <Image src={t.src} alt={t.alt} fill className="object-cover" sizes="48px" />
+                  </button>
+                ))}
+              </div>
+            </div>
 
-              {/* ── Info: justify-between → botón al fondo alineado con thumbnails ── */}
-              <div className="flex flex-1 flex-col justify-between overflow-y-auto p-4 sm:overflow-hidden sm:p-5">
-
-                {/* Contenido */}
-                <div className="flex flex-col gap-3.5">
-
-                  {/* Título */}
-                  <div>
-                    <h3
-                      className="text-base font-semibold leading-snug text-foreground"
-                      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-                    >
-                      Liposomas en Spray para Pestañas y Cejas
-                    </h3>
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      Nanotecnología biotecnológica · 15 ml
-                    </p>
-                  </div>
-
-                  {/* Bajada */}
-                  <p className="text-xs leading-relaxed text-foreground/70">
-                    Aplicación en spray ultra rápida. Sus <strong className="font-medium text-foreground/85">liposomas</strong> llevan
-                    los nutrientes directamente a las células del vello para fortalecer desde la raíz.
+            {/* Info */}
+            <div className="flex flex-col justify-between gap-4 p-4 sm:overflow-y-auto sm:p-5">
+              <div className="flex flex-col gap-3.5">
+                <div>
+                  <h3
+                    className="text-base font-semibold leading-snug text-foreground"
+                    style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+                  >
+                    Liposomas en Spray para Pestañas y Cejas
+                  </h3>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Nanotecnología biotecnológica · 15 ml
                   </p>
-
-                  {/* Beneficios */}
-                  <div>
-                    <p
-                      className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-muted-foreground"
-                      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-                    >
-                      Beneficios
-                    </p>
-                    <ul className="flex flex-col gap-1.5">
-                      {BENEFITS.map(({ icon: Icon, text }) => (
-                        <li key={text} className="flex items-start gap-2 text-xs text-foreground/80">
-                          <span className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-primary/12">
-                            <Icon className="h-2.5 w-2.5 text-primary" strokeWidth={2.5} />
-                          </span>
-                          {text}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Modo de uso */}
-                  <div className="rounded-xl bg-secondary px-3 py-2.5">
-                    <p
-                      className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-primary"
-                      style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-                    >
-                      Modo de uso
-                    </p>
-                    <ol className="flex flex-col gap-1">
-                      {STEPS.map((s, i) => (
-                        <li key={i} className="flex gap-1.5 text-[11px] text-muted-foreground">
-                          <span className="flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-[9px] font-bold text-primary">
-                            {i + 1}
-                          </span>
-                          {s}
-                        </li>
-                      ))}
-                    </ol>
-                    <p className="mt-1.5 text-[10px] italic text-muted-foreground/70">
-                      2–3 veces por día, ¡incluso sobre el maquillaje!
-                    </p>
-                  </div>
-
-                  {/* Sellos */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {BADGES.map(({ icon: Icon, label }) => (
-                      <span
-                        key={label}
-                        className="flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-0.5 text-[10px] text-muted-foreground"
-                      >
-                        <Icon className="h-2.5 w-2.5 text-primary/70" strokeWidth={1.75} />
-                        {label}
-                      </span>
-                    ))}
-                  </div>
                 </div>
 
-                {/* Botón WA — fondo de la columna, mismo nivel que thumbnails */}
-                <a
-                  href={WA_PRODUCT_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-semibold text-white shadow transition-all hover:brightness-105 active:scale-95 sm:w-auto"
-                  style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-                >
-                  <WhatsAppIcon className="h-3.5 w-3.5 flex-shrink-0" />
-                  Consultar por WhatsApp
-                </a>
+                <p className="text-xs leading-relaxed text-foreground/70">
+                  Aplicación en spray ultra rápida. Sus{" "}
+                  <strong className="font-medium text-foreground/85">liposomas</strong> llevan los
+                  nutrientes directamente a las células del vello para fortalecer desde la raíz.
+                </p>
+
+                <div>
+                  <p
+                    className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-muted-foreground"
+                    style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+                  >
+                    Beneficios
+                  </p>
+                  <ul className="flex flex-col gap-1.5">
+                    {BENEFITS.map(({ icon: Icon, text }) => (
+                      <li key={text} className="flex items-start gap-2 text-xs text-foreground/80">
+                        <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/12">
+                          <Icon className="h-2.5 w-2.5 text-primary" strokeWidth={2.5} />
+                        </span>
+                        {text}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="rounded-xl bg-secondary px-3 py-2.5">
+                  <p
+                    className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-primary"
+                    style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+                  >
+                    Modo de uso
+                  </p>
+                  <ol className="flex flex-col gap-1">
+                    {STEPS.map((s, i) => (
+                      <li key={i} className="flex gap-1.5 text-[11px] text-muted-foreground">
+                        <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[9px] font-bold text-primary">
+                          {i + 1}
+                        </span>
+                        {s}
+                      </li>
+                    ))}
+                  </ol>
+                  <p className="mt-1.5 text-[10px] italic text-muted-foreground/70">
+                    2–3 veces por día, ¡incluso sobre el maquillaje!
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {BADGES.map(({ icon: Icon, label }) => (
+                    <span
+                      key={label}
+                      className="flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-0.5 text-[10px] text-muted-foreground"
+                    >
+                      <Icon className="h-2.5 w-2.5 text-primary/70" strokeWidth={1.75} />
+                      {label}
+                    </span>
+                  ))}
+                </div>
               </div>
+
+              <a
+                href={WA_PRODUCT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-semibold text-white shadow transition-all hover:brightness-105 active:scale-95 sm:w-auto"
+                style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+              >
+                <WhatsAppIcon className="h-3.5 w-3.5 shrink-0" />
+                Consultar por WhatsApp
+              </a>
             </div>
           </div>
         </motion.div>
       </motion.div>
 
-      {/* Lightbox */}
       <AnimatePresence>
         {zoomed && zoomedImage && (
           <ImageLightbox
@@ -425,13 +404,12 @@ export function FeaturedProductSection() {
             </div>
           </FadeIn>
 
-          <div className="flex flex-col items-center gap-10 md:flex-row md:gap-14 lg:gap-20">
-
-            <FadeIn direction="none" className="w-full md:w-[46%] lg:w-[42%]">
+          <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12 lg:gap-16">
+            <FadeIn direction="none" className="w-full">
               <button
                 onClick={() => setOpen(true)}
                 aria-label="Ver detalles del producto"
-                className="group relative block w-full overflow-hidden rounded-3xl shadow-xl transition-transform duration-500 hover:scale-[1.025] active:scale-[0.98]"
+                className="group relative mx-auto block w-full max-w-md overflow-hidden rounded-3xl shadow-xl transition-transform duration-500 hover:scale-[1.025] active:scale-[0.98] md:max-w-none"
               >
                 <div className="relative aspect-[3/4] w-full">
                   <Image
@@ -449,11 +427,7 @@ export function FeaturedProductSection() {
               </button>
             </FadeIn>
 
-
-
-
-
-            <FadeIn delay={0.12} className="flex w-full flex-col items-start gap-5 md:w-[54%] lg:w-[58%]">
+            <FadeIn delay={0.12} className="flex w-full flex-col items-start gap-5">
               <div>
                 <h2
                   className="text-3xl font-semibold uppercase tracking-[0.12em] text-primary sm:text-4xl lg:text-5xl"
@@ -462,8 +436,8 @@ export function FeaturedProductSection() {
                   Cuidá tu mirada
                 </h2>
                 <p
-                  className="mt-1 text-2xl text-foreground/55 sm:text-3xl"
-                  style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
+                  className="mt-1 text-lg font-medium tracking-wide text-foreground/55 sm:text-xl"
+                  style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
                 >
                   con exel Promoter
                 </p>
@@ -474,10 +448,10 @@ export function FeaturedProductSection() {
                 fortalecimiento de pestañas y cejas.
               </p>
 
-              <ul className="flex flex-col gap-2.5">
+              <ul className="flex w-full flex-col gap-2.5">
                 {BENEFITS.map(({ icon: Icon, text }) => (
                   <li key={text} className="flex items-start gap-2.5 text-sm text-foreground/75">
-                    <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/12">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/12">
                       <Icon className="h-3 w-3 text-primary" strokeWidth={2.5} />
                     </span>
                     {text}
@@ -485,7 +459,6 @@ export function FeaturedProductSection() {
                 ))}
               </ul>
 
-              {/* Sellos con íconos */}
               <div className="flex flex-wrap gap-2">
                 {BADGES_SHORT.map(({ icon: Icon, label }) => (
                   <span

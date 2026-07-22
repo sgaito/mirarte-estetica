@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { Heart, Sparkles, Star } from "lucide-react"
 import { FadeIn } from "@/components/fade-in"
 import { CERTIFICACION_FLAGS } from "@/lib/certificacion-flags"
 
@@ -11,10 +12,19 @@ const HOME_PHOTOS = [
   },
 ] as const
 
-const TRUST_LINES = [
-  "N° 1 en Rosario avalado por reseñas Google.",
-  "Una de las pioneras en especializarse en este servicio en Rosario.",
-  "+2.000 clientas satisfechas.",
+const TRUST_ITEMS = [
+  {
+    text: "N° 1 en Rosario avalado por reseñas Google.",
+    Icon: Star,
+  },
+  {
+    text: "Una de las pioneras en especializarse en este servicio en Rosario.",
+    Icon: Sparkles,
+  },
+  {
+    text: "+2.000 clientas satisfechas.",
+    Icon: Heart,
+  },
 ] as const
 
 function CertificacionFlags({ size = "sm" }: { size?: "sm" | "md" }) {
@@ -82,14 +92,24 @@ export function HomePhotosSection() {
               <CertificacionFlags />
             </div>
 
-            <ul className="mt-4 space-y-1.5 sm:mt-5 sm:space-y-2">
-              {TRUST_LINES.map((line) => (
+            <ul
+              className="mx-auto mt-5 grid max-w-xl grid-cols-1 gap-2.5 text-left sm:mt-6 sm:grid-cols-3 sm:gap-3"
+              style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+              aria-label="Respaldo Mirarte"
+            >
+              {TRUST_ITEMS.map(({ text, Icon }) => (
                 <li
-                  key={line}
-                  className="text-xs leading-snug text-foreground/75 sm:text-sm"
-                  style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+                  key={text}
+                  className="rounded-2xl border border-primary/12 bg-primary/[0.05] px-3.5 py-3.5 backdrop-blur-[2px]"
                 >
-                  {line}
+                  <div className="flex items-start gap-3 sm:flex-col sm:items-center sm:gap-2.5 sm:text-center">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Icon className="h-3.5 w-3.5" strokeWidth={2.25} />
+                    </div>
+                    <p className="min-w-0 text-[13px] font-medium leading-snug text-foreground/80 sm:text-xs">
+                      {text}
+                    </p>
+                  </div>
                 </li>
               ))}
             </ul>
