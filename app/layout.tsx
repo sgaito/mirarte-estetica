@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono, Great_Vibes, Montserrat } from 'next/font/google'
+import { Geist, Geist_Mono, Great_Vibes, Montserrat, Parisienne } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
@@ -17,6 +17,13 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-display",
+  display: "swap",
+});
+
+const parisienne = Parisienne({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-tagline",
   display: "swap",
 });
 
@@ -73,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className={`bg-background scroll-smooth ${greatVibes.variable} ${montserrat.variable}`}>
+    <html lang="es" className={`bg-background scroll-smooth ${greatVibes.variable} ${montserrat.variable} ${parisienne.variable}`}>
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

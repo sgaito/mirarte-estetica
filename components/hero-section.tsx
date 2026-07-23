@@ -68,8 +68,8 @@ export function HeroSection() {
           </h1>
 
           <p
-            className="mt-2 max-w-lg text-pretty text-3xl italic text-foreground/80 sm:text-4xl"
-            style={{ fontFamily: "var(--font-script), Great Vibes, cursive" }}
+            className="mt-2 max-w-lg text-pretty text-[2rem] font-normal leading-snug tracking-wide text-foreground/80 sm:text-[2.75rem]"
+            style={{ fontFamily: "var(--font-tagline), Parisienne, cursive" }}
           >
             Tu mirada habla por vos
           </p>

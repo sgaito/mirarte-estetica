@@ -78,7 +78,7 @@ export function Header() {
             <img
               src="/logo_1.png"
               alt="Mirarte Estética — Inicio"
-              className="h-10 w-auto"
+              className="h-12 w-auto"
             />
           </button>
           <button
@@ -120,7 +120,7 @@ export function Header() {
             <img
               src="/logo_1.png"
               alt="Mirarte Estética — Inicio"
-              className="h-11 w-auto lg:h-12"
+              className="h-12 w-auto lg:h-14"
             />
           </button>
 
