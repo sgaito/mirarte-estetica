@@ -1,7 +1,10 @@
 "use client"
 
-import { Instagram, Mail } from "lucide-react"
+import { Instagram, Mail, Phone } from "lucide-react"
 import Link from "next/link"
+
+const CALL_URL = "tel:+5493416367119"
+const PHONE_DISPLAY = "341 636-7119"
 
 // WhatsApp icon (no está en lucide-react, lo definimos inline)
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -31,6 +34,15 @@ export function Footer() {
           <div className="text-center">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/60">Contacto</h3>
             <ul className="mt-3 space-y-2">
+              <li>
+                <a
+                  href={CALL_URL}
+                  className="inline-flex items-center gap-3 text-muted-foreground transition-colors hover:text-primary"
+                >
+                  <Phone className="h-5 w-5 shrink-0 text-primary" strokeWidth={2} />
+                  <span>{PHONE_DISPLAY}</span>
+                </a>
+              </li>
               <li>
                 <Link
                   href="https://wa.me/5493416367119"

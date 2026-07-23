@@ -5,6 +5,7 @@ const WA_URL =
   "https://wa.me/5493416367119?text=Hola%20Mirarte%20Estetica!!%20Quiero%20consultar%20por%20un%20turno."
 
 const CALL_URL = "tel:+5493416367119"
+const PHONE_DISPLAY = "341 636-7119"
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -18,7 +19,7 @@ const ctaPrimary =
   "inline-flex h-[3.5rem] w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-6 text-sm font-semibold tracking-wide text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 active:scale-[0.98] sm:h-14 sm:text-[15px]"
 
 const ctaSecondary =
-  "inline-flex h-[3.5rem] w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-primary/20 bg-white/50 px-6 text-sm font-medium tracking-wide text-primary shadow-sm backdrop-blur-md transition-all hover:bg-white/80 hover:border-primary/40 active:scale-[0.98] sm:h-14 sm:text-[15px]"
+  "inline-flex h-[3.5rem] w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary/20 bg-white/50 px-4 text-[13px] font-medium tracking-wide text-primary shadow-sm backdrop-blur-md transition-all hover:bg-white/80 hover:border-primary/40 active:scale-[0.98] sm:h-14 sm:gap-2.5 sm:px-6 sm:text-[15px]"
 
 export function HeroSection() {
   return (
@@ -81,8 +82,8 @@ export function HeroSection() {
             Reservar por WhatsApp
           </Link>
           <a href={CALL_URL} className={ctaSecondary}>
-            <Phone className="h-5 w-5" strokeWidth={2.5} />
-            Llamar ahora
+            <Phone className="h-5 w-5 shrink-0" strokeWidth={2.5} />
+            Llamar ahora al {PHONE_DISPLAY}
           </a>
         </div>
       </div>
