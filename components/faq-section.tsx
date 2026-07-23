@@ -37,6 +37,36 @@ const FAQS = [
     q: "¿Dónde están ubicados y qué medidas de higiene toman?",
     a: "El estudio está en la zona Centro de Rosario. Trabajamos bajo protocolo de bioseguridad, tomando todas las medidas y precauciones necesarias.",
   },
+  {
+    id: 7,
+    q: "¿Cuánto dura un Lash Lifting?",
+    a: "El resultado se mantiene alrededor de 45 días en promedio. La duración varía según el ciclo de crecimiento de tus pestañas naturales y cómo las cuides día a día.",
+  },
+  {
+    id: 8,
+    q: "¿Cada cuánto se hace el retoque?",
+    a: "Lo ideal es retocar entre los 14 y 21 días. Así mantenés el diseño prolijo y evitás que el trabajo se descompense con el crecimiento natural.",
+  },
+  {
+    id: 9,
+    q: "¿Cómo debo cuidarlas?",
+    a: "Al finalizar el servicio te entregamos una guía de cuidados con todas las indicaciones. Siguiéndola, el resultado se ve mejor y dura más tiempo.",
+  },
+  {
+    id: 10,
+    q: "¿Cuánto tiempo dura un turno de extensiones?",
+    a: "Un turno de extensiones suele durar entre 1 hora y 1 hora 30, incluyendo el asesoramiento previo y la colocación.",
+  },
+  {
+    id: 11,
+    q: "¿Cuánto tiempo dura un turno de Lash Lifting o laminado de cejas?",
+    a: "Ambos servicios tienen una duración aproximada de 50 minutos, para que puedas organizarte con tranquilidad.",
+  },
+  {
+    id: 12,
+    q: "¿Cuánto tiempo dura un turno de diseño y perfilado de cejas?",
+    a: "El diseño y perfilado de cejas dura entre 30 y 40 minutos, según el trabajo que necesites en el momento.",
+  },
 ]
 
 /* ── Desktop: grilla con números decorativos ─────────────── */
@@ -126,7 +156,7 @@ export function FaqSection() {
   return (
     <section
       id="faq"
-      className="relative overflow-hidden scroll-mt-20 py-24 lg:py-32"
+      className="relative overflow-hidden scroll-mt-20 pt-24 pb-10 lg:pt-32 lg:pb-12"
       style={{
         background: `
           radial-gradient(ellipse at 90% 60%, oklch(0.95 0.05 178 / 0.45) 0%, transparent 50%),
@@ -135,7 +165,7 @@ export function FaqSection() {
         `.trim(),
       }}
     >
-      <SectionSeam edge="bottom" to="var(--background)" />
+      <SectionSeam edge="bottom" to="var(--secondary)" />
       <div className="relative mx-auto max-w-5xl px-6 lg:px-8">
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">

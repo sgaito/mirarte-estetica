@@ -4,6 +4,7 @@ import { useRef, useLayoutEffect, useEffect } from "react"
 import { motion, useMotionValue, useAnimationFrame } from "framer-motion"
 import { Star } from "lucide-react"
 import { FadeIn } from "@/components/fade-in"
+import { GoogleRating } from "@/components/google-rating"
 import { SectionSeam } from "@/components/section-seam"
 
 const reviews = [
@@ -140,11 +141,20 @@ function ReviewsCarousel() {
 
 export function ReviewsSection() {
   return (
-    <section id="resenas" className="relative scroll-mt-20 overflow-hidden bg-secondary py-24 lg:py-32">
+    <section id="resenas" className="relative scroll-mt-20 overflow-x-clip pt-10 pb-24 lg:pt-12 lg:pb-32">
       <SectionSeam edge="bottom" to="oklch(0.977 0.003 240)" />
+      {/* Continuidad atmosférica con el glow del promoter */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full opacity-10 sm:h-64 sm:w-64"
+        style={{ background: "radial-gradient(circle, oklch(0.72 0.12 178) 0%, transparent 72%)" }}
+      />
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
+            <div className="mb-4 flex justify-center">
+              <GoogleRating logoClassName="h-6 w-6" starClassName="h-4 w-4" />
+            </div>
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
               <span className="heading-emphasis">Número 1</span> en Rosario según reseñas en Google
             </h2>

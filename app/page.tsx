@@ -7,7 +7,9 @@ import { GallerySection } from "@/components/gallery-section"
 import { FeaturedProductSection } from "@/components/featured-product-section"
 import { FaqSection } from "@/components/faq-section"
 import { ReviewsSection } from "@/components/reviews-section"
+import { PrefooterCta } from "@/components/prefooter-cta"
 import { Footer } from "@/components/footer"
+import { BackToTop } from "@/components/back-to-top"
 import { ELI_CARTA_PRESENTACION_DEFAULT } from "@/lib/eli-presentacion"
 import { getSobreEliMedia } from "@/lib/google-drive"
 import { detectMobileSafeGridFromUserAgent } from "@/lib/progressive-service-grid"
@@ -41,10 +43,15 @@ export default async function HomePage() {
         }))}
       />
       <GallerySection />
-      <FeaturedProductSection />
-      <ReviewsSection />
+      {/* Misma superficie: evita junta/corte entre promoter y reseñas */}
+      <div className="bg-secondary">
+        <FeaturedProductSection />
+        <ReviewsSection />
+      </div>
       <FaqSection />
+      <PrefooterCta />
       <Footer />
+      <BackToTop />
     </main>
   )
 }

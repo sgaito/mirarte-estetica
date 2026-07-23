@@ -374,16 +374,17 @@ export function FeaturedProductSection() {
 
   return (
     <>
-      <section id="promoter" className="relative scroll-mt-20 overflow-hidden bg-secondary py-20 lg:py-28">
+      <section id="promoter" className="relative scroll-mt-20 overflow-x-clip pt-20 pb-10 lg:pt-28 lg:pb-12">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-20"
           style={{ background: "radial-gradient(circle, oklch(0.82 0.12 178) 0%, transparent 70%)" }}
         />
+        {/* Glow interior (sin clip en el borde inferior) para no marcar junta con reseñas */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-24 -right-16 h-80 w-80 rounded-full opacity-15"
-          style={{ background: "radial-gradient(circle, oklch(0.72 0.12 178) 0%, transparent 70%)" }}
+          className="pointer-events-none absolute bottom-8 right-0 h-64 w-64 rounded-full opacity-15 sm:bottom-12 sm:h-72 sm:w-72"
+          style={{ background: "radial-gradient(circle, oklch(0.72 0.12 178) 0%, transparent 72%)" }}
         />
 
         <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
