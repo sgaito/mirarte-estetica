@@ -56,8 +56,9 @@ const WA_CHAT =
   encodeURIComponent("Hola Mirarte Estética! Quiero reservar un turno.")
 
 const CALL_URL = "tel:+5493416367119"
+const PHONE_DISPLAY = "341 636-7119"
 
-function WaLink({ href }: { href: string }) {
+function WaLink({ href, showPhone }: { href: string; showPhone?: boolean }) {
   return (
     <a
       href={href}
@@ -65,7 +66,7 @@ function WaLink({ href }: { href: string }) {
       rel="noopener noreferrer"
       className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
     >
-      WhatsApp
+      WhatsApp{showPhone ? ` ${PHONE_DISPLAY}` : ""}
     </a>
   )
 }
@@ -76,7 +77,7 @@ function CallLink() {
       href={CALL_URL}
       className="font-semibold text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
     >
-      llamada
+      llamada {PHONE_DISPLAY}
     </a>
   )
 }
@@ -572,7 +573,7 @@ function ComoReservarTurnoPestanas() {
   return (
     <PestanasAccordion title="¿Cómo reservar mi turno?">
       <p>
-        Escribinos por <WaLink href={WA_CHAT} /> para reservar tu turno, o por{" "}
+        Escribinos por <WaLink href={WA_CHAT} showPhone /> para reservar tu turno, o por{" "}
         <CallLink />.
       </p>
     </PestanasAccordion>

@@ -45,7 +45,7 @@ const FAQS = [
   {
     id: 8,
     q: "¿Cada cuánto se hace el retoque?",
-    a: "Lo ideal es retocar entre los 14 y 21 días. Así mantenés el diseño prolijo y evitás que el trabajo se descompense con el crecimiento natural.",
+    a: "Lo ideal es retocar entre los 14 y 21 días.",
   },
   {
     id: 9,
@@ -66,6 +66,36 @@ const FAQS = [
     id: 12,
     q: "¿Cuánto tiempo dura un turno de diseño y perfilado de cejas?",
     a: "El diseño y perfilado de cejas dura entre 30 y 40 minutos, según el trabajo que necesites en el momento.",
+  },
+  {
+    id: 13,
+    q: "¿Cómo es un turno de retoque de pestañas?",
+    a: "Primero retiramos algunas extensiones crecidas por el crecimiento de las pestañas naturales, luego realizamos una limpieza profunda con un shampoo de pestañas para retirar impurezas e higienizar las pestañas, seguido colocamos extensiones donde anteriormente retiramos y dónde había huecos por la caída natural de las extensiones.",
+  },
+  {
+    id: 14,
+    q: "¿Cuánto tiempo dura un turno de retoque de extensiones?",
+    a: "50 minutos.",
+  },
+  {
+    id: 15,
+    q: "¿Si estoy embarazada o amamantando puedo colocarme extensiones o realizarme un Lash Lifting?",
+    a: "Sí se puede realizar el trabajo con normalidad, los productos están aprobados para estos casos. Consulte con su médico ante la duda.",
+  },
+  {
+    id: 16,
+    q: "¿Si tengo los ojos sensibles puedo colocarme extensiones o hacerme el Lash Lifting?",
+    a: "Sí se puede realizar. Todos los productos son hipoalergénicos.",
+  },
+  {
+    id: 17,
+    q: "¿Me puedo mojar las extensiones?",
+    a: "Sí, son resistentes al agua.",
+  },
+  {
+    id: 18,
+    q: "¿Me puedo colocar las extensiones teniendo lentes de contacto puestos?",
+    a: "En este caso deberías retirarte los lentes de contacto durante el servicio.",
   },
 ]
 
