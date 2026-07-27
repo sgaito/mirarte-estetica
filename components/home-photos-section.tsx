@@ -5,12 +5,9 @@ import { GoogleGIcon, FiveStars } from "@/components/google-rating"
 import { CERTIFICACION_FLAGS } from "@/lib/certificacion-flags"
 
 const HOME_PHOTOS = [
-  { src: "/home/4.jpg", alt: "Mirarte Estética — ambiente del estudio" },
-  { src: "/home/IMG_4900.jpg", alt: "Mirarte Estética — trabajo de pestañas" },
-  {
-    src: "/home/B763073A-A3AD-4B5B-A1F5-9E58E9F70130.JPG.jpeg",
-    alt: "Mirarte Estética — detalle de servicio",
-  },
+  { src: "/home/1.jpg", alt: "Mirarte Estética — foto 1" },
+  { src: "/home/2.jpg", alt: "Mirarte Estética — foto 2" },
+  { src: "/home/3.jpeg", alt: "Mirarte Estética — foto 3" },
 ] as const
 
 const TRUST_ITEMS = [

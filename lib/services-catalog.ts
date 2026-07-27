@@ -151,7 +151,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         group: "extension",
         shortDesc: "Mayor densidad y definición en la mirada.",
         fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "volumen-4d", ["IMG_3051.JPEG", "IMG_3083.JPEG", "IMG_3085.JPEG"]),
+        photos: photos("pestanas", "volumen-4d", ["IMG_3085.JPEG", "IMG_3051.JPEG", "IMG_3083.JPEG"]),
       },
       {
         slug: "glow-5d",

@@ -202,13 +202,10 @@ export function FaqSection() {
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
               Preguntas <span className="heading-emphasis">Frecuentes</span>
             </h2>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Todo lo que necesitás saber antes de tu primera visita.
-            </p>
           </div>
         </FadeIn>
 
-        <div className="mt-16">
+        <div className="mt-14">
           {/* Desktop */}
           <div className="hidden sm:block">
             <DesktopGrid />

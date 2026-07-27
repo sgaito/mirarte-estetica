@@ -1,11 +1,14 @@
 import Link from "next/link"
-import { Phone } from "lucide-react"
+import { MapPin, Phone } from "lucide-react"
 
 const WA_URL =
   "https://wa.me/5493416367119?text=Hola%20Mirarte%20Estetica!!%20Quiero%20consultar%20por%20un%20turno."
 
 const CALL_URL = "tel:+5493416367119"
 const PHONE_DISPLAY = "341 636-7119"
+const MAP_LINK =
+  "https://www.google.com/maps/search/?api=1&query=" +
+  encodeURIComponent("Sarmiento 1073, Rosario centro, Santa Fe, Argentina.")
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -20,6 +23,9 @@ const ctaPrimary =
 
 const ctaSecondary =
   "inline-flex h-[3.5rem] w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-primary/20 bg-white/50 px-4 text-[13px] font-medium tracking-wide text-primary shadow-sm backdrop-blur-md transition-all hover:bg-white/80 hover:border-primary/40 active:scale-[0.98] sm:h-14 sm:gap-2.5 sm:px-6 sm:text-[15px]"
+
+const ctaTertiary =
+  "inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-full border border-primary/12 bg-white/30 px-5 py-3 text-[15px] font-medium leading-snug text-foreground/85 shadow-sm backdrop-blur-sm transition-all hover:border-primary/25 hover:bg-white/55 active:scale-[0.98] sm:min-h-[3.25rem] sm:text-base"
 
 export function HeroSection() {
   return (
@@ -76,7 +82,7 @@ export function HeroSection() {
           </p>
         </div>
 
-        <div className="flex w-full max-w-xs flex-col items-stretch gap-4 sm:max-w-md">
+        <div className="flex w-full max-w-xs flex-col items-stretch gap-3 sm:max-w-md sm:gap-4">
           <Link href={WA_URL} target="_blank" rel="noopener noreferrer" className={ctaPrimary}>
             <WhatsAppIcon className="h-5 w-5" />
             Reservar por WhatsApp
@@ -84,6 +90,16 @@ export function HeroSection() {
           <a href={CALL_URL} className={ctaSecondary}>
             <Phone className="h-5 w-5 shrink-0" strokeWidth={2.5} />
             Llamar ahora al {PHONE_DISPLAY}
+          </a>
+          <a
+            href={MAP_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={ctaTertiary}
+            aria-label="Ver ubicación en Google Maps: Sarmiento 1073, Rosario"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-primary" strokeWidth={2.25} />
+            Sarmiento 1073, Rosario
           </a>
         </div>
       </div>
