@@ -119,16 +119,18 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         slug: "style-natural",
         name: "Style Natural",
         group: "extension",
-        shortDesc: "Look natural con técnica pelo por pelo.",
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "style-natural", ["1.PNG","2.PNG"]),
+        shortDesc: "Look natural y delicado: 1 extensión por pestaña, mismo largo, efecto máscara.",
+        fullDesc:
+          "Se utiliza la técnica pelo por pelo clásica, colocando 1 extensión por pestaña natural, manteniendo el mismo largo que tus pestañas naturales, y arqueamos dando el efecto como si tuvieras máscara de pestañas. Perfectas para un look natural y delicado.",
+        photos: photos("pestanas", "style-natural", ["1.PNG", "2.PNG"]),
       },
       {
         slug: "clasicas",
         name: "Clásicas",
         group: "extension",
-        shortDesc: "Extensiones clásicas pelo por pelo.",
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        shortDesc: "1 extensión por pestaña: efecto máscara, con largo y diseño a elección.",
+        fullDesc:
+          "Se coloca 1 extensión por pestaña natural brindando el efecto como si tuvieras máscara de pestañas; además podés elegir el largo y el diseño que más te guste para una mirada más marcada y natural.",
         photos: photos("pestanas", "clasicas", ["FFE91095-D3DB-44CD-8764-7743C2A6DBF4.PNG"]),
       },
       {
@@ -150,7 +152,7 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         name: "Volúmen 4D",
         group: "extension",
         shortDesc: "Mayor densidad y definición en la mirada.",
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        fullDesc: "Mayor densidad y definición en la mirada.",
         photos: photos("pestanas", "volumen-4d", ["IMG_3085.JPEG", "IMG_3051.JPEG", "IMG_3083.JPEG"]),
       },
       {
@@ -167,8 +169,9 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         slug: "ruso-6d",
         name: "Volúmen Ruso",
         group: "extension",
-        shortDesc: "Volumen ruso con efecto denso y definido.",
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        shortDesc: "90% de cobertura con abanicos artesanales: efecto voluminoso y delicado.",
+        fullDesc:
+          "En esta técnica completamos el 90% de las pestañas naturales con abanicos artesanales armados en el momento con fibras súper finitas, para cuidar tus pestañas y crear un efecto voluminoso y delicado.",
         photos: photos("pestanas", "ruso-6d", ["IMG_3440.JPEG"]),
       },
       {
@@ -185,17 +188,20 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         slug: "foxy-curl-l",
         name: "Foxy Curv L",
         group: "extension",
-        shortDesc: "Diseño con curvatura Foxy para mirada lifting.",
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        shortDesc: "Mirada lifting y rasgada con curvaturas mixtas y delineado en L.",
+        fullDesc:
+          "Este diseño crea la ilusión de una mirada lifting y rasgada: se utilizan diferentes curvaturas para lograr este efecto y delineamos en los laterales con una curvatura específica “L”.",
+        duration: "2 horas",
         photos: photos("pestanas", "foxy-curl-l", ["IMG_3393.JPEG", "IMG_3414.JPEG"]),
       },
       {
         slug: "delineado",
         name: "Delineado",
         group: "extension",
-        shortDesc: "Efecto delineado en la línea de pestañas.",
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        photos: photos("pestanas", "delineado", ["IMG_2852.JPEG"]),
+        shortDesc: "Mirada rasgada y delineada con largos de menor a mayor.",
+        fullDesc:
+          "Este diseño crea la ilusión de una mirada rasgada y delineada. Se colocan pestañas de menor a mayor largo, y se utiliza una curvatura específica para lograr el efecto.",
+        photos: photos("pestanas", "delineado", ["1.png"]),
       },
       {
         slug: "lash-lifting-botox",
@@ -260,6 +266,15 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         ],
         duration: "20 minutos",
         photos: photos("pestanas", "tintura", ["IMG_20260626_042233.png"]),
+      },
+      {
+        slug: "pestanas-inferiores",
+        name: "Pestañas Inferiores",
+        group: "extension",
+        shortDesc: "Extensiones finas y cortas: efecto rímel y más apertura de mirada.",
+        fullDesc:
+          "Se colocan extensiones de una medida pequeña y finas logrando un efecto rímel y de mayor apertura para la mirada.",
+        photos: photos("pestanas", "pestanas-inferiores", ["1.jpeg","2.png"]),
       },
     ],
   },
@@ -343,8 +358,17 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         slug: "full-botox-brow",
         name: "Full Botox Brow",
         group: "main",
-        shortDesc: DESCRIPCION_SERVICIO_PENDIENTE,
-        fullDesc: DESCRIPCION_SERVICIO_PENDIENTE,
+        shortDesc: "Nutre, fortalece y revitaliza los pelitos de las cejas desde la raíz.",
+        fullDesc:
+          "Es un tratamiento hidratante y reparador que ayuda a fortalecer, nutrir y revitalizar los pelitos de las cejas desde la raíz. Aporta vitaminas, proteínas y nutrientes que mejoran la elasticidad, el brillo y la salud de las cejas, dejándolas más suaves, fuertes y saludables.",
+        sections: [
+          section("Procedimiento", [
+            "Realizamos una limpieza profunda de las cejas",
+            "Colocamos el botox y lo dejamos actuar",
+            "Finalizamos con un shock de queratina",
+          ]),
+        ],
+        duration: "30 minutos",
         photos: photos("cejas", "full-botox-brow", ["IMG_20260626_040956.png"]),
       },
       {
