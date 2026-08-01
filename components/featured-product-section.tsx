@@ -375,9 +375,10 @@ export function FeaturedProductSection() {
   return (
     <>
       <section id="promoter" className="relative scroll-mt-20 overflow-x-clip pt-20 pb-10 lg:pt-28 lg:pb-12">
+        {/* Glow interior (sin salir del borde superior): overflow-x-clip también recorta Y y marcaba junta con galería */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-20"
+          className="pointer-events-none absolute -left-16 top-10 h-64 w-64 rounded-full opacity-20 sm:top-14 sm:h-72 sm:w-72"
           style={{ background: "radial-gradient(circle, oklch(0.82 0.12 178) 0%, transparent 70%)" }}
         />
         {/* Glow interior (sin clip en el borde inferior) para no marcar junta con reseñas */}
