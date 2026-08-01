@@ -19,12 +19,13 @@ export function SectionSeam({
   const isBottom = edge === "bottom"
   const height =
     strength === "deep"
-      ? "h-[min(22vh,9rem)] sm:h-[min(24vh,10rem)] md:h-[min(26vh,11rem)]"
-      : "h-[3.75rem] sm:h-[4.75rem] md:h-[5.75rem]"
+      ? "h-[min(28vh,11rem)] sm:h-[min(24vh,10rem)] md:h-[min(26vh,11rem)]"
+      : "h-[5.5rem] sm:h-[4.75rem] md:h-[5.75rem]"
 
+  // Curva más larga en mobile: evita el “escalón” que se nota con alturas cortas.
   const gradient = isBottom
-    ? `linear-gradient(to bottom, transparent 0%, color-mix(in oklch, ${to} 22%, transparent) 45%, color-mix(in oklch, ${to} 55%, transparent) 72%, color-mix(in oklch, ${to} 88%, transparent) 90%, ${to} 100%)`
-    : `linear-gradient(to top, transparent 0%, color-mix(in oklch, ${to} 22%, transparent) 45%, color-mix(in oklch, ${to} 55%, transparent) 72%, color-mix(in oklch, ${to} 88%, transparent) 90%, ${to} 100%)`
+    ? `linear-gradient(to bottom, transparent 0%, color-mix(in oklch, ${to} 10%, transparent) 28%, color-mix(in oklch, ${to} 28%, transparent) 52%, color-mix(in oklch, ${to} 55%, transparent) 72%, color-mix(in oklch, ${to} 82%, transparent) 88%, ${to} 100%)`
+    : `linear-gradient(to top, transparent 0%, color-mix(in oklch, ${to} 10%, transparent) 28%, color-mix(in oklch, ${to} 28%, transparent) 52%, color-mix(in oklch, ${to} 55%, transparent) 72%, color-mix(in oklch, ${to} 82%, transparent) 88%, ${to} 100%)`
 
   return (
     <div

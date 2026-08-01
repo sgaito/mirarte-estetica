@@ -21,12 +21,12 @@ export async function GallerySection() {
   return (
     <section
       id="galeria"
-      className="relative scroll-mt-20 overflow-hidden bg-background pt-24 pb-10 lg:pt-32 lg:pb-12"
+      className="relative scroll-mt-20 overflow-hidden bg-background pt-24 pb-20 sm:pb-14 lg:pt-32 lg:pb-16"
     >
-      <SectionSeam edge="bottom" to="var(--secondary)" />
+      <SectionSeam edge="bottom" to="var(--secondary)" strength="deep" />
 
       {/* Título centrado */}
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="relative z-[2] mx-auto max-w-7xl px-6 lg:px-8">
         <FadeIn>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-light tracking-tight text-foreground sm:text-4xl">
@@ -40,11 +40,11 @@ export async function GallerySection() {
       </div>
 
       {/* Marquee full-width fuera del contenedor */}
-      <div className="relative">
+      <div className="relative z-[2]">
         <GalleryMarquee images={images} />
       </div>
 
-      <div className="relative mx-auto mt-8 flex max-w-xs justify-center px-6 sm:mt-10 sm:max-w-md lg:px-8">
+      <div className="relative z-[2] mx-auto mt-8 flex max-w-xs justify-center px-6 sm:mt-10 sm:max-w-md lg:px-8">
         <Link
           href={WA_URL}
           target="_blank"
