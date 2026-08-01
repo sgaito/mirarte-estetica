@@ -43,9 +43,9 @@ export function BackToTop() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"
-        className={floatingBtn}
+        className="flex h-14 w-14 items-center justify-center rounded-full border border-border/70 bg-background/90 text-primary shadow-md backdrop-blur-md transition-all duration-300 hover:border-primary/40 hover:shadow-lg active:scale-95 sm:h-16 sm:w-16"
       >
-        <WhatsAppIcon className="h-5 w-5" />
+        <WhatsAppIcon className="h-7 w-7 sm:h-8 sm:w-8" />
       </a>
 
       <button
