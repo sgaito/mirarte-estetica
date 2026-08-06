@@ -66,7 +66,10 @@ export function HeroSection() {
           </p>
 
           <h1 className="flex flex-col items-center">
-            <span className="block max-w-xl text-balance text-[2rem] font-medium leading-[1.1] tracking-[-0.03em] text-foreground sm:text-5xl lg:text-6xl">
+            <span
+              className="block max-w-xl text-balance text-[2rem] font-light leading-[1.1] tracking-[-0.02em] text-foreground sm:text-5xl lg:text-6xl"
+              style={{ fontFamily: "var(--font-hero), Poppins, sans-serif" }}
+            >
               Colocación de extensiones
             </span>
             <span className="mt-4 block text-[1rem] font-light tracking-[0.2em] uppercase text-foreground/70 sm:text-lg">
