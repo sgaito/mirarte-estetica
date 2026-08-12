@@ -98,7 +98,7 @@ const CATEGORY_NAV: Record<ServiceCategory["id"], CategoryNavMeta> = {
     subtitle: "Extensiones, lifting y tratamientos para tu mirada.",
   },
   cejas: {
-    icon: BrowsIcon,
+    icon: Sparkles,
     subtitle: "Diseño, laminado y perfilado de cejas.",
   },
   labios: {
@@ -110,27 +110,6 @@ const CATEGORY_NAV: Record<ServiceCategory["id"], CategoryNavMeta> = {
     icon: GraduationCap,
     subtitle: "Cursos de pestañas y cejas, personalizados y grupales.",
   },
-}
-
-/* ─── Brows icon ──────────────────────────────────────────────────────────── */
-
-function BrowsIcon({ className, ...props }: LucideProps) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      {...props}
-    >
-      <path d="M3 13.5c2.2-3.2 4.8-4.7 7.5-4.2" />
-      <path d="M21 13.5c-2.2-3.2-4.8-4.7-7.5-4.2" />
-    </svg>
-  )
 }
 
 /* ─── Lips icon ───────────────────────────────────────────────────────────── */
