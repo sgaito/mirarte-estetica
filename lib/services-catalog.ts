@@ -8,8 +8,25 @@ export const DESCRIPCION_SERVICIO_PENDIENTE =
 
 export const TEXTO_PROXIMAMENTE = "Proximamente"
 
-/** Pestaña Cursos — copy temporal hasta tener el programa armado. */
-export const CURSOS_DESCRIPCION = TEXTO_PROXIMAMENTE
+/** Pestaña Cursos. */
+export const CURSOS_ITEMS = [
+  {
+    id: "cursos-pestanas",
+    title: "Cursos de pestañas personalizados y grupales.",
+    image: {
+      src: "/servicios/cursos/1.jpeg",
+      alt: "Curso de pestañas en Mirarte Estética — práctica en cabina",
+    },
+  },
+  {
+    id: "cursos-cejas",
+    title: "Cursos de cejas personalizados y grupales.",
+    image: {
+      src: "/servicios/cursos/2.png",
+      alt: "Curso de cejas en Mirarte Estética — práctica en cabina",
+    },
+  },
+] as const
 
 /** A) Extensiones de pestaña de seda premium */
 export const ELI_EXTENSIONES_PREMIUM_INTRO =
@@ -412,8 +429,8 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         name: "Micropigmentación Lips",
         group: "main",
         comingSoon: true,
-        shortDesc: TEXTO_PROXIMAMENTE,
-        fullDesc: TEXTO_PROXIMAMENTE,
+        shortDesc: "Pronto",
+        fullDesc: "Pronto",
         photos: photos("labios", "micropigmentacion-lips", ["IMG_20260626_034136.jpg.jpeg"]),
       },
       {
@@ -421,8 +438,8 @@ export const SERVICES_CATALOG: ServiceCategory[] = [
         name: "Baby Botox",
         group: "main",
         comingSoon: true,
-        shortDesc: TEXTO_PROXIMAMENTE,
-        fullDesc: TEXTO_PROXIMAMENTE,
+        shortDesc: "Pronto",
+        fullDesc: "Pronto",
         photos: photos("labios", "baby-botox", ["1.jpeg", "2.jpeg"]),
       },
     ],

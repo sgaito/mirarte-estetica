@@ -29,7 +29,7 @@ import {
   ELI_ASESORAMIENTO_EXTENSIONES,
   ELI_COMO_ASISTIR_CITA_PESTANAS,
   DESCRIPCION_SERVICIO_PENDIENTE,
-  CURSOS_DESCRIPCION,
+  CURSOS_ITEMS,
   TEXTO_PROXIMAMENTE,
   ELI_EXTENSIONES_BENEFICIOS,
   ELI_EXTENSIONES_PROCEDIMIENTO_INTRO,
@@ -98,18 +98,39 @@ const CATEGORY_NAV: Record<ServiceCategory["id"], CategoryNavMeta> = {
     subtitle: "Extensiones, lifting y tratamientos para tu mirada.",
   },
   cejas: {
-    icon: Sparkles,
+    icon: BrowsIcon,
     subtitle: "Diseño, laminado y perfilado de cejas.",
   },
   labios: {
     icon: LipsIcon,
     subtitle: "Perfilado y tratamientos labiales.",
+    comingSoon: true,
   },
   cursos: {
     icon: GraduationCap,
-    subtitle: "Capacitaciones profesionales — próximamente.",
-    comingSoon: true,
+    subtitle: "Cursos de pestañas y cejas, personalizados y grupales.",
   },
+}
+
+/* ─── Brows icon ──────────────────────────────────────────────────────────── */
+
+function BrowsIcon({ className, ...props }: LucideProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <path d="M3 13.5c2.2-3.2 4.8-4.7 7.5-4.2" />
+      <path d="M21 13.5c-2.2-3.2-4.8-4.7-7.5-4.2" />
+    </svg>
+  )
 }
 
 /* ─── Lips icon ───────────────────────────────────────────────────────────── */
@@ -861,12 +882,17 @@ function ServiceModal({
             className="space-y-4 px-5 pb-7 pt-5"
             style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
           >
-            {service.comingSoon && service.fullDesc !== TEXTO_PROXIMAMENTE ? (
-              <p className="text-sm font-semibold text-primary sm:text-base">{TEXTO_PROXIMAMENTE}</p>
+            {service.comingSoon &&
+            service.fullDesc !== TEXTO_PROXIMAMENTE &&
+            service.fullDesc !== "Pronto" ? (
+              <p className="text-sm font-semibold text-primary sm:text-base">Pronto</p>
             ) : null}
 
-            {isServiceComingSoon(service) && service.fullDesc === TEXTO_PROXIMAMENTE ? (
-              <p className="text-base font-semibold text-primary sm:text-lg">{TEXTO_PROXIMAMENTE}</p>
+            {isServiceComingSoon(service) &&
+            (service.fullDesc === TEXTO_PROXIMAMENTE || service.fullDesc === "Pronto") ? (
+              <p className="text-base font-semibold text-primary sm:text-lg">
+                {service.fullDesc === "Pronto" ? "Pronto" : TEXTO_PROXIMAMENTE}
+              </p>
             ) : (
               <p
                 className={`text-sm leading-relaxed sm:text-base ${
@@ -919,11 +945,33 @@ function CategoryContent({
 }) {
   if (category.id === "cursos") {
     return (
-      <div
-        className="rounded-2xl border border-border/60 bg-card/90 px-6 py-10 text-center shadow-sm sm:px-8 sm:py-12"
-        style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
-      >
-        <p className="text-base font-medium text-foreground/90 sm:text-lg">{CURSOS_DESCRIPCION}</p>
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
+        {CURSOS_ITEMS.map((curso) => (
+          <a
+            key={curso.id}
+            href={WA_SERVICE(curso.title.replace(/\.$/, ""))}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group overflow-hidden rounded-2xl border border-border/60 bg-card/90 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md active:scale-[0.99]"
+            style={{ fontFamily: "var(--font-display), Montserrat, sans-serif" }}
+          >
+            <div className="relative aspect-[4/3] w-full bg-muted sm:aspect-[16/10]">
+              <Image
+                src={curso.image.src}
+                alt={curso.image.alt}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                sizes="(max-width: 640px) 100vw, 450px"
+                priority={false}
+              />
+            </div>
+            <div className="px-5 py-6 text-center sm:px-6 sm:py-7">
+              <p className="text-base font-medium text-foreground/90 transition-colors group-hover:text-primary sm:text-lg">
+                {curso.title}
+              </p>
+            </div>
+          </a>
+        ))}
       </div>
     )
   }
@@ -1027,7 +1075,7 @@ function ServiceCategoryNav({ activeId }: { activeId: ServiceCategory["id"] }) {
               <Icon className="h-4 w-4 shrink-0 opacity-90" strokeWidth={1.75} />
               <span className="text-center leading-tight">{cat.label}</span>
               {nav.comingSoon ? (
-                <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-primary group-data-[state=active]:bg-white/20 group-data-[state=active]:text-primary-foreground lg:hidden">
+                <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-primary group-data-[state=active]:bg-white/20 group-data-[state=active]:text-primary-foreground lg:px-2 lg:text-[10px]">
                   Pronto
                 </span>
               ) : null}
