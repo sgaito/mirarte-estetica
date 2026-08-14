@@ -72,13 +72,13 @@ export function HeroSection() {
             >
               Colocación de extensiones
             </span>
-            <span className="mt-4 block text-[1rem] font-light tracking-[0.2em] uppercase text-foreground/70 sm:text-lg">
+            <span className="mt-4 block translate-y-[10px] text-[1rem] font-light tracking-[0.2em] uppercase text-foreground/70 sm:text-lg">
               Lash lifting · Cejas · Laminado
             </span>
           </h1>
 
           <p
-            className="mt-2 max-w-lg translate-y-[26px] text-pretty text-[2rem] font-normal leading-snug tracking-wide text-foreground/80 sm:translate-y-[34px] sm:text-[2.75rem]"
+            className="mt-2 max-w-lg translate-y-[12px] text-pretty text-[2rem] font-normal leading-snug tracking-wide text-foreground/80 sm:translate-y-[16px] sm:text-[2.75rem]"
             style={{ fontFamily: "var(--font-tagline), Parisienne, cursive" }}
           >
             Tu mirada habla por vos
