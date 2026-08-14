@@ -61,7 +61,7 @@ export function HeroSection() {
       {/* ── Contenido centrado ── */}
       <div className="relative z-10 flex flex-col items-center gap-8 px-6 py-16 text-center sm:py-24">
         <div className="flex flex-col items-center gap-4">
-          <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-foreground/60 sm:text-xs">
+          <p className="translate-y-[14px] text-[10px] font-bold uppercase tracking-[0.35em] text-foreground/60 sm:text-xs">
             Since 2019
           </p>
 
@@ -78,7 +78,7 @@ export function HeroSection() {
           </h1>
 
           <p
-            className="mt-2 max-w-lg text-pretty text-[2rem] font-normal leading-snug tracking-wide text-foreground/80 sm:text-[2.75rem]"
+            className="mt-2 max-w-lg translate-y-[26px] text-pretty text-[2rem] font-normal leading-snug tracking-wide text-foreground/80 sm:translate-y-[34px] sm:text-[2.75rem]"
             style={{ fontFamily: "var(--font-tagline), Parisienne, cursive" }}
           >
             Tu mirada habla por vos

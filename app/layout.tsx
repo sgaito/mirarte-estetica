@@ -34,7 +34,7 @@ const parisienne = Parisienne({
   display: "swap",
 });
 
-const siteUrl = "https://mirarte-estetica.vercel.app"
+const siteUrl = "https://www.mirarteestetica.com.ar"
 
 /** 58 caracteres — rango recomendado OG/Twitter ~50–60. */
 const shareTitle =
